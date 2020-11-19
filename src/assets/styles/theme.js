@@ -12,21 +12,22 @@ export const colors = {
   primary: 'hsl(233, 57%, 37%)',
   primaryLight: 'hsl(236, 71%, 69%)',
   primaryDark: 'hsl(221, 100%, 26%)',
-  grey100: 'hsl(0, 0%, 35%)',
+  grey100: 'hsl(0, 0%, 25%)',
   grey200: 'hsl(0, 0%, 74%)',
   grey300: 'hsl(0, 0%, 87%)',
   grey400: 'hsl(0, 0%, 91%)',
   grey500: 'hsl(0, 0%, 97%)',
-  white: 'hsl(0, 0%, 95%)',
+  white: 'hsl(0, 0%, 100%)',
   black: 'hsl(0, 0%, 10%)',
 }
 
 export const font = {
   size: {
     small: '1.4rem',
+    button: '1.5rem',
     regular: '1.6rem',
     medium: '1.8rem',
-    large: '2.2rem',
+    large: '2.9rem',
     xxl: '6rem',
   },
   weight: {

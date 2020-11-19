@@ -10,12 +10,16 @@ const GlobalStyle = createGlobalStyle`
   *::before,
   *::after {
     box-sizing: inherit;
+    margin: 0;
+    padding: 0;
   }
   
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
+    height: 100%;
+    width: 100%;
     font-size: 1.6rem;
     font-family: 'Roboto', sans-serif;
     line-height: 1.5;

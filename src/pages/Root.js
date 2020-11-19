@@ -1,17 +1,18 @@
 import React from 'react'
-import styled from 'styled-components'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-import { ReactComponent as Logo } from 'assets/svgs/Logo.svg'
-
-const FavoriteIcon = styled(FavoriteBorderIcon)`
-  color: blue;
-`
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import MainTemplate from 'templates/MainTemplate'
+import Home from './Home'
 
 const Root = () => {
   return (
     <div className="App">
-      <Logo />
-      <FavoriteIcon />
+      <MainTemplate>
+        <Router>
+          <Switch>
+            <Route path="/" component={Home} />
+          </Switch>
+        </Router>
+      </MainTemplate>
     </div>
   )
 }
