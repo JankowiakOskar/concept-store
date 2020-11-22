@@ -1,19 +1,22 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import MainTemplate from 'templates/MainTemplate'
+import routes from 'routes'
 import Home from './Home'
+import WhishListPage from './WhishListPage'
 
 const Root = () => {
   return (
-    <div className="App">
-      <MainTemplate>
-        <Router>
+    <Router>
+      <div className="App">
+        <MainTemplate>
           <Switch>
-            <Route path="/" component={Home} />
+            <Route exact path={routes.home} component={Home} />
+            <Route path={routes.whishlist} component={WhishListPage} />
           </Switch>
-        </Router>
-      </MainTemplate>
-    </div>
+        </MainTemplate>
+      </div>
+    </Router>
   )
 }
 

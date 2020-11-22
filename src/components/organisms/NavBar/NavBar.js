@@ -1,5 +1,9 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
+import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import routes from 'routes'
+import { UIContext } from 'contexts/GlobalUIContext'
+import styled from 'styled-components'
+import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
 import { ReactComponent as Logo } from 'assets/svgs/Logo.svg'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket'
@@ -10,10 +14,11 @@ const Wrapper = styled.div`
   width: 100%;
   height: 80px;
   border-bottom: 1px solid ${({ theme }) => theme.grey200};
+  z-index: ${({ theme }) => theme.zIndex.level9};
 `
 
 const Nav = styled.nav`
-  padding: 10px;
+  padding: 0 ${({ theme }) => theme.layout.mobileSidesPadding};
   width: 100%;
   height: 100%;
   display: flex;
@@ -21,13 +26,13 @@ const Nav = styled.nav`
   justify-content: space-between;
 `
 
-const StyledLogo = styled(Logo)`
-  width: 170px;
+const StyledLink = styled(Link)`
+  display: flex;
+  align-items: center;
 `
 
-const baseIconStyle = css`
-  font-size: 3rem !important;
-  color: ${({ theme }) => theme.black};
+const StyledLogo = styled(Logo)`
+  width: 170px;
 `
 
 const FavoriteIcon = styled(FavoriteBorderIcon)`
@@ -43,13 +48,22 @@ const HamburgerIcon = styled(NotesIcon)`
 `
 
 const NavBar = () => {
+  const {
+    setOpenSidePanel,
+    panelTypes: [menu, shopingBasket],
+  } = useContext(UIContext)
+
   return (
     <Wrapper>
       <Nav>
-        <StyledLogo />
-        <FavoriteIcon />
-        <BasketIcon />
-        <HamburgerIcon />
+        <StyledLink to={routes.home}>
+          <StyledLogo />
+        </StyledLink>
+        <StyledLink to={routes.whishlist}>
+          <FavoriteIcon />
+        </StyledLink>
+        <BasketIcon onClick={() => setOpenSidePanel(shopingBasket)} />
+        <HamburgerIcon onClick={() => setOpenSidePanel(menu)} />
       </Nav>
     </Wrapper>
   )

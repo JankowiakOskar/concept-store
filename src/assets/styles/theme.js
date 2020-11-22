@@ -27,6 +27,7 @@ export const font = {
     button: '1.5rem',
     regular: '1.6rem',
     medium: '1.8rem',
+    siteHeader: '2.5rem',
     large: '2.9rem',
     xxl: '6rem',
   },
@@ -50,7 +51,7 @@ export const theme = {
   mq,
   layout: {
     searchBarHeight: '80px',
-    mobileSidesPadding: '30px',
+    mobileSidesPadding: '20px',
   },
   zIndex: {
     level1: '1000',

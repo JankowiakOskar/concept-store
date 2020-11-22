@@ -8,6 +8,7 @@ const SliderWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 80vh;
+  max-height: 500px;
   overflow: hidden;
 `
 

@@ -2,12 +2,12 @@ import React, { useReducer } from 'react'
 import PropTypes from 'prop-types'
 import initialState from 'reducers/dataReducer'
 
-export const AppContext = React.createContext()
+export const StoreContext = React.createContext()
 
 const StoreProvider = ({ children }) => {
   const [data] = useReducer(null, initialState)
 
-  return <AppContext.Provider value={data}>{children}</AppContext.Provider>
+  return <StoreContext.Provider value={data}>{children}</StoreContext.Provider>
 }
 
 StoreProvider.propTypes = {

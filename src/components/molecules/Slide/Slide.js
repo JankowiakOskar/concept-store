@@ -12,8 +12,8 @@ const Wrapper = styled(motion.div)`
   width: 100%;
   height: 100%;
   background-image: linear-gradient(
-      rgba(53, 129, 200, 0.6),
-      rgba(0, 25, 32, 0.6)
+      rgba(53, 129, 200, 0.3),
+      rgba(0, 25, 32, 0.3)
     ),
     url(${({ img }) => img});
   background-repeat: no-repeat;
