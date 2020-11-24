@@ -51,7 +51,7 @@ const EmptyCard = () => {
       <EmptyBasketDraw />
       <ContentWrapper>
         <ContentTitle>Your cart is empty</ContentTitle>
-        <ContentParagraph>Lets add some clothes</ContentParagraph>
+        <ContentParagraph>I suggest add some clothes</ContentParagraph>
         <StyledButton primary>Continue shopping</StyledButton>
       </ContentWrapper>
     </Wrapper>

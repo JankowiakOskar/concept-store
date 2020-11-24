@@ -5,7 +5,7 @@ import { UIContext } from 'contexts/GlobalUIContext'
 import styled from 'styled-components'
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
 import { ReactComponent as Logo } from 'assets/svgs/Logo.svg'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
+import FavoriteIcon from '@material-ui/icons/Favorite'
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket'
 import NotesIcon from '@material-ui/icons/Notes'
 
@@ -35,7 +35,7 @@ const StyledLogo = styled(Logo)`
   width: 170px;
 `
 
-const FavoriteIcon = styled(FavoriteBorderIcon)`
+const StyledFavoriteIcon = styled(FavoriteIcon)`
   ${baseIconStyle}
 `
 
@@ -60,7 +60,7 @@ const NavBar = () => {
           <StyledLogo />
         </StyledLink>
         <StyledLink to={routes.whishlist}>
-          <FavoriteIcon />
+          <StyledFavoriteIcon />
         </StyledLink>
         <BasketIcon onClick={() => setOpenSidePanel(shopingBasket)} />
         <HamburgerIcon onClick={() => setOpenSidePanel(menu)} />

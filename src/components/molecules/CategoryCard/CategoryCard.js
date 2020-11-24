@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Button from 'components/atoms/Button/Button'
 
 const WrapperCard = styled.div`
-  margin: 30px 0;
+  margin: 10px 0;
   position: relative;
   width: 100%;
   height: 250px;

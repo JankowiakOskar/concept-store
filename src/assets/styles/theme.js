@@ -12,6 +12,7 @@ export const colors = {
   primary: 'hsl(233, 57%, 37%)',
   primaryLight: 'hsl(236, 71%, 69%)',
   primaryDark: 'hsl(221, 100%, 26%)',
+  red: 'hsl(346, 100%, 46%)',
   grey100: 'hsl(0, 0%, 25%)',
   grey200: 'hsl(0, 0%, 74%)',
   grey300: 'hsl(0, 0%, 87%)',

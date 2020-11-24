@@ -38,17 +38,14 @@ const StyledCloseIcon = styled(CloseIcon)`
 
 const menuPanelVariants = {
   hidden: {
-    x: '-100%',
+    x: '-50%',
     opacity: 0,
   },
   visible: {
     x: 0,
     opacity: 1,
     transition: {
-      type: 'spring',
-      mass: 0.1,
-      damping: 8,
-      duration: 0.2,
+      duration: 0.3,
     },
   },
   exit: {
@@ -59,7 +56,7 @@ const menuPanelVariants = {
 
 const shopingBasketVariants = {
   hidden: {
-    x: '100%',
+    x: '50%',
     opacity: 0,
   },
   visible: {
@@ -82,8 +79,6 @@ const SidePanel = () => {
   } = useContext(UIContext)
 
   const { shopingBasket } = useContext(StoreContext)
-
-  console.log(shopingBasket)
   return (
     <AnimatePresence>
       {isOpen && (
