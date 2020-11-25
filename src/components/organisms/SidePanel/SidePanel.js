@@ -5,7 +5,11 @@ import styled from 'styled-components'
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
 import { motion, AnimatePresence } from 'framer-motion'
 import CloseIcon from '@material-ui/icons/Close'
+import HomeIcon from '@material-ui/icons/Home'
+import FavoriteIcon from '@material-ui/icons/Favorite'
 import ShopingCartTemplate from 'templates/ShoppingCartTemplate'
+import MenuList from 'components/molecules/MenuList/MenuList'
+import routes from 'routes'
 
 const Wrapper = styled(motion.div)`
   position: fixed;
@@ -26,15 +30,12 @@ const PanelHeader = styled.div`
   padding: 20px ${({ theme }) => theme.layout.mobileSidesPadding};
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid ${({ theme }) => theme.grey300};
+  border-bottom: 2px solid ${({ theme }) => theme.grey200};
 `
 const CloseIconWrapper = styled(motion.span)`
-  width: 30px;
-  height: 30px;
+  ${baseIconStyle};
 `
-const StyledCloseIcon = styled(CloseIcon)`
-  ${baseIconStyle}
-`
+const StyledCloseIcon = styled(CloseIcon)``
 
 const menuPanelVariants = {
   hidden: {
@@ -79,6 +80,7 @@ const SidePanel = () => {
   } = useContext(UIContext)
 
   const { shopingBasket } = useContext(StoreContext)
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -98,6 +100,20 @@ const SidePanel = () => {
               <StyledCloseIcon />
             </CloseIconWrapper>
           </PanelHeader>
+          {panelType === 'menu' && (
+            <MenuList
+              handleClosePanel={closeSidePanel}
+              list={[
+                { name: 'Home', link: `${routes.home}`, icon: HomeIcon },
+                {
+                  name: 'Whishlist',
+                  link: `${routes.whishlist}`,
+                  icon: FavoriteIcon,
+                },
+                { name: 'Clothes', link: `${routes.clothes}` },
+              ]}
+            />
+          )}
           {panelType === shopingCart && (
             <ShopingCartTemplate shopingBasket={shopingBasket} />
           )}

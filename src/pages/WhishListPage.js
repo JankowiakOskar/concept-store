@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { StoreContext } from 'store/StoreProvider'
 import styled from 'styled-components'
 import PageHeader from 'components/atoms/PageHeader/PageHeader'
+import WhishListTemplate from 'templates/WhisListTemplate'
 
 const Wrapper = styled.div`
   padding: 80px 0 0 0;
@@ -9,9 +11,13 @@ const Wrapper = styled.div`
 `
 
 const WhishListPage = () => {
+  const data = useContext(StoreContext)
+
+  console.log(data)
   return (
     <Wrapper>
       <PageHeader title="Whishlist" />
+      <WhishListTemplate />
     </Wrapper>
   )
 }

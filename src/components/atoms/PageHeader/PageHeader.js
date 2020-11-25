@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const Wrapper = styled.header`
   width: 100%;
   height: 80px;
-  border-bottom: 1px solid ${({ theme }) => theme.grey200};
+  /* border-bottom: 1px solid ${({ theme }) => theme.grey200}; */
   display: flex;
   align-items: center;
 `

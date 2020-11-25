@@ -28,7 +28,7 @@ export const font = {
     button: '1.5rem',
     regular: '1.6rem',
     medium: '1.8rem',
-    siteHeader: '2.5rem',
+    siteHeader: '2.2rem',
     large: '2.9rem',
     xxl: '6rem',
   },

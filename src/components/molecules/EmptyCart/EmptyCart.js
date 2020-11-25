@@ -1,6 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { UIContext } from 'contexts/GlobalUIContext'
+import routes from 'routes'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ReactComponent as EmptyBasket } from 'assets/svgs/EmptyBasket.svg'
+import { ReactComponent as WhishDraw } from 'assets/svgs/WhishDraw.svg'
 import Button from 'components/atoms/Button/Button'
 
 const Wrapper = styled.div`
@@ -13,6 +18,10 @@ const Wrapper = styled.div`
 `
 
 const EmptyBasketDraw = styled(EmptyBasket)`
+  width: 100%;
+  height: 200px;
+`
+const EmptyWhishList = styled(WhishDraw)`
   width: 100%;
   height: 200px;
 `
@@ -45,17 +54,30 @@ const StyledButton = styled(Button)`
   color: ${({ theme }) => theme.grey400};
 `
 
-const EmptyCard = () => {
+const EmptyCard = ({ title, description, type }) => {
+  const { closeSidePanel } = useContext(UIContext)
+
   return (
     <Wrapper>
-      <EmptyBasketDraw />
+      {type === 'shopingBasket' && <EmptyBasketDraw />}
+      {type === 'whishList' && <EmptyWhishList />}
       <ContentWrapper>
-        <ContentTitle>Your cart is empty</ContentTitle>
-        <ContentParagraph>I suggest add some clothes</ContentParagraph>
-        <StyledButton primary>Continue shopping</StyledButton>
+        <ContentTitle>{title}</ContentTitle>
+        <ContentParagraph>{description}</ContentParagraph>
+        {type === 'shopingBasket' && (
+          <Link to={routes.clothes} onClick={closeSidePanel}>
+            <StyledButton primary>Continue shopping</StyledButton>
+          </Link>
+        )}
       </ContentWrapper>
     </Wrapper>
   )
+}
+
+EmptyCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['shopingBasket', 'whishList']).isRequired,
 }
 
 export default EmptyCard

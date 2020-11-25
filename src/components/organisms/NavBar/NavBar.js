@@ -14,11 +14,11 @@ const Wrapper = styled.div`
   position: fixed;
   width: 100%;
   height: 80px;
-  border-bottom: 1px solid ${({ theme }) => theme.grey200};
+  border-bottom: 1px solid ${({ theme }) => theme.grey300};
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
   z-index: ${({ theme }) => theme.zIndex.level9};
-  background-color: ${({ onScroll, theme }) =>
-    onScroll ? theme.white : 'transparent'};
+  background-color: ${({ isOverScrolled, theme }) =>
+    isOverScrolled ? theme.white : 'transparent'};
   transition: background-color 0.2s 0.1s ease;
 `
 
@@ -61,7 +61,7 @@ const NavBar = () => {
   const [scrollYPos] = useScrollPos(window)
 
   return (
-    <Wrapper onScroll={scrollYPos > 150}>
+    <Wrapper isOverScrolled={scrollYPos > 100}>
       <Nav>
         <StyledLink to={routes.home}>
           <StyledLogo />

@@ -32,8 +32,8 @@ const StyledFavoriteIcon = styled(FavoriteBorderIcon)`
   position: absolute;
   top: 10px;
   right: 10px;
-  fill: ${({ favorite, theme }) =>
-    favorite ? `${theme.red} !important` : `${theme.grey100} !important`};
+  fill: ${({ liked, theme }) =>
+    liked ? `${theme.red} !important` : `${theme.grey100} !important`};
   ${baseIconStyle};
   transition: isFavorite 0.15s ease;
   cursor: pointer;
@@ -58,7 +58,7 @@ const ProductCard = () => {
       <ImageWrapper>
         <ProductImage src={denimJacket} whileHover={{ scale: 1.1 }} />
         <StyledFavoriteIcon
-          favorite={isFavorite}
+          liked={isFavorite ? 1 : 0}
           onClick={() => setFavorite(!isFavorite)}
         />
       </ImageWrapper>

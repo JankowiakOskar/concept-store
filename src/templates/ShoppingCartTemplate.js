@@ -10,7 +10,17 @@ const Wrapper = styled.div`
 `
 
 const ShoppingCartTemplate = ({ shopingBasket }) => {
-  return <Wrapper>{!shopingBasket.length && <EmptyCard />}</Wrapper>
+  return (
+    <Wrapper>
+      {!shopingBasket.length && (
+        <EmptyCard
+          title="Your cart is empty"
+          description="I suggest add some clothes"
+          type="shopingBasket"
+        />
+      )}
+    </Wrapper>
+  )
 }
 
 ShoppingCartTemplate.propTypes = {
