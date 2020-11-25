@@ -9,7 +9,6 @@ import ProductCard from 'components/molecules/ProductCard/ProductCard'
 import LoadingProvider from 'providers/LoadingProvider'
 
 const Wrapper = styled(motion.div)`
-  padding: 80px 0 0 0;
   width: 100%;
   min-height: 100%;
 `

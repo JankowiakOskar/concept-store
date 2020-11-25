@@ -24,7 +24,7 @@ const Wrapper = styled(motion.div)`
 const InnerWrapper = styled(motion.div)`
   width: 100%;
   padding: 0 30px;
-  margin: 50px 0 0 0;
+  margin: 120px 0 0 0;
 `
 
 const Dot = styled.span`

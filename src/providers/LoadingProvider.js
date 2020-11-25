@@ -6,7 +6,11 @@ const LoadingProvider = ({ children }) => {
   const [isLoading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (isLoading) setTimeout(() => setLoading(!isLoading), 1200)
+    const handleLoading = () => setLoading(!isLoading)
+
+    if (isLoading) setTimeout(handleLoading, 1200)
+
+    return () => clearTimeout(handleLoading)
   }, [isLoading])
 
   return isLoading ? <LoadingPage /> : children

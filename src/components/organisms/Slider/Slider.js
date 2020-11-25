@@ -7,8 +7,7 @@ import ControlDot from 'components/atoms/ControlDot/ControlDot'
 const SliderWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 80vh;
-  max-height: 500px;
+  height: 100vh;
   overflow: hidden;
 `
 

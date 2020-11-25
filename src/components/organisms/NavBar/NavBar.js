@@ -8,13 +8,18 @@ import { ReactComponent as Logo } from 'assets/svgs/Logo.svg'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket'
 import NotesIcon from '@material-ui/icons/Notes'
+import useScrollPos from 'hooks/useScrollPos'
 
 const Wrapper = styled.div`
   position: fixed;
   width: 100%;
   height: 80px;
   border-bottom: 1px solid ${({ theme }) => theme.grey200};
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
   z-index: ${({ theme }) => theme.zIndex.level9};
+  background-color: ${({ onScroll, theme }) =>
+    onScroll ? theme.white : 'transparent'};
+  transition: background-color 0.2s 0.1s ease;
 `
 
 const Nav = styled.nav`
@@ -53,8 +58,10 @@ const NavBar = () => {
     panelTypes: [menu, shopingBasket],
   } = useContext(UIContext)
 
+  const [scrollYPos] = useScrollPos(window)
+
   return (
-    <Wrapper>
+    <Wrapper onScroll={scrollYPos > 150}>
       <Nav>
         <StyledLink to={routes.home}>
           <StyledLogo />
