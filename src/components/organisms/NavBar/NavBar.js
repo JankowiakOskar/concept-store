@@ -66,7 +66,7 @@ const NavBar = () => {
         <StyledLink to={routes.home}>
           <StyledLogo />
         </StyledLink>
-        <StyledLink to={routes.whishlist}>
+        <StyledLink to={routes.wishlist}>
           <StyledFavoriteIcon />
         </StyledLink>
         <BasketIcon onClick={() => setOpenSidePanel(shopingBasket)} />

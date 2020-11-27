@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import Slider from 'components/organisms/Slider/Slider'
 import CategoriesTemplate from 'templates/CategoriesTemplate'
 import CategoryCard from 'components/molecules/CategoryCard/CategoryCard'
-import ProductCard from 'components/molecules/ProductCard/ProductCard'
 import LoadingProvider from 'providers/LoadingProvider'
 
 const Wrapper = styled(motion.div)`
@@ -14,7 +13,9 @@ const Wrapper = styled(motion.div)`
 `
 
 const Home = () => {
-  const { slides, categories } = useContext(StoreContext)
+  const {
+    data: { slides, categories },
+  } = useContext(StoreContext)
   return (
     <LoadingProvider>
       <Wrapper
@@ -32,7 +33,6 @@ const Home = () => {
             />
           ))}
         </CategoriesTemplate>
-        <ProductCard />
       </Wrapper>
     </LoadingProvider>
   )

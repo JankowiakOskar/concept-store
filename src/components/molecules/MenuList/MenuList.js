@@ -26,7 +26,7 @@ const MenuList = ({ list, handleClosePanel }) => {
   return (
     <List onClick={handleClosePanel}>
       {list.map(({ name, link }) => (
-        <StyledLink to={link}>
+        <StyledLink key={name} to={link}>
           <ListElement>{name}</ListElement>
         </StyledLink>
       ))}

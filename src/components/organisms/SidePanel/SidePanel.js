@@ -79,7 +79,9 @@ const SidePanel = () => {
     panelTypes: [menu, shopingCart],
   } = useContext(UIContext)
 
-  const { shopingBasket } = useContext(StoreContext)
+  const {
+    data: { shopingBasket },
+  } = useContext(StoreContext)
 
   return (
     <AnimatePresence>
@@ -106,8 +108,8 @@ const SidePanel = () => {
               list={[
                 { name: 'Home', link: `${routes.home}`, icon: HomeIcon },
                 {
-                  name: 'Whishlist',
-                  link: `${routes.whishlist}`,
+                  name: 'Wishlist',
+                  link: `${routes.wishlist}`,
                   icon: FavoriteIcon,
                 },
                 { name: 'Clothes', link: `${routes.clothes}` },

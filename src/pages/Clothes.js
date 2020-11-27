@@ -1,6 +1,8 @@
 import React from 'react'
-import LoadingPage from './LoadingPage'
+import ProductsTemplate from 'templates/ProductsTemplate'
 
-const Clothes = () => <LoadingPage />
+const Clothes = () => {
+  return <ProductsTemplate />
+}
 
 export default Clothes

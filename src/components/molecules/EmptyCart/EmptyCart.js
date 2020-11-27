@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ReactComponent as EmptyBasket } from 'assets/svgs/EmptyBasket.svg'
-import { ReactComponent as WhishDraw } from 'assets/svgs/WhishDraw.svg'
+import { ReactComponent as WishDraw } from 'assets/svgs/WishDraw.svg'
 import Button from 'components/atoms/Button/Button'
 
 const Wrapper = styled.div`
@@ -21,7 +21,7 @@ const EmptyBasketDraw = styled(EmptyBasket)`
   width: 100%;
   height: 200px;
 `
-const EmptyWhishList = styled(WhishDraw)`
+const EmptyWishList = styled(WishDraw)`
   width: 100%;
   height: 200px;
 `
@@ -60,7 +60,7 @@ const EmptyCard = ({ title, description, type }) => {
   return (
     <Wrapper>
       {type === 'shopingBasket' && <EmptyBasketDraw />}
-      {type === 'whishList' && <EmptyWhishList />}
+      {type === 'wishList' && <EmptyWishList />}
       <ContentWrapper>
         <ContentTitle>{title}</ContentTitle>
         <ContentParagraph>{description}</ContentParagraph>
@@ -77,7 +77,7 @@ const EmptyCard = ({ title, description, type }) => {
 EmptyCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['shopingBasket', 'whishList']).isRequired,
+  type: PropTypes.oneOf(['shopingBasket', 'wishList']).isRequired,
 }
 
 export default EmptyCard

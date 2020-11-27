@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
-import denimJacket from 'assets/images/denimJacket.jpg'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
 
@@ -14,18 +14,35 @@ const ProductWrapper = styled.div`
   justify-content: space-between;
 `
 
+const ProductImage = styled(motion.img)`
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.2s ease;
+`
+
 const ImageWrapper = styled.div`
   height: 400px;
   position: relative;
   width: 100%;
   overflow: hidden;
-`
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 
-const ProductImage = styled(motion.img)`
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
+  ${({ theme }) => theme.mq.desktop} {
+    &:hover {
+      ${ProductImage} {
+        transform: scale(1.1);
+      }
+    }
+  }
 `
 
 const StyledFavoriteIcon = styled(FavoriteBorderIcon)`
@@ -37,6 +54,7 @@ const StyledFavoriteIcon = styled(FavoriteBorderIcon)`
   ${baseIconStyle};
   transition: isFavorite 0.15s ease;
   cursor: pointer;
+  z-index: ${({ theme }) => theme.zIndex.level7};
 `
 
 const DescriptionWrapper = styled.div`
@@ -51,23 +69,42 @@ const Price = styled.p`
   color: ${({ theme }) => theme.grey100};
 `
 
-const ProductCard = () => {
+const ProductCard = ({ id, name, price, pictureURL, handleWishlist }) => {
   const [isFavorite, setFavorite] = useState(false)
+
+  const handleClickFavorite = (ID) => {
+    setFavorite(!isFavorite)
+    handleWishlist(ID)
+  }
   return (
     <ProductWrapper>
       <ImageWrapper>
-        <ProductImage src={denimJacket} whileHover={{ scale: 1.1 }} />
+        <ProductImage src={`http://localhost:1337${pictureURL}`} />
         <StyledFavoriteIcon
           liked={isFavorite ? 1 : 0}
-          onClick={() => setFavorite(!isFavorite)}
+          onClick={() => handleClickFavorite(id)}
         />
       </ImageWrapper>
       <DescriptionWrapper>
-        <ProductTitle>Denim jacket</ProductTitle>
-        <Price>30,99 €</Price>
+        <ProductTitle>{name}</ProductTitle>
+        <Price>{price} €</Price>
       </DescriptionWrapper>
     </ProductWrapper>
   )
+}
+
+ProductCard.propTypes = {
+  name: PropTypes.string,
+  price: PropTypes.number,
+  pictureURL: PropTypes.string,
+  handleWishlist: PropTypes.func,
+}
+
+ProductCard.defaultProps = {
+  name: '',
+  price: 0,
+  pictureURL: '',
+  handleWishlist: () => {},
 }
 
 export default ProductCard

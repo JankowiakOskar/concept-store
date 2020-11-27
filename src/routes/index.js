@@ -1,6 +1,6 @@
 const routes = {
   home: '/',
-  whishlist: '/whishlist',
+  wishlist: '/wishlist',
   clothes: '/clothes',
 }
 
