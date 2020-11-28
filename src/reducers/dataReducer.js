@@ -8,7 +8,9 @@ import {
   FETCHING_PRODUCTS_REQUEST,
   FETCHING_PRODUCTS_SUCCESS,
   FETCHING_PRODUCTS_FAILURE,
-  ADD_TO_WHISHLIST,
+  GET_WISHLIST,
+  ADD_TO_WISHLIST,
+  REMOVE_FROM_WISHLIST,
 } from 'actions/data'
 
 export const initialState = {
@@ -75,10 +77,20 @@ export const dataReducer = (state, action) => {
         isLoadingProducts: !state.isLoadingProducts,
         error: action.payload,
       }
-    case ADD_TO_WHISHLIST:
+    case GET_WISHLIST:
+      return {
+        ...state,
+        wishlist: [...state.wishlist, ...action.payload],
+      }
+    case ADD_TO_WISHLIST:
       return {
         ...state,
         wishlist: [...state.wishlist, action.payload],
+      }
+    case REMOVE_FROM_WISHLIST:
+      return {
+        ...state,
+        wishlist: state.wishlist.filter(({ id }) => id !== action.payload.id),
       }
     default: {
       throw new Error(`Unhandled action: ${action.type}`)

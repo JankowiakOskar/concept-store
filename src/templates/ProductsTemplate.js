@@ -1,8 +1,6 @@
-import React, { useContext } from 'react'
-import { StoreContext } from 'store/StoreProvider'
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import ProductCard from 'components/molecules/ProductCard/ProductCard'
-import { getFromArrByID } from 'helpers'
 
 const Wrapper = styled.div`
   height: auto;
@@ -14,41 +12,16 @@ const Wrapper = styled.div`
   align-items: center;
 `
 
-const ProductsTemplate = () => {
-  const {
-    data: { products: productsObj },
-    addToWishlist,
-  } = useContext(StoreContext)
+const ProductsTemplate = ({ children }) => {
+  return <Wrapper>{children}</Wrapper>
+}
 
-  const allProductsArr = Object.keys(productsObj).reduce(
-    (arr, currentCategory) => {
-      const isArrayCategory = Array.isArray(productsObj[currentCategory])
-      if (isArrayCategory) arr.push(...productsObj[currentCategory])
-      return arr
-    },
-    [],
-  )
+ProductsTemplate.propTypes = {
+  children: PropTypes.node,
+}
 
-  const handleWishlist = (id) => {
-    const choosenProduct = getFromArrByID(allProductsArr, id)
-    addToWishlist(choosenProduct)
-  }
-
-  return (
-    <Wrapper>
-      {allProductsArr.length &&
-        allProductsArr.map(({ id, name, price, picture: { url } }) => (
-          <ProductCard
-            key={id}
-            id={id}
-            name={name}
-            price={price}
-            pictureURL={url}
-            handleWishlist={handleWishlist}
-          />
-        ))}
-    </Wrapper>
-  )
+ProductsTemplate.defaultProps = {
+  children: [],
 }
 
 export default ProductsTemplate
