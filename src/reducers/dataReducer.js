@@ -52,9 +52,9 @@ export const initialState = {
     },
   ],
   isLoadingProducts: false,
-  products: {},
+  products: [],
   wishlist: [],
-  shopingBasket: [],
+  shoppingBasket: [],
   error: {},
 }
 

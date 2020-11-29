@@ -1,5 +1,9 @@
 import axios from 'axios'
-import { setItemToLocalStorage, removeItemFromLocalStorage } from 'helpers'
+import {
+  setItemToLocalStorage,
+  removeItemFromLocalStorage,
+  sleeper,
+} from 'helpers'
 
 export const FETCHING_PRODUCTS_REQUEST = 'FETCHING_PRODUCTS_REQUEST'
 export const FETCHING_PRODUCTS_SUCCESS = 'FETCHING_PRODUCTS_SUCCESS'
@@ -10,12 +14,19 @@ export const GET_WISHLIST = 'GET_WISHLIST'
 export const ADD_TO_WISHLIST = 'ADD_TO_WISHLIST'
 export const REMOVE_FROM_WISHLIST = 'ADD_TO_WHISHLIST'
 
-export const getProducts = async (dispatch) => {
+const fetchLimit = 10
+
+export const getProducts = async (dispatch, currentProducts) => {
   dispatch({ type: FETCHING_PRODUCTS_REQUEST })
+  const productsNum
+
+
   try {
-    const {
-      data: [products],
-    } = await axios.get('http://localhost:1337/products?_limit=3')
+    const { data: products } = await axios.get(
+      `http://localhost:1337/products?_limit=${fetchLimit}`,
+    )
+
+    await sleeper(1000)
 
     dispatch({
       type: FETCHING_PRODUCTS_SUCCESS,
@@ -40,7 +51,7 @@ export const addToWishlist = (dispatch, product) => {
   dispatch({ type: ADD_TO_WISHLIST, payload: product })
 }
 
-export const removeFromWishlist = (dispatch, product) => {
-  removeItemFromLocalStorage('wishlist', product)
-  dispatch({ type: REMOVE_FROM_WISHLIST, payload: { id: product.id } })
+export const removeFromWishlist = (dispatch, id) => {
+  removeItemFromLocalStorage('wishlist', id)
+  dispatch({ type: REMOVE_FROM_WISHLIST, payload: { id } })
 }

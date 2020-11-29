@@ -10,10 +10,12 @@ const Wrapper = styled.div`
   text-align: center;
 `
 
-const WishListTemplate = ({ wishList }) => {
+const WishListTemplate = ({ children }) => {
   return (
     <Wrapper>
-      {!wishList.length && (
+      {children.length ? (
+        children
+      ) : (
         <EmptyCard
           title="You haven't any clothes on wishlist"
           description="Let's find something with your style."
@@ -25,11 +27,11 @@ const WishListTemplate = ({ wishList }) => {
 }
 
 WishListTemplate.propTypes = {
-  wishList: PropTypes.arrayOf(PropTypes.object),
+  children: PropTypes.arrayOf(PropTypes.node),
 }
 
 WishListTemplate.defaultProps = {
-  wishList: [],
+  children: [],
 }
 
 export default WishListTemplate

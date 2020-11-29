@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
 
 const ProductWrapper = styled.div`
@@ -57,6 +58,15 @@ const StyledFavoriteIcon = styled(FavoriteBorderIcon)`
   z-index: ${({ theme }) => theme.zIndex.level7};
 `
 
+const StyledDeleteIcon = styled(DeleteForeverIcon)`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  fill: ${({ theme }) => theme.grey100};
+  ${baseIconStyle}
+  z-index: ${({ theme }) => theme.zIndex.level7};
+`
+
 const DescriptionWrapper = styled.div`
   margin: 10px 0 0 0;
 `
@@ -69,21 +79,38 @@ const Price = styled.p`
   color: ${({ theme }) => theme.grey100};
 `
 
-const ProductCard = ({ id, name, price, pictureURL, handleWishlist }) => {
-  const [isFavorite, setFavorite] = useState(false)
+const ProductCard = ({
+  id,
+  name,
+  price,
+  pictureURL,
+  handleWishlist,
+  onWishlist,
+  removeFromWishlist,
+  cardType,
+}) => {
+  const [isFavorite, setFavorite] = useState(onWishlist)
+
+  useCallback(() => setFavorite(onWishlist), [onWishlist])
 
   const handleClickFavorite = (ID) => {
     setFavorite(!isFavorite)
     handleWishlist(ID)
   }
+
   return (
     <ProductWrapper>
       <ImageWrapper>
         <ProductImage src={`http://localhost:1337${pictureURL}`} />
-        <StyledFavoriteIcon
-          liked={isFavorite ? 1 : 0}
-          onClick={() => handleClickFavorite(id)}
-        />
+        {cardType === 'productCard' && (
+          <StyledFavoriteIcon
+            liked={isFavorite ? 1 : 0}
+            onClick={() => handleClickFavorite(id)}
+          />
+        )}
+        {cardType === 'wishedCard' && (
+          <StyledDeleteIcon onClick={() => removeFromWishlist(id)} />
+        )}
       </ImageWrapper>
       <DescriptionWrapper>
         <ProductTitle>{name}</ProductTitle>
@@ -94,17 +121,24 @@ const ProductCard = ({ id, name, price, pictureURL, handleWishlist }) => {
 }
 
 ProductCard.propTypes = {
+  id: PropTypes.string,
   name: PropTypes.string,
   price: PropTypes.number,
   pictureURL: PropTypes.string,
   handleWishlist: PropTypes.func,
+  onWishlist: PropTypes.bool,
+  cardType: PropTypes.oneOf(['productCard', 'wishedCard']).isRequired,
+  removeFromWishlist: PropTypes.func,
 }
 
 ProductCard.defaultProps = {
+  id: '',
   name: '',
   price: 0,
   pictureURL: '',
   handleWishlist: () => {},
+  removeFromWishlist: () => {},
+  onWishlist: false,
 }
 
 export default ProductCard

@@ -21,8 +21,7 @@ const StoreProvider = ({ children }) => {
 
   const addToWishlist = (product) => addToWishlistAction(dispatch, product)
 
-  const removeFromWishlist = (product) =>
-    removeFromWishlistAction(dispatch, product)
+  const removeFromWishlist = (id) => removeFromWishlistAction(dispatch, id)
 
   const getWishlist = () => getWishlistAction(dispatch)
 
@@ -39,6 +38,7 @@ const StoreProvider = ({ children }) => {
     data,
     addToWishlist,
     removeFromWishlist,
+    fetchProducts,
   }
 
   return (

@@ -9,6 +9,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket'
 import NotesIcon from '@material-ui/icons/Notes'
 import useScrollPos from 'hooks/useScrollPos'
+import useNumStoredItems from 'hooks/useNumStoredItems'
 
 const Wrapper = styled.div`
   position: fixed;
@@ -36,6 +37,27 @@ const StyledLink = styled(Link)`
   align-items: center;
 `
 
+const ElementWrapper = styled.div`
+  position: relative;
+  display: flex;
+`
+
+const Circle = styled.span`
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.white};
+  font-size: ${({ theme }) => theme.font.size.small};
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.primaryDark};
+`
+
 const StyledLogo = styled(Logo)`
   width: 170px;
 `
@@ -57,9 +79,9 @@ const NavBar = () => {
     setOpenSidePanel,
     panelTypes: [menu, shopingBasket],
   } = useContext(UIContext)
-
   const [scrollYPos] = useScrollPos(window)
-
+  const [numWishedProducts] = useNumStoredItems('wishlist')
+  const [numProductsInBasket] = useNumStoredItems('shoppingBasket')
   return (
     <Wrapper isOverScrolled={scrollYPos > 100}>
       <Nav>
@@ -67,9 +89,15 @@ const NavBar = () => {
           <StyledLogo />
         </StyledLink>
         <StyledLink to={routes.wishlist}>
-          <StyledFavoriteIcon />
+          <ElementWrapper>
+            <StyledFavoriteIcon />
+            {numWishedProducts > 0 && <Circle>{numWishedProducts}</Circle>}
+          </ElementWrapper>
         </StyledLink>
-        <BasketIcon onClick={() => setOpenSidePanel(shopingBasket)} />
+        <ElementWrapper onClick={() => setOpenSidePanel(shopingBasket)}>
+          <BasketIcon />
+          {numProductsInBasket > 0 && <Circle>{numProductsInBasket}</Circle>}
+        </ElementWrapper>
         <HamburgerIcon onClick={() => setOpenSidePanel(menu)} />
       </Nav>
     </Wrapper>
