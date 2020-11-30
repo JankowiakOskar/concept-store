@@ -5,6 +5,8 @@ import {
   sleeper,
 } from 'helpers'
 
+import { limitQueryParam, allDataQueryParam } from 'helpers/queryHelpers'
+
 export const FETCHING_PRODUCTS_REQUEST = 'FETCHING_PRODUCTS_REQUEST'
 export const FETCHING_PRODUCTS_SUCCESS = 'FETCHING_PRODUCTS_SUCCESS'
 export const FETCHING_PRODUCTS_FAILURE = 'FETCHING_PRODUCTS_FAILURE'
@@ -14,23 +16,25 @@ export const GET_WISHLIST = 'GET_WISHLIST'
 export const ADD_TO_WISHLIST = 'ADD_TO_WISHLIST'
 export const REMOVE_FROM_WISHLIST = 'ADD_TO_WHISHLIST'
 
-const fetchLimit = 10
+export const limitRequest = 12
 
 export const getProducts = async (dispatch, currentProducts) => {
   dispatch({ type: FETCHING_PRODUCTS_REQUEST })
-  const productsNum
 
+  const limitQuery = limitQueryParam(currentProducts, limitRequest)
 
   try {
     const { data: products } = await axios.get(
-      `http://localhost:1337/products?_limit=${fetchLimit}`,
+      `http://localhost:1337/products?${limitQuery}`,
     )
 
-    await sleeper(1000)
+    await sleeper(500)
+
+    const isAllProductsFetched = limitQuery.includes(allDataQueryParam)
 
     dispatch({
       type: FETCHING_PRODUCTS_SUCCESS,
-      payload: products,
+      payload: { products, isAllProductsFetched },
     })
   } catch (error) {
     dispatch({

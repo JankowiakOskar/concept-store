@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import styled from 'styled-components'
 import { StoreContext } from 'store/StoreProvider'
 import { getFromArrByID } from 'helpers'
+import { limitRequest } from 'actions/data'
 import ProductsTemplate from 'templates/ProductsTemplate'
 import ProductCard from 'components/molecules/ProductCard/ProductCard'
 import SkeletonCard from 'components/molecules/SkeletonCard/SkeletonCard'
@@ -29,20 +30,11 @@ const cardVariants = {
 
 const Clothes = () => {
   const {
-    data: { products, wishlist },
+    data: { products, wishlist, isLoadingProducts },
     addToWishlist,
     removeFromWishlist,
-    fetchProducts,
   } = useContext(StoreContext)
 
-  // const allProductsArr = Object.keys(productsObj).reduce(
-  //   (arr, currentCategory) => {
-  //     const isArrayCategory = Array.isArray(productsObj[currentCategory])
-  //     if (isArrayCategory) arr.push(...productsObj[currentCategory])
-  //     return arr
-  //   },
-  //   [],
-  // )
   const handleWishlist = (id) => {
     const choosenProduct = getFromArrByID(products, id)
     const isOnWishlist = wishlist.some(
@@ -55,7 +47,7 @@ const Clothes = () => {
   return (
     <Wrapper>
       <ProductsTemplate>
-        {products.length
+        {products.length && !isLoadingProducts
           ? products.map(({ id, name, price, picture: { url } }) => (
               <CardWrapper
                 variants={cardVariants}
@@ -74,7 +66,7 @@ const Clothes = () => {
                 />
               </CardWrapper>
             ))
-          : Array.from({ length: 6 }).map((_, index) => (
+          : Array.from({ length: limitRequest }).map((_, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <CardWrapper key={index}>
                 <SkeletonCard />

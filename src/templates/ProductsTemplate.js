@@ -22,20 +22,25 @@ const StyledButton = styled(Button)`
 
 const ProductsTemplate = ({ children }) => {
   const {
-    data: { isLoadingProducts },
+    data: {
+      isLoadingProducts,
+      products: currentProducts,
+      isAllProductsFetched,
+    },
     fetchProducts,
   } = useContext(StoreContext)
-
   return (
     <Wrapper>
       {children}
-      <StyledButton onClick={() => fetchProducts()}>
-        {isLoadingProducts ? (
-          <Loader type="ThreeDots" color="#ffffff" height={50} width={50} />
-        ) : (
-          'Load more'
-        )}
-      </StyledButton>
+      {!isAllProductsFetched && (
+        <StyledButton onClick={() => fetchProducts(currentProducts)}>
+          {isLoadingProducts ? (
+            <Loader type="ThreeDots" color="#ffffff" height={50} width={50} />
+          ) : (
+            'Load more'
+          )}
+        </StyledButton>
+      )}
     </Wrapper>
   )
 }

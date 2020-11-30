@@ -53,6 +53,7 @@ export const initialState = {
   ],
   isLoadingProducts: false,
   products: [],
+  isAllProductsFetched: false,
   wishlist: [],
   shoppingBasket: [],
   error: {},
@@ -69,7 +70,8 @@ export const dataReducer = (state, action) => {
       return {
         ...state,
         isLoadingProducts: !state.isLoadingProducts,
-        products: action.payload,
+        products: [...state.products, ...action.payload.products],
+        isAllProductsFetched: action.payload.isAllProductsFetched,
       }
     case FETCHING_PRODUCTS_FAILURE:
       return {

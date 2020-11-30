@@ -17,7 +17,8 @@ const StoreProvider = ({ children }) => {
 
   const { pathname } = useLocation()
 
-  const fetchProducts = () => getProductsAction(dispatch)
+  const fetchProducts = (currentProducts) =>
+    getProductsAction(dispatch, currentProducts)
 
   const addToWishlist = (product) => addToWishlistAction(dispatch, product)
 
@@ -31,7 +32,7 @@ const StoreProvider = ({ children }) => {
 
   useEffect(() => {
     const isClothesPagePath = routes.clothes === pathname
-    if (isClothesPagePath) fetchProducts()
+    if (isClothesPagePath) fetchProducts(data.products)
   }, [pathname])
 
   const values = {
