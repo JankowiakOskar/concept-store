@@ -46,6 +46,7 @@ const menuPanelVariants = {
     x: 0,
     opacity: 1,
     transition: {
+      type: 'ease',
       duration: 0.3,
     },
   },
@@ -84,7 +85,7 @@ const SidePanel = () => {
   } = useContext(StoreContext)
 
   return (
-    <AnimatePresence>
+    <AnimatePresence exitBeforeEnter>
       {isOpen && (
         <Wrapper
           variants={

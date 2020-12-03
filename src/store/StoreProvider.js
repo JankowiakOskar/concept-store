@@ -8,6 +8,7 @@ import {
   addToWishlist as addToWishlistAction,
   removeFromWishlist as removeFromWishlistAction,
   getWishlist as getWishlistAction,
+  // getExactProduct as getExactProductAction,
 } from 'actions/data'
 
 export const StoreContext = React.createContext()
@@ -16,6 +17,7 @@ const StoreProvider = ({ children }) => {
   const [data, dispatch] = useReducer(dataReducer, initialState)
 
   const { pathname } = useLocation()
+  const { products } = data
 
   const fetchProducts = (currentProducts) =>
     getProductsAction(dispatch, currentProducts)
@@ -32,8 +34,8 @@ const StoreProvider = ({ children }) => {
 
   useEffect(() => {
     const isClothesPagePath = routes.clothes === pathname
-    if (isClothesPagePath) fetchProducts(data.products)
-  }, [pathname])
+    if (isClothesPagePath && !products.length) fetchProducts(products)
+  }, [pathname, products])
 
   const values = {
     data,

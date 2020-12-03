@@ -7,6 +7,7 @@ import { limitRequest } from 'actions/data'
 import ProductsTemplate from 'templates/ProductsTemplate'
 import ProductCard from 'components/molecules/ProductCard/ProductCard'
 import SkeletonCard from 'components/molecules/SkeletonCard/SkeletonCard'
+import TransitionProvider from 'providers/TransitionProvider'
 
 const Wrapper = styled.div`
   padding: 80px 0 0 0;
@@ -14,7 +15,7 @@ const Wrapper = styled.div`
   height: auto;
 `
 const CardWrapper = styled(motion.div)`
-  margin: 20px 0;
+  margin: 30px 0;
 `
 
 const cardVariants = {
@@ -40,40 +41,40 @@ const Clothes = () => {
     const isOnWishlist = wishlist.some(
       (product) => product.id === choosenProduct.id,
     )
-    return isOnWishlist
-      ? removeFromWishlist(choosenProduct)
-      : addToWishlist(choosenProduct)
+    return isOnWishlist ? removeFromWishlist(id) : addToWishlist(choosenProduct)
   }
   return (
-    <Wrapper>
-      <ProductsTemplate>
-        {products.length && !isLoadingProducts
-          ? products.map(({ id, name, price, picture: { url } }) => (
-              <CardWrapper
-                variants={cardVariants}
-                initial="hidden"
-                animate="vissible"
-                key={id}
-              >
-                <ProductCard
-                  id={id}
-                  name={name}
-                  price={price}
-                  pictureURL={url}
-                  handleWishlist={handleWishlist}
-                  onWishlist={wishlist.some((product) => product.id === id)}
-                  cardType="productCard"
-                />
-              </CardWrapper>
-            ))
-          : Array.from({ length: limitRequest }).map((_, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <CardWrapper key={index}>
-                <SkeletonCard />
-              </CardWrapper>
-            ))}
-      </ProductsTemplate>
-    </Wrapper>
+    <TransitionProvider>
+      <Wrapper>
+        <ProductsTemplate>
+          {products.length && !isLoadingProducts
+            ? products.map(({ id, name, price, picture: { url } }) => (
+                <CardWrapper
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="vissible"
+                  key={id}
+                >
+                  <ProductCard
+                    id={id}
+                    name={name}
+                    price={price}
+                    pictureURL={url}
+                    handleWishlist={handleWishlist}
+                    onWishlist={wishlist.some((product) => product.id === id)}
+                    cardType="productCard"
+                  />
+                </CardWrapper>
+              ))
+            : Array.from({ length: limitRequest }).map((_, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <CardWrapper key={index}>
+                  <SkeletonCard />
+                </CardWrapper>
+              ))}
+        </ProductsTemplate>
+      </Wrapper>
+    </TransitionProvider>
   )
 }
 

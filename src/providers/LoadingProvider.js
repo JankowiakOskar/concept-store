@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import PropTypes from 'prop-types'
 import LoadingPage from 'pages/LoadingPage'
 
@@ -13,7 +14,11 @@ const LoadingProvider = ({ children }) => {
     return () => clearTimeout(handleLoading)
   }, [isLoading])
 
-  return isLoading ? <LoadingPage /> : children
+  return (
+    <AnimatePresence exitBeforeEnter>
+      {isLoading ? <LoadingPage /> : children}
+    </AnimatePresence>
+  )
 }
 
 LoadingProvider.propTypes = {

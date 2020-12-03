@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
+import routes from 'routes'
+import { Link } from 'react-router-dom'
 
 const ProductWrapper = styled.div`
   max-height: 600px;
@@ -22,11 +24,15 @@ const ProductImage = styled(motion.img)`
   transition: transform 0.2s ease;
 `
 
-const ImageWrapper = styled.div`
+const OuterImageWrapper = styled.div`
   height: 400px;
   position: relative;
   width: 100%;
   overflow: hidden;
+`
+
+const ImageWrapper = styled.div`
+  width: 100%;
   &:after {
     content: '';
     position: absolute;
@@ -93,25 +99,29 @@ const ProductCard = ({
 
   useCallback(() => setFavorite(onWishlist), [onWishlist])
 
-  const handleClickFavorite = (ID) => {
+  const handleClickFavorite = (e, ID) => {
     setFavorite(!isFavorite)
     handleWishlist(ID)
   }
 
   return (
     <ProductWrapper>
-      <ImageWrapper>
-        <ProductImage src={`http://localhost:1337${pictureURL}`} />
+      <OuterImageWrapper>
+        <Link to={`${routes.clothes}/${id}`}>
+          <ImageWrapper>
+            <ProductImage src={`http://localhost:1337${pictureURL}`} />
+          </ImageWrapper>
+        </Link>
         {cardType === 'productCard' && (
           <StyledFavoriteIcon
             liked={isFavorite ? 1 : 0}
-            onClick={() => handleClickFavorite(id)}
+            onClick={(e) => handleClickFavorite(e, id)}
           />
         )}
         {cardType === 'wishedCard' && (
           <StyledDeleteIcon onClick={() => removeFromWishlist(id)} />
         )}
-      </ImageWrapper>
+      </OuterImageWrapper>
       <DescriptionWrapper>
         <ProductTitle>{name}</ProductTitle>
         <Price>{price} €</Price>

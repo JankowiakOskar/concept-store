@@ -11,10 +11,16 @@ export const FETCHING_PRODUCTS_REQUEST = 'FETCHING_PRODUCTS_REQUEST'
 export const FETCHING_PRODUCTS_SUCCESS = 'FETCHING_PRODUCTS_SUCCESS'
 export const FETCHING_PRODUCTS_FAILURE = 'FETCHING_PRODUCTS_FAILURE'
 
+export const FETCHING_PRODUCT_REQUEST = 'FETCHING_PRODUCT_REQUEST'
+export const FETCHING_PRODUCT_SUCCESS = 'FETCHING_PRODUCT_SUCCESS'
+export const FETCHING_PRODUCT_FAILURE = 'FETCHING_PRODUCT_FAILURE'
+
 export const GET_WISHLIST = 'GET_WISHLIST'
 
 export const ADD_TO_WISHLIST = 'ADD_TO_WISHLIST'
 export const REMOVE_FROM_WISHLIST = 'ADD_TO_WHISHLIST'
+
+export const REMOVE_MATCHED_PRODUCT = 'REMOVE_MATCHED_PRODUCT'
 
 export const limitRequest = 12
 
@@ -25,7 +31,7 @@ export const getProducts = async (dispatch, currentProducts) => {
 
   try {
     const { data: products } = await axios.get(
-      `http://localhost:1337/products?${limitQuery}`,
+      `http://localhost:1337/products?${limitQuery}`
     )
 
     await sleeper(500)
@@ -39,6 +45,23 @@ export const getProducts = async (dispatch, currentProducts) => {
   } catch (error) {
     dispatch({
       type: FETCHING_PRODUCTS_FAILURE,
+      payload: error,
+    })
+  }
+}
+
+export const getExactProduct = async (dispatch, id) => {
+  dispatch({ type: FETCHING_PRODUCT_REQUEST })
+
+  try {
+    const { data: matchedProduct } = await axios.get(
+      `http://localhost:1337/products/${id}`
+    )
+
+    dispatch({ type: FETCHING_PRODUCT_SUCCESS, payload: matchedProduct })
+  } catch (error) {
+    dispatch({
+      type: FETCHING_PRODUCT_FAILURE,
       payload: error,
     })
   }

@@ -5,6 +5,7 @@ import routes from 'routes'
 import Home from './Home'
 import WishListPage from './WishListPage'
 import Clothes from './Clothes'
+import DetailPage from './DetailPage'
 
 const Root = () => {
   return (
@@ -14,7 +15,8 @@ const Root = () => {
           <Switch>
             <Route exact path={routes.home} component={Home} />
             <Route path={routes.wishlist} component={WishListPage} />
-            <Route path={routes.clothes} component={Clothes} />
+            <Route exact path={routes.clothes} component={Clothes} />
+            <Route path={routes.detailClothes} component={DetailPage} />
           </Switch>
         </MainTemplate>
       </div>

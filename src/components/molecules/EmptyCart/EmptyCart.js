@@ -56,7 +56,6 @@ const StyledButton = styled(Button)`
 
 const EmptyCard = ({ title, description, type }) => {
   const { closeSidePanel } = useContext(UIContext)
-
   return (
     <Wrapper>
       {type === 'shopingBasket' && <EmptyBasketDraw />}

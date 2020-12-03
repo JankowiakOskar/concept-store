@@ -17,3 +17,13 @@ export const removeItemFromLocalStorage = (key, ID) => {
   const filteredValues = values.filter(({ id }) => id !== ID)
   localStorage.setItem(key, JSON.stringify(filteredValues))
 }
+
+export const arrObjectsFromObjectPairs = (obj, firstKey, secondKey) =>
+  Object.keys(obj).reduce((arr, currentValue) => {
+    const newObj = {}
+    newObj[firstKey] = currentValue
+    newObj[secondKey] = obj[currentValue]
+    arr.push(newObj)
+
+    return arr
+  }, [])

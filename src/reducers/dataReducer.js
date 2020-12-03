@@ -52,6 +52,7 @@ export const initialState = {
     },
   ],
   isLoadingProducts: false,
+  matchedProduct: {},
   products: [],
   isAllProductsFetched: false,
   wishlist: [],

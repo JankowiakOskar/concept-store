@@ -86,7 +86,7 @@ const childVariants = {
 
 const Slide = ({ image, title, subTitle, btnContent, isActiveSlide }) => {
   return (
-    <AnimatePresence>
+    <AnimatePresence exitBeforeEnter>
       {isActiveSlide && (
         <Wrapper
           img={image}
