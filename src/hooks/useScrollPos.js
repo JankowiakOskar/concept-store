@@ -1,21 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
 const useScrollPos = (ref) => {
-  const [scrollYPos, setScrollYPos] = useState(0)
+  const [scrollYPos, setScrollYPos] = useState(0);
 
   useEffect(() => {
     function handleScroll() {
-      setScrollYPos(this.scrollY)
+      setScrollYPos(this.scrollY);
     }
 
-    ref.addEventListener('scroll', handleScroll)
+    ref.addEventListener('scroll', handleScroll);
 
     return () => {
-      ref.removeEventListener('scroll', handleScroll)
-    }
-  }, [ref])
+      ref.removeEventListener('scroll', handleScroll);
+    };
+  }, [ref]);
 
-  return [scrollYPos]
-}
+  return [scrollYPos];
+};
 
-export default useScrollPos
+export default useScrollPos;

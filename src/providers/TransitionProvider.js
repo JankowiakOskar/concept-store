@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { AnimatePresence, motion } from 'framer-motion'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const wrapperVariants = {
   hidden: {
@@ -14,7 +14,7 @@ const wrapperVariants = {
     },
   },
   exit: { opacity: 0 },
-}
+};
 
 const TransitionProvider = ({ children }) => {
   return (
@@ -28,11 +28,11 @@ const TransitionProvider = ({ children }) => {
         {children}
       </motion.div>
     </AnimatePresence>
-  )
-}
+  );
+};
 
 TransitionProvider.propTypes = {
   children: PropTypes.node.isRequired,
-}
+};
 
-export default TransitionProvider
+export default TransitionProvider;

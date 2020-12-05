@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
-import { StoreContext } from 'store/StoreProvider'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import Button from 'components/atoms/Button/Button'
-import Loader from 'react-loader-spinner'
+import React, { useContext } from 'react';
+import { StoreContext } from 'store/StoreProvider';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import Button from 'components/atoms/Button/Button';
+import Loader from 'react-loader-spinner';
 
 const Wrapper = styled.div`
   height: auto;
@@ -13,12 +13,12 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const StyledButton = styled(Button)`
   background-color: ${({ theme }) => theme.grey100};
   margin: 0 0 50px 0;
-`
+`;
 
 const ProductsTemplate = ({ children }) => {
   const {
@@ -28,7 +28,7 @@ const ProductsTemplate = ({ children }) => {
       isAllProductsFetched,
     },
     fetchProducts,
-  } = useContext(StoreContext)
+  } = useContext(StoreContext);
   return (
     <Wrapper>
       {children}
@@ -42,15 +42,15 @@ const ProductsTemplate = ({ children }) => {
         </StyledButton>
       )}
     </Wrapper>
-  )
-}
+  );
+};
 
 ProductsTemplate.propTypes = {
   children: PropTypes.node,
-}
+};
 
 ProductsTemplate.defaultProps = {
   children: [],
-}
+};
 
-export default ProductsTemplate
+export default ProductsTemplate;

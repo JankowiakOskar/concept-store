@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled, { css } from 'styled-components';
 
 const Button = styled.button`
   width: 170px;
@@ -35,6 +35,6 @@ const Button = styled.button`
       text-shadow: none;
       color: ${({ theme }) => theme.grey100};
     `}
-`
+`;
 
-export default Button
+export default Button;

@@ -1,11 +1,11 @@
-import React from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import MainTemplate from 'templates/MainTemplate'
-import routes from 'routes'
-import Home from './Home'
-import WishListPage from './WishListPage'
-import Clothes from './Clothes'
-import DetailPage from './DetailPage'
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import MainTemplate from 'templates/MainTemplate';
+import routes from 'routes';
+import Home from './Home';
+import WishListPage from './WishListPage';
+import Clothes from './Clothes';
+import DetailPage from './DetailPage';
 
 const Root = () => {
   return (
@@ -21,7 +21,7 @@ const Root = () => {
         </MainTemplate>
       </div>
     </Router>
-  )
-}
+  );
+};
 
-export default Root
+export default Root;

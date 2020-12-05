@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const List = styled.ul`
   display: flex;
@@ -9,7 +9,7 @@ const List = styled.ul`
   justify-content: center;
   align-items: center;
   list-style: none;
-`
+`;
 
 const StyledLink = styled(Link)`
   padding: 25px 20px;
@@ -18,9 +18,9 @@ const StyledLink = styled(Link)`
   font-size: 15px;
   text-decoration: none;
   color: ${({ theme }) => theme.grey100};
-`
+`;
 
-const ListElement = styled.li``
+const ListElement = styled.li``;
 
 const MenuList = ({ list, handleClosePanel }) => {
   return (
@@ -31,16 +31,16 @@ const MenuList = ({ list, handleClosePanel }) => {
         </StyledLink>
       ))}
     </List>
-  )
-}
+  );
+};
 
 MenuList.propTypes = {
   list: PropTypes.arrayOf(PropTypes.object),
   handleClosePanel: PropTypes.func.isRequired,
-}
+};
 
 MenuList.defaultProps = {
   list: [],
-}
+};
 
-export default MenuList
+export default MenuList;

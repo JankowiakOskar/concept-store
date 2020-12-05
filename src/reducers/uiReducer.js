@@ -1,4 +1,4 @@
-import { SHOW_SIDEPANEL, HIDE_SIDEPANEL } from 'actions/ui'
+import { SHOW_SIDEPANEL, HIDE_SIDEPANEL } from 'actions/ui';
 
 export const initialState = {
   sidePanel: {
@@ -9,7 +9,7 @@ export const initialState = {
     isOpen: false,
     type: '',
   },
-}
+};
 
 export const uiReducer = (state, action) => {
   switch (action.type) {
@@ -19,15 +19,15 @@ export const uiReducer = (state, action) => {
           isOpen: !state.sidePanel.isOpen,
           panelType: action.payload,
         },
-      }
+      };
     case HIDE_SIDEPANEL:
       return {
         sidePanel: {
           isOpen: !state.sidePanel.isOpen,
           panelType: '',
         },
-      }
+      };
     default:
-      throw new Error(`Unhandled action: ${action.type}`)
+      throw new Error(`Unhandled action: ${action.type}`);
   }
-}
+};

@@ -1,15 +1,15 @@
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
-import routes from 'routes'
-import { UIContext } from 'contexts/GlobalUIContext'
-import styled from 'styled-components'
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
-import { ReactComponent as Logo } from 'assets/svgs/Logo.svg'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket'
-import NotesIcon from '@material-ui/icons/Notes'
-import useScrollPos from 'hooks/useScrollPos'
-import useNumStoredItems from 'hooks/useNumStoredItems'
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import routes from 'routes';
+import { UIContext } from 'contexts/GlobalUIContext';
+import styled from 'styled-components';
+import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import { ReactComponent as Logo } from 'assets/svgs/Logo.svg';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+import NotesIcon from '@material-ui/icons/Notes';
+import useScrollPos from 'hooks/useScrollPos';
+import useNumStoredItems from 'hooks/useNumStoredItems';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   background-color: ${({ isOverScrolled, theme }) =>
     isOverScrolled ? theme.white : 'transparent'};
   transition: background-color 0.2s 0.1s ease;
-`
+`;
 
 const Nav = styled.nav`
   padding: 0 ${({ theme }) => theme.layout.mobileSidesPadding};
@@ -30,17 +30,17 @@ const Nav = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
+`;
 
 const StyledLink = styled(Link)`
   display: flex;
   align-items: center;
-`
+`;
 
 const ElementWrapper = styled.div`
   position: relative;
   display: flex;
-`
+`;
 
 const Circle = styled.span`
   position: absolute;
@@ -56,32 +56,32 @@ const Circle = styled.span`
   font-size: ${({ theme }) => theme.font.size.small};
   border-radius: 50%;
   background-color: ${({ theme }) => theme.primaryDark};
-`
+`;
 
 const StyledLogo = styled(Logo)`
   width: 170px;
-`
+`;
 
 const StyledFavoriteIcon = styled(FavoriteIcon)`
   ${baseIconStyle}
-`
+`;
 
 const BasketIcon = styled(ShoppingBasketIcon)`
   ${baseIconStyle}
-`
+`;
 
 const HamburgerIcon = styled(NotesIcon)`
   ${baseIconStyle}
-`
+`;
 
 const NavBar = () => {
   const {
     setOpenSidePanel,
-    panelTypes: [menu, shopingBasket],
-  } = useContext(UIContext)
-  const [scrollYPos] = useScrollPos(window)
-  const [numWishedProducts] = useNumStoredItems('wishlist')
-  const [numProductsInBasket] = useNumStoredItems('shoppingBasket')
+    panelTypes: [menu, shoppingCart],
+  } = useContext(UIContext);
+  const [scrollYPos] = useScrollPos(window);
+  const [numWishedProducts] = useNumStoredItems('wishlist');
+  const [numProductsInBasket] = useNumStoredItems('shoppingCart');
   return (
     <Wrapper isOverScrolled={scrollYPos > 100}>
       <Nav>
@@ -94,14 +94,14 @@ const NavBar = () => {
             {numWishedProducts > 0 && <Circle>{numWishedProducts}</Circle>}
           </ElementWrapper>
         </StyledLink>
-        <ElementWrapper onClick={() => setOpenSidePanel(shopingBasket)}>
+        <ElementWrapper onClick={() => setOpenSidePanel(shoppingCart)}>
           <BasketIcon />
           {numProductsInBasket > 0 && <Circle>{numProductsInBasket}</Circle>}
         </ElementWrapper>
         <HamburgerIcon onClick={() => setOpenSidePanel(menu)} />
       </Nav>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default NavBar
+export default NavBar;

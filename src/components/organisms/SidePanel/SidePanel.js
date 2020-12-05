@@ -1,15 +1,15 @@
-import React, { useContext } from 'react'
-import { UIContext } from 'contexts/GlobalUIContext'
-import { StoreContext } from 'store/StoreProvider'
-import styled from 'styled-components'
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
-import { motion, AnimatePresence } from 'framer-motion'
-import CloseIcon from '@material-ui/icons/Close'
-import HomeIcon from '@material-ui/icons/Home'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import ShopingCartTemplate from 'templates/ShoppingCartTemplate'
-import MenuList from 'components/molecules/MenuList/MenuList'
-import routes from 'routes'
+import React, { useContext } from 'react';
+import { UIContext } from 'contexts/GlobalUIContext';
+import { StoreContext } from 'store/StoreProvider';
+import styled from 'styled-components';
+import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import { motion, AnimatePresence } from 'framer-motion';
+import CloseIcon from '@material-ui/icons/Close';
+import HomeIcon from '@material-ui/icons/Home';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShopingCartTemplate from 'templates/ShoppingCartTemplate';
+import MenuList from 'components/molecules/MenuList/MenuList';
+import routes from 'routes';
 
 const Wrapper = styled(motion.div)`
   position: fixed;
@@ -17,12 +17,12 @@ const Wrapper = styled(motion.div)`
   height: 100vh;
   z-index: ${({ theme }) => theme.zIndex.level10};
   background-color: ${({ theme }) => theme.white};
-`
+`;
 
 const TitlePanel = styled.h3`
   font-size: ${({ theme }) => theme.medium};
   font-weight: ${({ theme }) => theme.font.weight.semiBold};
-`
+`;
 
 const PanelHeader = styled.div`
   display: flex;
@@ -31,11 +31,11 @@ const PanelHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid ${({ theme }) => theme.grey200};
-`
+`;
 const CloseIconWrapper = styled(motion.span)`
   ${baseIconStyle};
-`
-const StyledCloseIcon = styled(CloseIcon)``
+`;
+const StyledCloseIcon = styled(CloseIcon)``;
 
 const menuPanelVariants = {
   hidden: {
@@ -54,7 +54,7 @@ const menuPanelVariants = {
     x: '-100%',
     opacity: 0,
   },
-}
+};
 
 const shopingBasketVariants = {
   hidden: {
@@ -70,7 +70,7 @@ const shopingBasketVariants = {
     x: '100%',
     opacity: 0,
   },
-}
+};
 
 const SidePanel = () => {
   const {
@@ -78,12 +78,11 @@ const SidePanel = () => {
     panelType,
     closeSidePanel,
     panelTypes: [menu, shopingCart],
-  } = useContext(UIContext)
+  } = useContext(UIContext);
 
   const {
-    data: { shopingBasket },
-  } = useContext(StoreContext)
-
+    data: { shoppingCart },
+  } = useContext(StoreContext);
   return (
     <AnimatePresence exitBeforeEnter>
       {isOpen && (
@@ -118,12 +117,12 @@ const SidePanel = () => {
             />
           )}
           {panelType === shopingCart && (
-            <ShopingCartTemplate shopingBasket={shopingBasket} />
+            <ShopingCartTemplate shoppingCart={shoppingCart} />
           )}
         </Wrapper>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default SidePanel
+export default SidePanel;

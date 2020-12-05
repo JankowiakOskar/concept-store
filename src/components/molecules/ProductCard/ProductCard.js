@@ -1,12 +1,12 @@
-import React, { useState, useCallback } from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { motion } from 'framer-motion'
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
-import routes from 'routes'
-import { Link } from 'react-router-dom'
+import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import routes from 'routes';
+import { Link } from 'react-router-dom';
 
 const ProductWrapper = styled.div`
   max-height: 600px;
@@ -15,21 +15,21 @@ const ProductWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-`
+`;
 
 const ProductImage = styled(motion.img)`
   object-fit: cover;
   width: 100%;
   height: 100%;
   transition: transform 0.2s ease;
-`
+`;
 
 const OuterImageWrapper = styled.div`
   height: 400px;
   position: relative;
   width: 100%;
   overflow: hidden;
-`
+`;
 
 const ImageWrapper = styled.div`
   width: 100%;
@@ -50,7 +50,7 @@ const ImageWrapper = styled.div`
       }
     }
   }
-`
+`;
 
 const StyledFavoriteIcon = styled(FavoriteBorderIcon)`
   position: absolute;
@@ -62,7 +62,7 @@ const StyledFavoriteIcon = styled(FavoriteBorderIcon)`
   transition: isFavorite 0.15s ease;
   cursor: pointer;
   z-index: ${({ theme }) => theme.zIndex.level7};
-`
+`;
 
 const StyledDeleteIcon = styled(DeleteForeverIcon)`
   position: absolute;
@@ -71,19 +71,19 @@ const StyledDeleteIcon = styled(DeleteForeverIcon)`
   fill: ${({ theme }) => theme.grey100};
   ${baseIconStyle}
   z-index: ${({ theme }) => theme.zIndex.level7};
-`
+`;
 
 const DescriptionWrapper = styled.div`
   margin: 10px 0 0 0;
-`
+`;
 const ProductTitle = styled.h3`
   font-size: ${({ theme }) => theme.font.size.medium};
   font-weight: ${({ theme }) => theme.font.weight.semiBold};
-`
+`;
 
 const Price = styled.p`
   color: ${({ theme }) => theme.grey100};
-`
+`;
 
 const ProductCard = ({
   id,
@@ -95,14 +95,14 @@ const ProductCard = ({
   removeFromWishlist,
   cardType,
 }) => {
-  const [isFavorite, setFavorite] = useState(onWishlist)
+  const [isFavorite, setFavorite] = useState(onWishlist);
 
-  useCallback(() => setFavorite(onWishlist), [onWishlist])
+  useCallback(() => setFavorite(onWishlist), [onWishlist]);
 
   const handleClickFavorite = (e, ID) => {
-    setFavorite(!isFavorite)
-    handleWishlist(ID)
-  }
+    setFavorite(!isFavorite);
+    handleWishlist(ID);
+  };
 
   return (
     <ProductWrapper>
@@ -127,8 +127,8 @@ const ProductCard = ({
         <Price>{price} €</Price>
       </DescriptionWrapper>
     </ProductWrapper>
-  )
-}
+  );
+};
 
 ProductCard.propTypes = {
   id: PropTypes.string,
@@ -139,7 +139,7 @@ ProductCard.propTypes = {
   onWishlist: PropTypes.bool,
   cardType: PropTypes.oneOf(['productCard', 'wishedCard']).isRequired,
   removeFromWishlist: PropTypes.func,
-}
+};
 
 ProductCard.defaultProps = {
   id: '',
@@ -149,6 +149,6 @@ ProductCard.defaultProps = {
   handleWishlist: () => {},
   removeFromWishlist: () => {},
   onWishlist: false,
-}
+};
 
-export default ProductCard
+export default ProductCard;

@@ -1,17 +1,17 @@
-import { useState, useContext, useEffect } from 'react'
-import { StoreContext } from 'store/StoreProvider'
-import { calcArrItems } from 'helpers'
+import { useState, useContext, useEffect } from 'react';
+import { StoreContext } from 'store/StoreProvider';
+import { calcArrItems } from 'helpers';
 
 const useNumStoredItems = (ref) => {
-  const { data } = useContext(StoreContext)
-  const searchedItems = data[ref]
-  const [numItems, setNumItems] = useState(calcArrItems(searchedItems))
+  const { data } = useContext(StoreContext);
+  const searchedItems = data[ref];
+  const [numItems, setNumItems] = useState(calcArrItems(searchedItems));
 
   useEffect(() => {
-    setNumItems(calcArrItems(searchedItems))
-  }, [searchedItems])
+    setNumItems(calcArrItems(searchedItems));
+  }, [searchedItems]);
 
-  return [numItems]
-}
+  return [numItems];
+};
 
-export default useNumStoredItems
+export default useNumStoredItems;

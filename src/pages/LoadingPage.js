@@ -1,7 +1,7 @@
-import React from 'react'
-import styled from 'styled-components'
-import { motion } from 'framer-motion'
-import Logo from 'assets/svgs/Logo.svg'
+import React from 'react';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
+import Logo from 'assets/svgs/Logo.svg';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -12,11 +12,11 @@ const Wrapper = styled.div`
   align-items: center;
   z-index: ${({ theme }) => theme.zIndex.level10};
   background-color: ${({ theme }) => theme.white};
-`
+`;
 
 const LogoImg = styled(motion.img)`
   width: 250px;
-`
+`;
 
 const logoVariants = {
   animation: {
@@ -39,14 +39,14 @@ const logoVariants = {
       },
     },
   },
-}
+};
 
 const LoadingPage = () => {
   return (
     <Wrapper>
       <LogoImg variants={logoVariants} animate="animation" src={Logo} />
     </Wrapper>
-  )
-}
+  );
+};
 
-export default LoadingPage
+export default LoadingPage;

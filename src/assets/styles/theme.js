@@ -6,7 +6,7 @@ export const breakpoints = {
   tablet: '767',
   bigPhone: '400',
   phone: '320',
-}
+};
 
 export const colors = {
   primary: 'hsl(233, 57%, 37%)',
@@ -20,7 +20,7 @@ export const colors = {
   grey500: 'hsl(0, 0%, 97%)',
   white: 'hsl(0, 0%, 100%)',
   black: 'hsl(0, 0%, 10%)',
-}
+};
 
 export const font = {
   size: {
@@ -38,13 +38,13 @@ export const font = {
     semiBold: '600',
     bold: '800',
   },
-}
+};
 
 export const mq = Object.keys(breakpoints).reduce((acc, breakpoint) => {
-  acc[breakpoint] = `@media(min-width: ${breakpoints[breakpoint]}px)`
+  acc[breakpoint] = `@media(min-width: ${breakpoints[breakpoint]}px)`;
 
-  return acc
-}, {})
+  return acc;
+}, {});
 
 export const theme = {
   ...colors,
@@ -66,4 +66,4 @@ export const theme = {
     level9: '9000',
     level10: '10000',
   },
-}
+};

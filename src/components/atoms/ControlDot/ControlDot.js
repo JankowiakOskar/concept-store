@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled, { css } from 'styled-components';
 
 const ControlDot = styled.span`
   display: inline-block;
@@ -16,6 +16,6 @@ const ControlDot = styled.span`
       background-color: ${({ theme }) => theme.white};
       opacity: 1;
     `}
-`
+`;
 
-export default ControlDot
+export default ControlDot;

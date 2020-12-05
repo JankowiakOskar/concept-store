@@ -3,5 +3,5 @@ const routes = {
   wishlist: '/wishlist',
   clothes: '/clothes',
   detailClothes: '/clothes/:id',
-}
-export default routes
+};
+export default routes;

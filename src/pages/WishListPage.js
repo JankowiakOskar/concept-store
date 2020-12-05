@@ -1,22 +1,22 @@
-import React, { useContext } from 'react'
-import { StoreContext } from 'store/StoreProvider'
-import styled from 'styled-components'
-import PageHeader from 'components/atoms/PageHeader/PageHeader'
-import WishListTemplate from 'templates/WhisListTemplate'
-import ProductCard from 'components/molecules/ProductCard/ProductCard'
-import TransitionProvider from 'providers/TransitionProvider'
+import React, { useContext } from 'react';
+import { StoreContext } from 'store/StoreProvider';
+import styled from 'styled-components';
+import PageHeader from 'components/atoms/PageHeader/PageHeader';
+import WishListTemplate from 'templates/WhisListTemplate';
+import ProductCard from 'components/molecules/ProductCard/ProductCard';
+import TransitionProvider from 'providers/TransitionProvider';
 
 const Wrapper = styled.div`
   padding: 80px 0 0 0;
   width: 100%;
   min-height: 100vh;
-`
+`;
 
 const WishListPage = () => {
   const {
     data: { wishlist },
     removeFromWishlist,
-  } = useContext(StoreContext)
+  } = useContext(StoreContext);
 
   return (
     <TransitionProvider>
@@ -37,7 +37,7 @@ const WishListPage = () => {
         </WishListTemplate>
       </Wrapper>
     </TransitionProvider>
-  )
-}
+  );
+};
 
-export default WishListPage
+export default WishListPage;

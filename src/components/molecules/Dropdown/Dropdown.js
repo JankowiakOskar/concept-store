@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react'
-import styled from 'styled-components'
-import { AnimatePresence, motion } from 'framer-motion'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon'
-import useOutsideClick from 'hooks/useOutsideClick'
-import { arrObjectsFromObjectPairs } from 'helpers'
+import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
+import styled, { css } from 'styled-components';
+import { AnimatePresence, motion } from 'framer-motion';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import useOutsideClick from 'hooks/useOutsideClick';
 
 const DropDownWrapper = styled.div`
   width: 100%;
@@ -15,7 +15,7 @@ const DropDownWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const DropDownHeader = styled.div`
   width: 100%;
@@ -29,8 +29,15 @@ const DropDownHeader = styled.div`
     ${({ theme, isCollapse }) =>
       isCollapse ? theme.primaryLight : theme.grey100};
   box-shadow: 0px 2px 5px -1px rgba(0, 0, 0, 0.75);
+  transition: border 0.2s ease;
   cursor: pointer;
-`
+
+  ${({ isError }) =>
+    isError &&
+    css`
+      border: 2px solid ${({ theme }) => theme.red};
+    `}
+`;
 
 const DropDownTitle = styled.span`
   display: inline-flex;
@@ -40,17 +47,17 @@ const DropDownTitle = styled.span`
   margin: 10px 0 10px 10px;
   font-size: ${({ theme }) => theme.font.size.s};
   font-weight: ${({ theme }) => theme.font.weight.bold};
-  color: ${({ theme }) => theme.grey100};
+  color: ${({ theme, isError }) => (isError ? theme.red : theme.grey100)};
   border-right: 1px solid ${({ theme }) => theme.grey200};
-`
+  transition: border 0.2s ease;
+`;
 
 const ArrowIcon = styled(KeyboardArrowDownIcon)`
   flex-basis: 15%;
   ${baseIconStyle}
   transition: transform 0.15s ease !important;
-  transform: ${({ isCollapse }) =>
-    isCollapse ? 'rotate(180deg)' : 'rotate(0)'};
-`
+  transform: ${({ collapse }) => (collapse ? 'rotate(180deg)' : 'rotate(0)')};
+`;
 
 const DropDownList = styled(motion.ul)`
   position: absolute;
@@ -65,9 +72,12 @@ const DropDownList = styled(motion.ul)`
   border: 1px solid ${({ theme }) => theme.grey200};
   box-shadow: 0px 2px 7px -1px rgba(0, 0, 0, 0.75);
   z-index: ${({ theme }) => theme.zIndex.level7};
-`
+`;
 
 const DropDownElement = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px 20px;
   border-bottom: 1px solid ${({ theme }) => theme.grey300};
   transform: all 0.15s ease;
@@ -82,29 +92,29 @@ const DropDownElement = styled.li`
   &:last-child {
     border: none;
   }
-`
+`;
 
-const Dropdown = () => {
-  const [isCollapse, setCollapse] = useState(false)
-  const [value, setValue] = useState('')
-  const DropDownWrapperRef = useRef(null)
+const Size = styled.span``;
 
-  const sizes = { l: '6', m: '8', s: '12', xl: '13', xs: '10' }
+const PiecesLeft = styled.span`
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+`;
 
-  const newSizes = arrObjectsFromObjectPairs(sizes, 'size', 'amount')
-
-  console.log(newSizes)
+const Dropdown = ({ setValue, value, setError, error, list }) => {
+  const [isCollapse, setCollapse] = useState(false);
+  const DropDownWrapperRef = useRef(null);
 
   const handleOpening = () => {
-    setCollapse(!isCollapse)
-  }
+    setCollapse(!isCollapse);
+  };
 
-  useOutsideClick(DropDownWrapperRef, () => setCollapse(false))
+  useOutsideClick(DropDownWrapperRef, () => setCollapse(false));
 
-  const handleClick = (e) => {
-    const choosenSize = e.target.innerText
-    setValue(choosenSize)
-  }
+  const handleClick = (size, amount) => {
+    const upperCaseSize = size.toUpperCase();
+    setValue({ size: upperCaseSize, amount });
+    if (error) setError('');
+  };
 
   const listVariants = {
     hidden: {
@@ -126,13 +136,15 @@ const Dropdown = () => {
         duration: 0.15,
       },
     },
-  }
+  };
 
   return (
     <DropDownWrapper ref={DropDownWrapperRef} onClick={handleOpening}>
-      <DropDownHeader isCollapse={isCollapse}>
-        <DropDownTitle>{value || 'Choose size'}</DropDownTitle>
-        <ArrowIcon isCollapse={isCollapse} />
+      <DropDownHeader isError={error} isCollapse={isCollapse}>
+        <DropDownTitle isError={error}>
+          {error || value || 'Choose size'}
+        </DropDownTitle>
+        <ArrowIcon collapse={isCollapse ? 1 : 0} />
       </DropDownHeader>
       <AnimatePresence>
         {isCollapse && (
@@ -141,18 +153,37 @@ const Dropdown = () => {
             initial="hidden"
             animate="vissible"
             exit="exit"
-            onClick={(e) => handleClick(e)}
           >
-            <DropDownElement>XS</DropDownElement>
-            <DropDownElement>S</DropDownElement>
-            <DropDownElement>M</DropDownElement>
-            <DropDownElement>L</DropDownElement>
-            <DropDownElement>XL</DropDownElement>
+            {list.map(({ size, amount }) => (
+              <DropDownElement
+                key={size}
+                onClick={() => handleClick(size, amount)}
+              >
+                <Size>{size.toUpperCase()}</Size>{' '}
+                <PiecesLeft>Pieces left: {amount}</PiecesLeft>
+              </DropDownElement>
+            ))}
           </DropDownList>
         )}
       </AnimatePresence>
     </DropDownWrapper>
-  )
-}
+  );
+};
 
-export default Dropdown
+Dropdown.propTypes = {
+  value: PropTypes.string,
+  setValue: PropTypes.func,
+  setError: PropTypes.func,
+  error: PropTypes.string,
+  list: PropTypes.arrayOf(PropTypes.object),
+};
+
+Dropdown.defaultProps = {
+  value: '',
+  error: '',
+  setError: () => '',
+  setValue: () => '',
+  list: [],
+};
+
+export default Dropdown;

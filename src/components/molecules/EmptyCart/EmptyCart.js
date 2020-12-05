@@ -1,12 +1,12 @@
-import React, { useContext } from 'react'
-import { UIContext } from 'contexts/GlobalUIContext'
-import routes from 'routes'
-import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { ReactComponent as EmptyBasket } from 'assets/svgs/EmptyBasket.svg'
-import { ReactComponent as WishDraw } from 'assets/svgs/WishDraw.svg'
-import Button from 'components/atoms/Button/Button'
+import React, { useContext } from 'react';
+import { UIContext } from 'contexts/GlobalUIContext';
+import routes from 'routes';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { ReactComponent as EmptyBasket } from 'assets/svgs/EmptyBasket.svg';
+import { ReactComponent as WishDraw } from 'assets/svgs/WishDraw.svg';
+import Button from 'components/atoms/Button/Button';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -15,16 +15,16 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const EmptyBasketDraw = styled(EmptyBasket)`
   width: 100%;
   height: 200px;
-`
+`;
 const EmptyWishList = styled(WishDraw)`
   width: 100%;
   height: 200px;
-`
+`;
 
 const ContentWrapper = styled.div`
   margin: 20px 0 0;
@@ -33,50 +33,50 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-`
+`;
 
 const ContentTitle = styled.h3`
   font-size: ${({ theme }) => theme.medium};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.grey100};
-`
+`;
 
 const ContentParagraph = styled.p`
   margin-top: 4px;
   font-size: ${({ theme }) => theme.small};
   font-weight: ${({ theme }) => theme.font.weight.regular};
   color: ${({ theme }) => theme.grey100};
-`
+`;
 
 const StyledButton = styled(Button)`
   margin-top: 20px;
   width: 200px;
   color: ${({ theme }) => theme.grey400};
-`
+`;
 
 const EmptyCard = ({ title, description, type }) => {
-  const { closeSidePanel } = useContext(UIContext)
+  const { closeSidePanel } = useContext(UIContext);
   return (
     <Wrapper>
-      {type === 'shopingBasket' && <EmptyBasketDraw />}
+      {type === 'shoppingCart' && <EmptyBasketDraw />}
       {type === 'wishList' && <EmptyWishList />}
       <ContentWrapper>
         <ContentTitle>{title}</ContentTitle>
         <ContentParagraph>{description}</ContentParagraph>
-        {type === 'shopingBasket' && (
+        {type === 'shoppingCart' && (
           <Link to={routes.clothes} onClick={closeSidePanel}>
             <StyledButton primary>Continue shopping</StyledButton>
           </Link>
         )}
       </ContentWrapper>
     </Wrapper>
-  )
-}
+  );
+};
 
 EmptyCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['shopingBasket', 'wishList']).isRequired,
-}
+  type: PropTypes.oneOf(['shoppingCart', 'wishList']).isRequired,
+};
 
-export default EmptyCard
+export default EmptyCard;
