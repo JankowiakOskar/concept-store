@@ -8,6 +8,7 @@ import StoreProvider from 'store/StoreProvider';
 import GlobalUIProvider from 'contexts/GlobalUIContext';
 import Navbar from 'components/organisms/NavBar/NavBar';
 import SidePanel from 'components/organisms/SidePanel/SidePanel';
+import Footer from 'components/organisms/Footer/Footer';
 
 const MainTemplate = ({ children }) => {
   return (
@@ -20,6 +21,7 @@ const MainTemplate = ({ children }) => {
             <Navbar />
             <SidePanel />
             {children}
+            <Footer />
           </GlobalUIProvider>
         </StoreProvider>
       </ThemeProvider>

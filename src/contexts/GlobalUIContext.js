@@ -7,14 +7,36 @@ export const UIContext = React.createContext();
 
 const GlobalUIProvider = ({ children }) => {
   const [uiState, dispatch] = useReducer(uiReducer, initialState);
-  const panelTypes = ['menu', 'shoppingCart'];
+  const panelTypes = {
+    menu: 'Menu',
+    cart: 'Shopping Cart',
+    filter: 'Filter',
+  };
   const setOpenSidePanel = (panelType) => showSidePanel(dispatch, panelType);
 
   const closeSidePanel = () => hideSidePanel(dispatch);
 
+  // const createTitleDisplayedPanel = (displayedPanel) => {
+  //   const makeCapitalWord = (word) => {
+  //     const capitalWord =
+  //       word.chartAt(0).toUppercase() + displayedPanel.slice(1);
+  //     return capitalWord;
+  //   };
+  //   switch (displayedPanel) {
+  //     case 'menu':
+  //       return makeCapitalWord(displayedPanel);
+  //     case 'cart':
+  //       return `Shopping ${makeCapitalWord(displayedPanel)}`;
+  //     case 'filter':
+  //       return makeCapitalWord(displayedPanel);
+  //     default:
+  //       return '';
+  //   }
+  // };
+
   const sidePanel = {
     isOpen: uiState.sidePanel.isOpen,
-    panelType: uiState.sidePanel.panelType,
+    choosenPanel: uiState.sidePanel.choosenPanel,
     setOpenSidePanel,
     closeSidePanel,
     panelTypes,

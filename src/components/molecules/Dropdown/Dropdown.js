@@ -82,6 +82,12 @@ const DropDownElement = styled.li`
   border-bottom: 1px solid ${({ theme }) => theme.grey300};
   transform: all 0.15s ease;
   cursor: pointer;
+
+  ${({ isDisabled, theme }) =>
+    isDisabled &&
+    css`
+      color: ${theme.grey200};
+    `};
   ${({ theme }) => theme.mq.desktop} {
     &:hover {
       background-color: ${({ theme }) => theme.grey200};
@@ -110,9 +116,9 @@ const Dropdown = ({ setValue, value, setError, error, list }) => {
 
   useOutsideClick(DropDownWrapperRef, () => setCollapse(false));
 
-  const handleClick = (size, amount) => {
-    const upperCaseSize = size.toUpperCase();
-    setValue({ size: upperCaseSize, amount });
+  const handleClick = (size, amount, isDisabled) => {
+    if (isDisabled) return;
+    setValue({ size, amount });
     if (error) setError('');
   };
 
@@ -142,7 +148,7 @@ const Dropdown = ({ setValue, value, setError, error, list }) => {
     <DropDownWrapper ref={DropDownWrapperRef} onClick={handleOpening}>
       <DropDownHeader isError={error} isCollapse={isCollapse}>
         <DropDownTitle isError={error}>
-          {error || value || 'Choose size'}
+          {error || value.toUpperCase() || 'Choose size'}
         </DropDownTitle>
         <ArrowIcon collapse={isCollapse ? 1 : 0} />
       </DropDownHeader>
@@ -154,15 +160,21 @@ const Dropdown = ({ setValue, value, setError, error, list }) => {
             animate="vissible"
             exit="exit"
           >
-            {list.map(({ size, amount }) => (
-              <DropDownElement
-                key={size}
-                onClick={() => handleClick(size, amount)}
-              >
-                <Size>{size.toUpperCase()}</Size>{' '}
-                <PiecesLeft>Pieces left: {amount}</PiecesLeft>
-              </DropDownElement>
-            ))}
+            {list.map(({ size, amount }) => {
+              const isDisabled = +amount <= 0;
+              return (
+                <DropDownElement
+                  isDisabled={isDisabled}
+                  key={size}
+                  onClick={() => handleClick(size, amount, isDisabled)}
+                >
+                  <Size>{size.toUpperCase()}</Size>{' '}
+                  <PiecesLeft>
+                    {!isDisabled ? `Pieces left: ${amount}` : 'not avilable'}
+                  </PiecesLeft>
+                </DropDownElement>
+              );
+            })}
           </DropDownList>
         )}
       </AnimatePresence>

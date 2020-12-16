@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 
 const ProductWrapper = styled.div`
   max-height: 600px;
-  width: 300px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -25,7 +24,6 @@ const ProductImage = styled(motion.img)`
 `;
 
 const OuterImageWrapper = styled.div`
-  height: 400px;
   position: relative;
   width: 100%;
   overflow: hidden;

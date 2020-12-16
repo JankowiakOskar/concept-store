@@ -7,10 +7,18 @@ import Button from 'components/atoms/Button/Button';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import CounterQuantity from 'components/molecules/CounterQuantity/CounterQuantity';
+import CounterQuantity, {
+  CounterWrapper,
+} from 'components/molecules/CounterQuantity/CounterQuantity';
 
 const Form = styled.form`
   width: 100%;
+`;
+
+const StyledCounterQuantity = styled(CounterQuantity)`
+  ${CounterWrapper} {
+    margin: 15px 0 0 0;
+  }
 `;
 
 const ButtonsWrapper = styled.div`
@@ -51,9 +59,8 @@ const FavoriteIcon = styled(FavoriteBorderIcon)`
   ${baseIconStyle};
 `;
 
-const AddCartForm = ({ product }) => {
-  const { sizes_quantity: sizesQuantity } = product;
-  const [choosenSize, setChoosenSize] = useState({});
+const AddCartForm = ({ product, sizesQuantity }) => {
+  const [choosenSize, setChoosenSize] = useState('');
   const [amountItem, setAmountItem] = useState(1);
   const [error, setError] = useState('');
   const { addToShoppingCart } = useContext(StoreContext);
@@ -64,11 +71,24 @@ const AddCartForm = ({ product }) => {
       const errMsg = 'Firstly, select size !';
       setError(errMsg);
     } else if (choosenSize && !error) {
-      const choosenProduct = product;
-      choosenProduct.selectedSize = choosenSize;
-      addToShoppingCart(choosenProduct);
+      const selectedProduct = {
+        ...product,
+        sizes_quantity: {
+          [choosenSize.size]: amountItem,
+        },
+      };
+      addToShoppingCart(selectedProduct);
+      setChoosenSize('');
+      setAmountItem(1);
     }
   };
+
+  useEffect(() => {
+    if (error)
+      setTimeout(() => {
+        setError('');
+      }, 1500);
+  }, [error]);
 
   useEffect(() => {
     setAmountItem(1);
@@ -83,7 +103,7 @@ const AddCartForm = ({ product }) => {
         value={choosenSize.size}
         list={sizesQuantity}
       />
-      <CounterQuantity
+      <StyledCounterQuantity
         quantity={amountItem}
         setQuantity={setAmountItem}
         limitQuantity={+choosenSize.amount}
@@ -103,15 +123,18 @@ const AddCartForm = ({ product }) => {
 
 AddCartForm.propTypes = {
   product: PropTypes.shape({
+    id: PropTypes.string,
     name: PropTypes.string,
     price: PropTypes.number,
     picture: PropTypes.objectOf(PropTypes.any),
-    sizes_quantity: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
+    sizes_quantity: PropTypes.objectOf(PropTypes.string),
   }),
+  sizesQuantity: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
 };
 
 AddCartForm.defaultProps = {
   product: {},
+  sizesQuantity: [],
 };
 
 export default AddCartForm;

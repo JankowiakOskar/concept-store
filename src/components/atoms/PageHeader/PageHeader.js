@@ -5,15 +5,13 @@ import styled from 'styled-components';
 const Wrapper = styled.header`
   width: 100%;
   height: 80px;
-  /* border-bottom: 1px solid ${({ theme }) => theme.grey200}; */
   display: flex;
   align-items: center;
 `;
 const PageTitle = styled.h1`
   font-size: ${({ theme }) => theme.font.size.siteHeader};
-  font-weight: ${({ theme }) => theme.font.weight.semiBold};
-  color: ${({ theme }) => theme.grey100};
-  padding: 0 ${({ theme }) => theme.layout.mobileSidesPadding};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
+  color: ${({ theme }) => theme.black};
 `;
 
 const PageHeader = ({ title }) => (

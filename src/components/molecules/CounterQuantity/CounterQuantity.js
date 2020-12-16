@@ -1,17 +1,16 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const CounterWrapper = styled.div`
+export const CounterWrapper = styled.div`
   position: relative;
-  margin: 10px 0 0 0;
   display: flex;
   height: 50px;
   width: 150px;
 `;
 
-const CounterInput = styled.input`
+export const CounterInput = styled.input`
   height: 100%;
   flex-basis: 33%;
   text-align: center;
@@ -35,11 +34,12 @@ const AmountDisplayer = styled.span`
   font-size: ${({ theme }) => theme.font.size.regular};
 `;
 
-const ToolTip = styled(motion.span)`
+export const ToolTip = styled(motion.span)`
   position: absolute;
   top: 100%;
-  left: 0;
-  width: auto;
+  left: -5px;
+  opacity: 0;
+  width: 80%;
   text-align: center;
   width: 200px;
   padding: 5px;
@@ -75,9 +75,17 @@ const toolTipVariants = {
       },
     },
   },
+  exit: {
+    opacity: 0,
+  },
 };
 
-const CounterQuantity = ({ limitQuantity, setQuantity, quantity }) => {
+const CounterQuantity = ({
+  limitQuantity,
+  setQuantity,
+  quantity,
+  className,
+}) => {
   const addConditionDisabling = quantity === limitQuantity || !limitQuantity;
   const subtractConditionDisabling = quantity === 1 || !limitQuantity;
 
@@ -90,40 +98,48 @@ const CounterQuantity = ({ limitQuantity, setQuantity, quantity }) => {
 
     return handler(currentNum);
   };
-  return (
-    <CounterWrapper>
-      <CounterInput
-        type="button"
-        value="+"
-        disabled={addConditionDisabling}
-        isDisabled={addConditionDisabling}
-        onClick={(e) => handleCounting(e, quantity, setQuantity)}
-      />
 
-      <AmountDisplayer>{quantity}</AmountDisplayer>
-      <CounterInput
-        type="button"
-        value="-"
-        disabled={subtractConditionDisabling}
-        isDisabled={subtractConditionDisabling}
-        onClick={(e) => handleCounting(e, quantity, setQuantity)}
-      />
-      {limitQuantity === quantity && (
-        <ToolTip variants={toolTipVariants} animate="animation">
-          Size limit reached !
-        </ToolTip>
-      )}
-    </CounterWrapper>
+  return (
+    <div className={className}>
+      <CounterWrapper>
+        <CounterInput
+          type="button"
+          value="+"
+          disabled={addConditionDisabling}
+          isDisabled={addConditionDisabling}
+          onClick={(e) => handleCounting(e, quantity, setQuantity)}
+        />
+
+        <AmountDisplayer>{quantity}</AmountDisplayer>
+        <CounterInput
+          type="button"
+          value="-"
+          disabled={subtractConditionDisabling}
+          isDisabled={subtractConditionDisabling}
+          onClick={(e) => handleCounting(e, quantity, setQuantity)}
+        />
+        <AnimatePresence>
+          {limitQuantity === quantity && (
+            <ToolTip variants={toolTipVariants} animate="animation" exit="exit">
+              Size limit reached !
+            </ToolTip>
+          )}
+        </AnimatePresence>
+      </CounterWrapper>
+    </div>
   );
 };
 
 CounterQuantity.propTypes = {
-  limitQuantity: PropTypes.number.isRequired,
+  limitQuantity: PropTypes.number,
   quantity: PropTypes.number,
   setQuantity: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
 CounterQuantity.defaultProps = {
+  limitQuantity: 1,
   quantity: 0,
+  className: '',
 };
 export default CounterQuantity;

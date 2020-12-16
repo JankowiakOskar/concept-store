@@ -10,6 +10,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShopingCartTemplate from 'templates/ShoppingCartTemplate';
 import MenuList from 'components/molecules/MenuList/MenuList';
 import routes from 'routes';
+import FilterForm from 'components/organisms/FilterForm/FilteForm';
 
 const Wrapper = styled(motion.div)`
   position: fixed;
@@ -56,7 +57,7 @@ const menuPanelVariants = {
   },
 };
 
-const shopingBasketVariants = {
+const otherVariants = {
   hidden: {
     x: '50%',
     opacity: 0,
@@ -75,34 +76,30 @@ const shopingBasketVariants = {
 const SidePanel = () => {
   const {
     isOpen,
-    panelType,
+    choosenPanel,
     closeSidePanel,
-    panelTypes: [menu, shopingCart],
+    panelTypes: { menu, cart, filter },
   } = useContext(UIContext);
-
   const {
     data: { shoppingCart },
   } = useContext(StoreContext);
+
   return (
     <AnimatePresence exitBeforeEnter>
       {isOpen && (
         <Wrapper
-          variants={
-            panelType === menu ? menuPanelVariants : shopingBasketVariants
-          }
+          variants={choosenPanel === menu ? menuPanelVariants : otherVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
         >
           <PanelHeader>
-            <TitlePanel>
-              {panelType === 'menu' ? 'Menu' : 'Shopping Cart'}
-            </TitlePanel>
+            <TitlePanel>{choosenPanel}</TitlePanel>
             <CloseIconWrapper onClick={() => closeSidePanel()}>
               <StyledCloseIcon />
             </CloseIconWrapper>
           </PanelHeader>
-          {panelType === 'menu' && (
+          {choosenPanel === menu && (
             <MenuList
               handleClosePanel={closeSidePanel}
               list={[
@@ -116,9 +113,10 @@ const SidePanel = () => {
               ]}
             />
           )}
-          {panelType === shopingCart && (
+          {choosenPanel === cart && (
             <ShopingCartTemplate shoppingCart={shoppingCart} />
           )}
+          {choosenPanel === filter && <FilterForm />}
         </Wrapper>
       )}
     </AnimatePresence>

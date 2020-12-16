@@ -10,7 +10,9 @@ import {
   getWishlist as getWishlistAction,
   getShoppingCart as getShoppingCartAction,
   addToShoppingCart as addToShoppingCartAction,
-  // getExactProduct as getExactProductAction,
+  updateStore as updateStoreAction,
+  removeFromShoppingCart as removeFromShoppingCartAction,
+  getCategories as getCategoriesAction,
 } from 'actions/data';
 
 export const StoreContext = React.createContext();
@@ -18,7 +20,12 @@ export const StoreContext = React.createContext();
 const StoreProvider = ({ children }) => {
   const [data, dispatch] = useReducer(dataReducer, initialState);
   const { pathname } = useLocation();
-  const { products } = data;
+  const { products, shoppingCart } = data;
+
+  const updateStoreActions = {
+    removeFromStore: 'remove',
+    addToStore: 'add',
+  };
 
   const fetchProducts = (currentProducts) =>
     getProductsAction(dispatch, currentProducts);
@@ -31,12 +38,22 @@ const StoreProvider = ({ children }) => {
 
   const getShoppingCart = () => getShoppingCartAction(dispatch);
 
+  const updateStore = (id, actionType, valuesObj) =>
+    updateStoreAction(dispatch, id, actionType, valuesObj);
+
   const addToShoppingCart = (product) =>
-    addToShoppingCartAction(dispatch, product);
+    addToShoppingCartAction(dispatch, shoppingCart, product);
+
+  const removeFromShoppingCart = (id, size) => {
+    removeFromShoppingCartAction(dispatch, id, size);
+  };
+
+  const getCategories = () => getCategoriesAction(dispatch);
 
   useEffect(() => {
     getWishlist();
     getShoppingCart();
+    getCategories();
   }, []);
 
   useEffect(() => {
@@ -49,6 +66,9 @@ const StoreProvider = ({ children }) => {
     addToWishlist,
     removeFromWishlist,
     addToShoppingCart,
+    removeFromShoppingCart,
+    updateStore,
+    updateStoreActions,
     fetchProducts,
   };
 

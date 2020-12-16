@@ -8,12 +8,19 @@ import {
   FETCHING_PRODUCTS_REQUEST,
   FETCHING_PRODUCTS_SUCCESS,
   FETCHING_PRODUCTS_FAILURE,
+  GET_CATEGORIES_REQUEST,
+  GET_CATEGORIES_SUCCESS,
+  GET_CATEGORIES_FAILURE,
+  UPDATE_STORE_REQUEST,
+  UPDATE_STORE_SUCCESS,
+  UPDATE_STORE_FAILURE,
   GET_WISHLIST,
   ADD_TO_WISHLIST,
   REMOVE_FROM_WISHLIST,
   GET_SHOPPING_CART,
   ADD_TO_SHOPPING_CART,
-  // REMOVE_FROM_SHOPPING_CART,
+  REPLACE_ITEM_IN_SHOPPING_CART,
+  REMOVE_FROM_SHOPPING_CART,
 } from 'actions/data';
 
 export const initialState = {
@@ -40,7 +47,7 @@ export const initialState = {
       btnContent: 'Shop now',
     },
   ],
-  categories: [
+  categoriesCards: [
     {
       category: 'jackets',
       image: jacketsCategory,
@@ -55,11 +62,12 @@ export const initialState = {
     },
   ],
   isLoadingProducts: false,
-  matchedProduct: {},
-  products: [],
+  isLoadingCategories: false,
   isAllProductsFetched: false,
+  products: [],
   wishlist: [],
   shoppingCart: [],
+  categories: [],
   error: {},
 };
 
@@ -81,6 +89,41 @@ export const dataReducer = (state, action) => {
       return {
         ...state,
         isLoadingProducts: !state.isLoadingProducts,
+        error: action.payload,
+      };
+    case GET_CATEGORIES_REQUEST: {
+      return {
+        ...state,
+        isLoadingCategories: !state.isLoadingCategories,
+      };
+    }
+    case GET_CATEGORIES_SUCCESS: {
+      return {
+        ...state,
+        isLoadingCategories: !state.isLoadingCategories,
+        categories: action.payload.categories,
+      };
+    }
+    case GET_CATEGORIES_FAILURE: {
+      return {
+        ...state,
+        isLoadingCategories: !state.isLoadingCategories,
+      };
+    }
+    case UPDATE_STORE_REQUEST:
+      return {
+        ...state,
+        isUpdating: !state.isUpdating,
+      };
+    case UPDATE_STORE_SUCCESS:
+      return {
+        ...state,
+        isUpdating: !state.isUpdating,
+      };
+    case UPDATE_STORE_FAILURE:
+      return {
+        ...state,
+        isUpdating: !state.isUpdating,
         error: action.payload,
       };
     case GET_WISHLIST:
@@ -108,6 +151,22 @@ export const dataReducer = (state, action) => {
         ...state,
         shoppingCart: [...state.shoppingCart, action.payload],
       };
+    case REPLACE_ITEM_IN_SHOPPING_CART: {
+      return {
+        ...state,
+        shoppingCart: action.payload,
+      };
+    }
+    case REMOVE_FROM_SHOPPING_CART: {
+      return {
+        ...state,
+        shoppingCart: state.shoppingCart.filter(
+          ({ id, sizes_quantity: sizesQuantity }) =>
+            id !== action.payload.id ||
+            (id === action.payload.id && !sizesQuantity[action.payload.size])
+        ),
+      };
+    }
     default: {
       throw new Error(`Unhandled action: ${action.type}`);
     }

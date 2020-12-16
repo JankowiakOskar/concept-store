@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import AddCartForm from 'components/organisms/AddCartForm/AddCartForm';
 import { arrObjectsFromObjectPairs } from 'helpers';
+import ServicesBox from 'components/molecules/ServicesBox/ServicesBox';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -41,7 +42,11 @@ const Image = styled.img`
 
 const DescriptionWrapper = styled.div`
   width: 100%;
-  margin: 20px 0 0 0;
+  margin: 10px 0 0 0;
+`;
+
+const FormWrapper = styled.div`
+  margin: 10px 0;
 `;
 
 const TitleProduct = styled.h3``;
@@ -56,10 +61,9 @@ const DetailProductTemplate = ({ product }) => {
     sizes_quantity: sizesQuantity,
   } = product;
 
-  const productFormated = {
-    ...product,
-    sizes_quantity: arrObjectsFromObjectPairs(sizesQuantity, 'size', 'amount'),
-  };
+  const formatedSizesQuantity =
+    sizesQuantity && arrObjectsFromObjectPairs(sizesQuantity, 'size', 'amount');
+
   return (
     <Wrapper>
       <DetailWrapper>
@@ -69,8 +73,14 @@ const DetailProductTemplate = ({ product }) => {
         <DescriptionWrapper>
           <TitleProduct>{name}</TitleProduct>
           <Price>{price} €</Price>
-          <AddCartForm product={productFormated} />
+          <FormWrapper>
+            <AddCartForm
+              product={product}
+              sizesQuantity={formatedSizesQuantity}
+            />
+          </FormWrapper>
         </DescriptionWrapper>
+        <ServicesBox />
       </DetailWrapper>
     </Wrapper>
   );

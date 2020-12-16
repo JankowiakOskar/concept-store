@@ -77,7 +77,7 @@ const HamburgerIcon = styled(NotesIcon)`
 const NavBar = () => {
   const {
     setOpenSidePanel,
-    panelTypes: [menu, shoppingCart],
+    panelTypes: { menu, cart },
   } = useContext(UIContext);
   const [scrollYPos] = useScrollPos(window);
   const [numWishedProducts] = useNumStoredItems('wishlist');
@@ -94,7 +94,7 @@ const NavBar = () => {
             {numWishedProducts > 0 && <Circle>{numWishedProducts}</Circle>}
           </ElementWrapper>
         </StyledLink>
-        <ElementWrapper onClick={() => setOpenSidePanel(shoppingCart)}>
+        <ElementWrapper onClick={() => setOpenSidePanel(cart)}>
           <BasketIcon />
           {numProductsInBasket > 0 && <Circle>{numProductsInBasket}</Circle>}
         </ElementWrapper>

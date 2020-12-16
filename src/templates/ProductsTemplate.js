@@ -7,7 +7,6 @@ import Loader from 'react-loader-spinner';
 
 const Wrapper = styled.div`
   height: auto;
-  width: 90%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -20,7 +19,7 @@ const StyledButton = styled(Button)`
   margin: 0 0 50px 0;
 `;
 
-const ProductsTemplate = ({ children }) => {
+const ProductsTemplate = ({ children, className }) => {
   const {
     data: {
       isLoadingProducts,
@@ -30,7 +29,7 @@ const ProductsTemplate = ({ children }) => {
     fetchProducts,
   } = useContext(StoreContext);
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       {children}
       {!isAllProductsFetched && (
         <StyledButton onClick={() => fetchProducts(currentProducts)}>
@@ -46,10 +45,12 @@ const ProductsTemplate = ({ children }) => {
 };
 
 ProductsTemplate.propTypes = {
+  className: PropTypes.string,
   children: PropTypes.node,
 };
 
 ProductsTemplate.defaultProps = {
+  className: '',
   children: [],
 };
 

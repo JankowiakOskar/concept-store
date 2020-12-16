@@ -15,7 +15,7 @@ const Wrapper = styled(motion.div)`
 
 const Home = () => {
   const {
-    data: { slides, categories },
+    data: { slides, categoriesCards },
   } = useContext(StoreContext);
   return (
     <LoadingProvider>
@@ -23,7 +23,7 @@ const Home = () => {
         <Wrapper>
           <Slider slides={slides} />
           <CategoriesTemplate>
-            {categories.map(({ category, image }) => (
+            {categoriesCards.map(({ category, image }) => (
               <CategoryCard
                 key={category}
                 image={image}
