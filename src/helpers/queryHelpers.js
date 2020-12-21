@@ -13,9 +13,9 @@ export const categoryQueryFilter = (categories) => {
   const queryTemplate = 'name=';
   const filterStr = categories.reduce((queryStr, categoryName, currIdx) => {
     if (currIdx === 0) {
-      queryStr = `?${queryTemplate}=${categoryName}`;
+      queryStr = `?${queryTemplate}${categoryName}`;
     } else {
-      queryStr += `&${queryTemplate}=${categoryName}`;
+      queryStr += `&${queryTemplate}${categoryName}`;
     }
     return queryStr;
   }, '');

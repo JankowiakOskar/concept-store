@@ -8,9 +8,6 @@ import {
   FETCHING_PRODUCTS_REQUEST,
   FETCHING_PRODUCTS_SUCCESS,
   FETCHING_PRODUCTS_FAILURE,
-  GET_CATEGORIES_REQUEST,
-  GET_CATEGORIES_SUCCESS,
-  GET_CATEGORIES_FAILURE,
   UPDATE_STORE_REQUEST,
   UPDATE_STORE_SUCCESS,
   UPDATE_STORE_FAILURE,
@@ -21,6 +18,7 @@ import {
   ADD_TO_SHOPPING_CART,
   REPLACE_ITEM_IN_SHOPPING_CART,
   REMOVE_FROM_SHOPPING_CART,
+  REMOVE_ALL_PRODUCTS,
 } from 'actions/data';
 
 export const initialState = {
@@ -62,12 +60,10 @@ export const initialState = {
     },
   ],
   isLoadingProducts: false,
-  isLoadingCategories: false,
   isAllProductsFetched: false,
   products: [],
   wishlist: [],
   shoppingCart: [],
-  categories: [],
   error: {},
 };
 
@@ -91,25 +87,6 @@ export const dataReducer = (state, action) => {
         isLoadingProducts: !state.isLoadingProducts,
         error: action.payload,
       };
-    case GET_CATEGORIES_REQUEST: {
-      return {
-        ...state,
-        isLoadingCategories: !state.isLoadingCategories,
-      };
-    }
-    case GET_CATEGORIES_SUCCESS: {
-      return {
-        ...state,
-        isLoadingCategories: !state.isLoadingCategories,
-        categories: action.payload.categories,
-      };
-    }
-    case GET_CATEGORIES_FAILURE: {
-      return {
-        ...state,
-        isLoadingCategories: !state.isLoadingCategories,
-      };
-    }
     case UPDATE_STORE_REQUEST:
       return {
         ...state,
@@ -165,6 +142,12 @@ export const dataReducer = (state, action) => {
             id !== action.payload.id ||
             (id === action.payload.id && !sizesQuantity[action.payload.size])
         ),
+      };
+    }
+    case REMOVE_ALL_PRODUCTS: {
+      return {
+        ...state,
+        products: [],
       };
     }
     default: {

@@ -8,8 +8,11 @@ import {
   containerHasNewItem,
   updateSameProduct,
 } from 'helpers';
-
-import { limitQueryParam, allDataQueryParam } from 'helpers/queryHelpers';
+import {
+  limitQueryParam,
+  allDataQueryParam,
+  categoryQueryFilter,
+} from 'helpers/queryHelpers';
 
 export const FETCHING_PRODUCTS_REQUEST = 'FETCHING_PRODUCTS_REQUEST';
 export const FETCHING_PRODUCTS_SUCCESS = 'FETCHING_PRODUCTS_SUCCESS';
@@ -33,6 +36,7 @@ export const REPLACE_ITEM_IN_SHOPPING_CART = 'REPLACE_ITEM_IN_SHOPPING_CART';
 export const REMOVE_FROM_SHOPPING_CART = 'REMOVE_FROM_SHOPPING_CART';
 
 export const REMOVE_MATCHED_PRODUCT = 'REMOVE_MATCHED_PRODUCT';
+export const REMOVE_ALL_PRODUCTS = 'REMOVE_ALL_PRODUCTS';
 
 export const limitRequest = 12;
 
@@ -68,14 +72,12 @@ export const addToShoppingCart = (dispatch, currShoppingCart, product) => {
     : dispatch({ type: ADD_TO_SHOPPING_CART, payload: product });
 };
 
-export const getProducts = async (dispatch, currentProducts) => {
+export const getProducts = async (dispatch, currentProducts = []) => {
   dispatch({ type: FETCHING_PRODUCTS_REQUEST });
-
   const limitQuery = limitQueryParam(currentProducts, limitRequest);
-
   try {
     const { data: products } = await axios.get(
-      `http://localhost:1337/products?${limitQuery}`
+      `http://192.168.100.17:1337/products?${limitQuery}`
     );
 
     await sleeper(500);
@@ -94,21 +96,49 @@ export const getProducts = async (dispatch, currentProducts) => {
   }
 };
 
-export const getCategories = async (dispatch, categories = null) => {
-  dispatch({ type: GET_CATEGORIES_REQUEST });
-  try {
-    const { data } = await axios.get(`http://localhost:1337/categories`);
+export const getCategories = async (dispatch, filters = []) => {
+  const anyFilterSelected = filters.length;
 
-    const newCategoriesArr = data.reduce((acc, category) => {
+  const filterNames = anyFilterSelected
+    ? filters.map(({ categoryName }) => categoryName)
+    : filters;
+
+  const numItemsRequest =
+    anyFilterSelected &&
+    filters.reduce((acc, { productsNum }) => acc + productsNum, 0);
+
+  dispatch({ type: GET_CATEGORIES_REQUEST, payload: { numItemsRequest } });
+
+  const filterQueryStr = categoryQueryFilter(filterNames);
+
+  const endpoint = anyFilterSelected
+    ? `categories${filterQueryStr}`
+    : 'categories';
+
+  try {
+    const { data } = await axios.get(`http://192.168.100.17:1337/${endpoint}`);
+
+    const categoriesItems = data.reduce((acc, category) => {
       const categoryName = category.name;
-      const categoryProductsNum = category[categoryName].length;
-      acc.push({ categoryName, categoryProductsNum });
+      const products = category[categoryName];
+      acc.push(...products);
       return acc;
     }, []);
 
+    const allCategories = !anyFilterSelected
+      ? data.reduce((acc, category) => {
+          const categoryName = category.name;
+          const productsNum = category[categoryName].length;
+          acc.push({ categoryName, productsNum });
+          return acc;
+        }, [])
+      : [];
+
     dispatch({
       type: GET_CATEGORIES_SUCCESS,
-      payload: { categories: newCategoriesArr },
+      payload: anyFilterSelected
+        ? { allCategories, categoriesItems }
+        : { allCategories },
     });
   } catch (err) {
     dispatch({ type: GET_CATEGORIES_FAILURE, payload: err });
@@ -124,7 +154,7 @@ export const updateStore = async (
   dispatch({ type: UPDATE_STORE_REQUEST });
   try {
     const { data: productToUpdate } = await axios.get(
-      `http://localhost:1337/products/${id}`
+      `http://192.168.100.17:1337/products/${id}`
     );
     const { sizes_quantity } = productToUpdate;
 
@@ -150,7 +180,7 @@ export const updateStore = async (
     );
 
     const { data: updatedProduct } = await axios.put(
-      `http://localhost:1337/products/${id}`,
+      `http://192.168.100.17:1337/products/${id}`,
       {
         sizes_quantity: newSizesQuantity,
       }
@@ -189,3 +219,6 @@ export const removeFromWishlist = (dispatch, id) => {
 export const removeExactProduct = (dispatch, id) => {
   dispatch({ type: REMOVE_MATCHED_PRODUCT, payload: id });
 };
+
+export const removeAllProducts = (dispatch) =>
+  dispatch({ type: REMOVE_ALL_PRODUCTS });

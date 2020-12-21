@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { StoreContext } from 'store/StoreProvider';
+import { FilterContext } from 'contexts/FilterContext';
 import { useParams } from 'react-router-dom';
 import { getFromArrByID, setItemToLocalStorage } from 'helpers';
 import DetailProductTemplate from 'templates/DetailProductTemplate';
@@ -14,9 +15,18 @@ const DetailPage = () => {
   const {
     data: { products },
   } = useContext(StoreContext);
+
+  const {
+    state: { filteredItems },
+  } = useContext(FilterContext);
+
+  const arrWithProducts = [...products, ...filteredItems];
+
   const storedProductRef = useRef(null);
+
   const { id } = useParams();
-  const choosenProduct = getFromArrByID(products, id);
+
+  const choosenProduct = getFromArrByID(arrWithProducts, id);
 
   if (!choosenProduct) {
     const [storedProduct] = JSON.parse(localStorage.getItem('choosenProduct'));
@@ -34,6 +44,7 @@ const DetailPage = () => {
       <Wrapper>
         <DetailProductTemplate
           product={choosenProduct || storedProductRef.current}
+          arrProducts={arrWithProducts}
         />
       </Wrapper>
     </LoadingProvider>

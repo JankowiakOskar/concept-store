@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { FilterContext } from 'contexts/FilterContext';
 import { StoreContext } from 'store/StoreProvider';
 import CheckBoxElement from 'components/molecules/CheckBoxElement/CheckBoxElement';
 import Button from 'components/atoms/Button/Button';
-import { categoryQueryFilter } from 'helpers/queryHelpers';
 
 const Form = styled.form``;
 
@@ -28,18 +29,24 @@ const StyledButton = styled(Button)`
   height: 30px;
 `;
 
-const FilterForm = () => {
+const FilterForm = ({ handleClosePanel, saveValues, savedValues }) => {
   const {
-    data: { categories },
-  } = useContext(StoreContext);
+    state: { categoriesOptions },
+    getCategories,
+    removeAllFilteredProducts,
+  } = useContext(FilterContext);
 
-  const [filterValues, setFilterValues] = useState(() =>
-    categories.reduce((initialState, { categoryName }) => {
-      // eslint-disable-next-line no-param-reassign
-      initialState[categoryName] = false;
-      return initialState;
-    }, {})
-  );
+  const { removeAllProducts, fetchProducts } = useContext(StoreContext);
+
+  const initialValues = Object.keys(savedValues).length
+    ? savedValues
+    : categoriesOptions.reduce((initialState, { categoryName }) => {
+        // eslint-disable-next-line no-param-reassign
+        initialState[categoryName] = false;
+        return initialState;
+      }, {});
+
+  const [filterValues, setFilterValues] = useState(initialValues);
 
   const toggleCheckbox = (categoryName) => {
     setFilterValues({
@@ -50,19 +57,37 @@ const FilterForm = () => {
 
   const handleSubmit = (e, values) => {
     e.preventDefault();
-    const keys = Object.keys(values);
-    console.log(keys);
-    console.log(categoryQueryFilter(keys));
+
+    const currValues = values;
+    const selectedFilters = categoriesOptions.filter(
+      ({ categoryName }) => currValues[categoryName]
+    );
+    const anyFilterSelected = selectedFilters.length;
+
+    saveValues(currValues);
+    removeAllProducts();
+    removeAllFilteredProducts();
+    handleClosePanel();
+    return anyFilterSelected ? getCategories(selectedFilters) : fetchProducts();
+  };
+
+  const clearAll = (valuesObj) => {
+    const valuesToClear = valuesObj;
+    const clearedValues = Object.keys(valuesToClear).reduce((acc, property) => {
+      acc[property] = false;
+      return acc;
+    }, {});
+    setFilterValues(clearedValues);
   };
 
   return (
     <Form onSubmit={(e) => handleSubmit(e, filterValues)}>
       <CategoriesListWrapper>
-        {categories.map(({ categoryName, categoryProductsNum }) => (
+        {categoriesOptions.map(({ categoryName, productsNum }) => (
           <StyledCheckBoxElement
             key={categoryName}
             name={categoryName}
-            productNums={categoryProductsNum}
+            productsNum={productsNum}
             toggleCheckbox={toggleCheckbox}
             value={filterValues[categoryName]}
           />
@@ -70,10 +95,24 @@ const FilterForm = () => {
       </CategoriesListWrapper>
       <ButtonsWrapper>
         <StyledButton type="submit">Filter</StyledButton>
-        <Button type="button">Clear</Button>
+        <Button type="button" onClick={() => clearAll(filterValues)}>
+          Clear
+        </Button>
       </ButtonsWrapper>
     </Form>
   );
+};
+
+FilterForm.propTypes = {
+  saveValues: PropTypes.func,
+  savedValues: PropTypes.objectOf(PropTypes.bool),
+  handleClosePanel: PropTypes.func,
+};
+
+FilterForm.defaultProps = {
+  saveValues: () => {},
+  handleClosePanel: () => {},
+  savedValues: {},
 };
 
 export default FilterForm;

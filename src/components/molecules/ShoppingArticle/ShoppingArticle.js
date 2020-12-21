@@ -142,7 +142,7 @@ const ShoppingArticle = ({
   return (
     <ArticleWrapper className={className}>
       <ImageWrapper>
-        <ArticleImg src={`http://localhost:1337${pictureURL}`} />
+        <ArticleImg src={`http://192.168.100.17:1337${pictureURL}`} />
       </ImageWrapper>
       <DetailsGroup>
         <ItemTitle>{name}</ItemTitle>

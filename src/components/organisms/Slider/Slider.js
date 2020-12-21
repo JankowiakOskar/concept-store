@@ -57,6 +57,7 @@ const Slider = ({ slides }) => {
       <ControlWrapper>
         {slides.map(({ id }, index) => (
           <ControlDot
+            data-testid="controlDot"
             isActive={activeSlideIndex === index}
             key={id}
             onClick={() => handleClick(index)}

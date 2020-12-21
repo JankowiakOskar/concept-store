@@ -57,9 +57,15 @@ const FavoriteIconButton = styled.button`
 
 const FavoriteIcon = styled(FavoriteBorderIcon)`
   ${baseIconStyle};
+  color: ${({ isFavorite, theme }) => isFavorite && theme.red};
 `;
 
-const AddCartForm = ({ product, sizesQuantity }) => {
+const AddCartForm = ({
+  product,
+  sizesQuantity,
+  isOnWishlist,
+  handleWishlist,
+}) => {
   const [choosenSize, setChoosenSize] = useState('');
   const [amountItem, setAmountItem] = useState(1);
   const [error, setError] = useState('');
@@ -113,8 +119,8 @@ const AddCartForm = ({ product, sizesQuantity }) => {
           <StyledShopingCartIcon />
           <span>Add to cart</span>
         </StyledButton>
-        <FavoriteIconButton type="button">
-          <FavoriteIcon />
+        <FavoriteIconButton type="button" onClick={handleWishlist}>
+          <FavoriteIcon isFavorite={isOnWishlist} />
         </FavoriteIconButton>
       </ButtonsWrapper>
     </Form>
@@ -127,9 +133,10 @@ AddCartForm.propTypes = {
     name: PropTypes.string,
     price: PropTypes.number,
     picture: PropTypes.objectOf(PropTypes.any),
-    sizes_quantity: PropTypes.objectOf(PropTypes.string),
   }),
   sizesQuantity: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
+  isOnWishlist: PropTypes.bool.isRequired,
+  handleWishlist: PropTypes.func.isRequired,
 };
 
 AddCartForm.defaultProps = {

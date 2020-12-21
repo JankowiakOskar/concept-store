@@ -48,6 +48,10 @@ const ContentParagraph = styled.p`
   color: ${({ theme }) => theme.grey100};
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const StyledButton = styled(Button)`
   margin-top: 20px;
   width: 200px;
@@ -55,7 +59,7 @@ const StyledButton = styled(Button)`
 `;
 
 const EmptyCard = ({ title, description, type }) => {
-  const { closeSidePanel } = useContext(UIContext);
+  const { hideSidePanel } = useContext(UIContext);
   return (
     <Wrapper>
       {type === 'shoppingCart' && <EmptyBasketDraw />}
@@ -64,9 +68,9 @@ const EmptyCard = ({ title, description, type }) => {
         <ContentTitle>{title}</ContentTitle>
         <ContentParagraph>{description}</ContentParagraph>
         {type === 'shoppingCart' && (
-          <Link to={routes.clothes} onClick={closeSidePanel}>
+          <StyledLink to={routes.clothes} onClick={hideSidePanel}>
             <StyledButton primary>Continue shopping</StyledButton>
-          </Link>
+          </StyledLink>
         )}
       </ContentWrapper>
     </Wrapper>

@@ -1,27 +1,24 @@
 import React, { useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
-import routes from 'routes';
 import { initialState, dataReducer } from 'reducers/dataReducer';
 import {
   getProducts as getProductsAction,
-  addToWishlist as addToWishlistAction,
-  removeFromWishlist as removeFromWishlistAction,
+  addToWishlist,
+  removeFromWishlist,
   getWishlist as getWishlistAction,
   getShoppingCart as getShoppingCartAction,
   addToShoppingCart as addToShoppingCartAction,
   updateStore as updateStoreAction,
   removeFromShoppingCart as removeFromShoppingCartAction,
-  getCategories as getCategoriesAction,
+  removeAllProducts as removeAllProductsActions,
 } from 'actions/data';
+import { getFromArrByID } from 'helpers';
 
 export const StoreContext = React.createContext();
 
 const StoreProvider = ({ children }) => {
   const [data, dispatch] = useReducer(dataReducer, initialState);
-  const { pathname } = useLocation();
-  const { products, shoppingCart } = data;
-
+  const { products, shoppingCart, wishlist } = data;
   const updateStoreActions = {
     removeFromStore: 'remove',
     addToStore: 'add',
@@ -29,10 +26,6 @@ const StoreProvider = ({ children }) => {
 
   const fetchProducts = (currentProducts) =>
     getProductsAction(dispatch, currentProducts);
-
-  const addToWishlist = (product) => addToWishlistAction(dispatch, product);
-
-  const removeFromWishlist = (id) => removeFromWishlistAction(dispatch, id);
 
   const getWishlist = () => getWishlistAction(dispatch);
 
@@ -48,28 +41,31 @@ const StoreProvider = ({ children }) => {
     removeFromShoppingCartAction(dispatch, id, size);
   };
 
-  const getCategories = () => getCategoriesAction(dispatch);
+  const removeAllProducts = () => removeAllProductsActions(dispatch);
+
+  const handleWishlist = (id, productsArr = products) => {
+    const choosenProduct = getFromArrByID(productsArr, id);
+    const isOnWishlist = wishlist.some((product) => product.id === id);
+    return isOnWishlist
+      ? removeFromWishlist(dispatch, id)
+      : addToWishlist(dispatch, choosenProduct);
+  };
 
   useEffect(() => {
     getWishlist();
     getShoppingCart();
-    getCategories();
+    fetchProducts();
   }, []);
-
-  useEffect(() => {
-    const isClothesPagePath = routes.clothes === pathname;
-    if (isClothesPagePath && !products.length) fetchProducts(products);
-  }, [pathname, products]);
 
   const values = {
     data,
-    addToWishlist,
-    removeFromWishlist,
+    handleWishlist,
     addToShoppingCart,
     removeFromShoppingCart,
     updateStore,
     updateStoreActions,
     fetchProducts,
+    removeAllProducts,
   };
 
   return (

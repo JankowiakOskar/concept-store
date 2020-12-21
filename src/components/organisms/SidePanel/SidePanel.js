@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { UIContext } from 'contexts/GlobalUIContext';
 import { StoreContext } from 'store/StoreProvider';
 import styled from 'styled-components';
@@ -11,6 +11,7 @@ import ShopingCartTemplate from 'templates/ShoppingCartTemplate';
 import MenuList from 'components/molecules/MenuList/MenuList';
 import routes from 'routes';
 import FilterForm from 'components/organisms/FilterForm/FilteForm';
+import useSavedValues from 'hooks/useSavedValues';
 
 const Wrapper = styled(motion.div)`
   position: fixed;
@@ -77,12 +78,21 @@ const SidePanel = () => {
   const {
     isOpen,
     choosenPanel,
-    closeSidePanel,
+    hideSidePanel,
     panelTypes: { menu, cart, filter },
   } = useContext(UIContext);
   const {
     data: { shoppingCart },
   } = useContext(StoreContext);
+
+  const [savedValues, handleSavingValues] = useSavedValues();
+
+  useEffect(() => {
+    if (isOpen) document.body.style = 'overflow: hidden';
+    else {
+      document.body.style = 'overflow: auto';
+    }
+  }, [isOpen]);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -95,13 +105,13 @@ const SidePanel = () => {
         >
           <PanelHeader>
             <TitlePanel>{choosenPanel}</TitlePanel>
-            <CloseIconWrapper onClick={() => closeSidePanel()}>
+            <CloseIconWrapper onClick={() => hideSidePanel()}>
               <StyledCloseIcon />
             </CloseIconWrapper>
           </PanelHeader>
           {choosenPanel === menu && (
             <MenuList
-              handleClosePanel={closeSidePanel}
+              handleClosePanel={hideSidePanel}
               list={[
                 { name: 'Home', link: `${routes.home}`, icon: HomeIcon },
                 {
@@ -116,7 +126,13 @@ const SidePanel = () => {
           {choosenPanel === cart && (
             <ShopingCartTemplate shoppingCart={shoppingCart} />
           )}
-          {choosenPanel === filter && <FilterForm />}
+          {choosenPanel === filter && (
+            <FilterForm
+              handleClosePanel={hideSidePanel}
+              saveValues={handleSavingValues}
+              savedValues={savedValues}
+            />
+          )}
         </Wrapper>
       )}
     </AnimatePresence>

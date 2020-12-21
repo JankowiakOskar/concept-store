@@ -6,6 +6,7 @@ import { Normalize } from 'styled-normalize';
 import GlobalStyle from 'assets/styles/GlobalStyle';
 import StoreProvider from 'store/StoreProvider';
 import GlobalUIProvider from 'contexts/GlobalUIContext';
+import FilterProvider from 'contexts/FilterContext';
 import Navbar from 'components/organisms/NavBar/NavBar';
 import SidePanel from 'components/organisms/SidePanel/SidePanel';
 import Footer from 'components/organisms/Footer/Footer';
@@ -16,12 +17,14 @@ const MainTemplate = ({ children }) => {
       <ThemeProvider theme={theme}>
         <StoreProvider>
           <GlobalUIProvider>
-            <Normalize />
-            <GlobalStyle />
-            <Navbar />
-            <SidePanel />
-            {children}
-            <Footer />
+            <FilterProvider>
+              <Normalize />
+              <GlobalStyle />
+              <Navbar />
+              <SidePanel />
+              {children}
+              <Footer />
+            </FilterProvider>
           </GlobalUIProvider>
         </StoreProvider>
       </ThemeProvider>

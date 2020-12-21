@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { StoreContext } from 'store/StoreProvider';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import AddCartForm from 'components/organisms/AddCartForm/AddCartForm';
@@ -53,13 +54,19 @@ const TitleProduct = styled.h3``;
 
 const Price = styled.span``;
 
-const DetailProductTemplate = ({ product }) => {
+const DetailProductTemplate = ({ product, arrProducts }) => {
   const {
+    id,
     name,
     price,
     picture: { url },
     sizes_quantity: sizesQuantity,
   } = product;
+
+  const {
+    handleWishlist,
+    data: { wishlist },
+  } = useContext(StoreContext);
 
   const formatedSizesQuantity =
     sizesQuantity && arrObjectsFromObjectPairs(sizesQuantity, 'size', 'amount');
@@ -68,7 +75,7 @@ const DetailProductTemplate = ({ product }) => {
     <Wrapper>
       <DetailWrapper>
         <ImageWrapper>
-          <Image src={`http://localhost:1337${url}`} />
+          <Image src={`http://192.168.100.17:1337${url}`} />
         </ImageWrapper>
         <DescriptionWrapper>
           <TitleProduct>{name}</TitleProduct>
@@ -77,6 +84,10 @@ const DetailProductTemplate = ({ product }) => {
             <AddCartForm
               product={product}
               sizesQuantity={formatedSizesQuantity}
+              handleWishlist={() => handleWishlist(id, arrProducts)}
+              isOnWishlist={wishlist.some(
+                (wishProduct) => wishProduct.id === id
+              )}
             />
           </FormWrapper>
         </DescriptionWrapper>
@@ -88,15 +99,18 @@ const DetailProductTemplate = ({ product }) => {
 
 DetailProductTemplate.propTypes = {
   product: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     name: PropTypes.string,
     price: PropTypes.number,
     picture: PropTypes.objectOf(PropTypes.any),
     sizes_quantity: PropTypes.objectOf(PropTypes.string),
   }),
+  arrProducts: PropTypes.arrayOf(PropTypes.shape(PropTypes.object)),
 };
 
 DetailProductTemplate.defaultProps = {
   product: {},
+  arrProducts: [{}],
 };
 
 export default DetailProductTemplate;

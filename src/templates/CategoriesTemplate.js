@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const CategoriesWrapper = styled.section`
-  margin: 30px auto;
-  width: 95%;
+  margin: auto;
   height: auto;
   display: flex;
   flex-direction: column;

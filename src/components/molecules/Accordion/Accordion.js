@@ -9,7 +9,7 @@ import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
 const AccordionWrapper = styled.div`
   display: flex;
   flex-direction: column;
-
+  justify-content: center;
   border-bottom: 0.5px solid ${({ theme }) => theme.grey100};
 `;
 
@@ -27,8 +27,7 @@ const AccordionHeader = styled.div`
 const ArrowIcon = styled(ArrowDropDownIcon)`
   ${baseIconStyle};
   color: ${({ theme }) => theme.white};
-  transform: ${({ isCollapse }) =>
-    isCollapse ? 'rotate(-180deg)' : 'rotate(0)'};
+  transform: ${({ collapse }) => (collapse ? 'rotate(-180deg)' : 'rotate(0)')};
   transition: transform 0.2s ease !important;
 `;
 
@@ -67,10 +66,11 @@ const listVariants = {
     },
   },
   exit: {
-    maxHeight: 0,
     opacity: 0,
+    maxHeight: 0,
     transform: {
       type: 'easeOut',
+      duartion: 0.2,
     },
   },
 };
@@ -82,7 +82,7 @@ const Accordion = ({ title, list }) => {
   return (
     <AccordionWrapper onClick={handleClick}>
       <AccordionHeader>
-        {title} <ArrowIcon isCollapse={isCollapse ? 1 : 0} />
+        {title} <ArrowIcon collapse={isCollapse ? 1 : 0} />
       </AccordionHeader>
       <AnimatePresence exitBeforeEnter>
         {isCollapse && (

@@ -1,4 +1,6 @@
 import React from 'react';
+import routes from 'routes';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -19,6 +21,7 @@ const Wrapper = styled(motion.div)`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 70% 40%;
+  opacity: 0;
 `;
 
 const InnerWrapper = styled(motion.div)`
@@ -61,11 +64,18 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      type: 'ease',
+      type: 'easeIn',
       when: 'beforeChildren',
+      duration: 0.3,
     },
   },
-  exit: { opacity: 0 },
+  exit: {
+    opacity: 0,
+    transition: {
+      type: 'easeOut',
+      duration: 0.3,
+    },
+  },
 };
 
 const childVariants = {
@@ -100,7 +110,9 @@ const Slide = ({ image, title, subTitle, btnContent, isActiveSlide }) => {
               {title} <Dot />
             </SlideTitle>
             <SlideSubTitle>{subTitle}</SlideSubTitle>
-            <StyledButton>{btnContent}</StyledButton>
+            <Link to={routes.clothes}>
+              <StyledButton>{btnContent}</StyledButton>
+            </Link>
           </InnerWrapper>
         </Wrapper>
       )}

@@ -25,18 +25,8 @@ const logoVariants = {
     opacity: [0, 1, 0],
 
     transition: {
-      y: {
-        type: 'ease',
-        duration: 1.5,
-      },
-      scale: {
-        type: 'ease',
-        duration: 1.5,
-      },
-      opacity: {
-        type: 'ease',
-        duration: 1.5,
-      },
+      type: 'easeIn',
+      duration: 1.5,
     },
   },
 };

@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
+import { FilterContext } from 'contexts/FilterContext';
 import { UIContext } from 'contexts/GlobalUIContext';
-import { getFromArrByID } from 'helpers';
 import { limitRequest } from 'actions/data';
 import PageHeader from 'components/atoms/PageHeader/PageHeader';
 import ProductsTemplate from 'templates/ProductsTemplate';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
-import SkeletonCard from 'components/molecules/SkeletonCard/SkeletonCard';
+import SkeletonCardsProvider from 'providers/SkeletonCardProvider';
 import TransitionProvider from 'providers/TransitionProvider';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
@@ -18,10 +18,6 @@ const Wrapper = styled.div`
   padding: 80px 20px 0;
   width: 100%;
   height: auto;
-`;
-
-const CardWrapper = styled(motion.div)`
-  margin: 30px 0;
 `;
 
 const FilterButton = styled.button`
@@ -42,37 +38,47 @@ const FilterIcon = styled(FilterListIcon)`
   ${baseIconStyle}
 `;
 
-const cardVariants = {
+const StyledProductsTemplate = styled(ProductsTemplate)`
+  && {
+    margin: 30px 0;
+  }
+`;
+export const CardWrapper = styled(motion.div)`
+  margin: 30px 0;
+`;
+
+export const cardVariants = {
   hidden: { opacity: 0 },
   vissible: {
     opacity: 1,
     transition: {
       type: 'ease',
-      duration: 0.5,
+      duration: 1,
     },
   },
 };
 
 const Clothes = () => {
   const {
-    data: { products, wishlist, isLoadingProducts },
-    addToWishlist,
-    removeFromWishlist,
+    data: { products, wishlist, isLoadingProducts, isAllProductsFetched },
+    handleWishlist,
   } = useContext(StoreContext);
+
+  const {
+    state: { filteredItems, numFetchingItems, isFiltering },
+  } = useContext(FilterContext);
+
+  const arrWithProducts = [...products, ...filteredItems];
+
   const {
     setOpenSidePanel,
     panelTypes: { filter },
   } = useContext(UIContext);
 
-  const handleWishlist = (id) => {
-    const choosenProduct = getFromArrByID(products, id);
-    const isOnWishlist = wishlist.some(
-      (product) => product.id === choosenProduct.id
-    );
-    return isOnWishlist
-      ? removeFromWishlist(id)
-      : addToWishlist(choosenProduct);
-  };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <TransitionProvider>
       <Wrapper>
@@ -80,9 +86,15 @@ const Clothes = () => {
         <FilterButton onClick={() => setOpenSidePanel(filter)}>
           Filter <FilterIcon />
         </FilterButton>
-        <ProductsTemplate>
-          {products.length && !isLoadingProducts
-            ? products.map(({ id, name, price, picture: { url } }) => (
+        <StyledProductsTemplate
+          isAllProductsFetched={products.length ? isAllProductsFetched : true}
+        >
+          <SkeletonCardsProvider
+            isLoading={isFiltering || isLoadingProducts}
+            limitCardRender={numFetchingItems || limitRequest}
+          >
+            {arrWithProducts.length > 0 &&
+              arrWithProducts.map(({ id, name, price, picture: { url } }) => (
                 <CardWrapper
                   variants={cardVariants}
                   initial="hidden"
@@ -94,19 +106,14 @@ const Clothes = () => {
                     name={name}
                     price={price}
                     pictureURL={url}
-                    handleWishlist={handleWishlist}
+                    handleWishlist={(ID) => handleWishlist(ID, arrWithProducts)}
                     onWishlist={wishlist.some((product) => product.id === id)}
                     cardType="productCard"
                   />
                 </CardWrapper>
-              ))
-            : Array.from({ length: limitRequest }).map((_, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <CardWrapper key={index}>
-                  <SkeletonCard />
-                </CardWrapper>
               ))}
-        </ProductsTemplate>
+          </SkeletonCardsProvider>
+        </StyledProductsTemplate>
       </Wrapper>
     </TransitionProvider>
   );

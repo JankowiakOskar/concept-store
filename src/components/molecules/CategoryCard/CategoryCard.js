@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { FilterContext } from 'contexts/FilterContext';
+import { StoreContext } from 'store/StoreProvider';
+import { Link } from 'react-router-dom';
+import routes from 'routes';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from 'components/atoms/Button/Button';
@@ -35,12 +39,21 @@ const StyledButton = styled(Button)`
   transform: translate(-50%, -50%);
 `;
 
-const CategoryCard = ({ image, categoryType }) => {
+const CategoryCard = ({ image, categoryType: categoryName }) => {
+  const { getCategories } = useContext(FilterContext);
+  const { removeAllProducts } = useContext(StoreContext);
+
+  const handleRedirect = () => {
+    removeAllProducts();
+    getCategories([{ categoryName }]);
+  };
   return (
-    <WrapperCard>
-      <CategoryImg src={image} />
-      <StyledButton secondary>{categoryType}</StyledButton>
-    </WrapperCard>
+    <Link to={routes.clothes}>
+      <WrapperCard onClick={handleRedirect}>
+        <CategoryImg src={image} />
+        <StyledButton secondary>{categoryName}</StyledButton>
+      </WrapperCard>
+    </Link>
   );
 };
 

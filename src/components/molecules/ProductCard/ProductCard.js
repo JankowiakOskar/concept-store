@@ -17,7 +17,6 @@ const ProductWrapper = styled.div`
 `;
 
 const ProductImage = styled(motion.img)`
-  object-fit: cover;
   width: 100%;
   height: 100%;
   transition: transform 0.2s ease;
@@ -26,11 +25,13 @@ const ProductImage = styled(motion.img)`
 const OuterImageWrapper = styled.div`
   position: relative;
   width: 100%;
+  height: 100%;
   overflow: hidden;
 `;
 
 const ImageWrapper = styled.div`
   width: 100%;
+  height: 100%;
   &:after {
     content: '';
     position: absolute;
@@ -107,7 +108,7 @@ const ProductCard = ({
       <OuterImageWrapper>
         <Link to={`${routes.clothes}/${id}`}>
           <ImageWrapper>
-            <ProductImage src={`http://localhost:1337${pictureURL}`} />
+            <ProductImage src={`http://192.168.100.17:1337${pictureURL}`} />
           </ImageWrapper>
         </Link>
         {cardType === 'productCard' && (

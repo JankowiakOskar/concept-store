@@ -19,15 +19,12 @@ const StyledButton = styled(Button)`
   margin: 0 0 50px 0;
 `;
 
-const ProductsTemplate = ({ children, className }) => {
+const ProductsTemplate = ({ children, className, isAllProductsFetched }) => {
   const {
-    data: {
-      isLoadingProducts,
-      products: currentProducts,
-      isAllProductsFetched,
-    },
+    data: { isLoadingProducts, products: currentProducts },
     fetchProducts,
   } = useContext(StoreContext);
+
   return (
     <Wrapper className={className}>
       {children}
@@ -47,6 +44,7 @@ const ProductsTemplate = ({ children, className }) => {
 ProductsTemplate.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node,
+  isAllProductsFetched: PropTypes.bool.isRequired,
 };
 
 ProductsTemplate.defaultProps = {

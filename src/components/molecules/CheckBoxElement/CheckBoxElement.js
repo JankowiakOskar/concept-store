@@ -51,7 +51,7 @@ const ProductNum = styled.span``;
 
 const CheckBoxElement = ({
   name,
-  productNums,
+  productsNum,
   className,
   toggleCheckbox,
   value,
@@ -63,7 +63,7 @@ const CheckBoxElement = ({
     >
       <Checkbox type="checkbox" name={name} value={value} />
       <CheckBoxLabel htmlFor={name} isChecked={value}>
-        {makeCapitalWord(name)} <ProductNum>({productNums})</ProductNum>
+        {makeCapitalWord(name)} <ProductNum>({productsNum})</ProductNum>
       </CheckBoxLabel>
     </CheckBoxElementWrapper>
   );
@@ -72,13 +72,14 @@ const CheckBoxElement = ({
 CheckBoxElement.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
-  productNums: PropTypes.number.isRequired,
-  value: PropTypes.bool.isRequired,
+  productsNum: PropTypes.number.isRequired,
+  value: PropTypes.bool,
   toggleCheckbox: PropTypes.func.isRequired,
 };
 
 CheckBoxElement.defaultProps = {
   className: '',
+  value: false,
 };
 
 export default CheckBoxElement;
