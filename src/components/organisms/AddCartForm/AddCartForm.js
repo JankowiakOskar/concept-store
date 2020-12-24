@@ -100,6 +100,10 @@ const AddCartForm = ({
     setAmountItem(1);
   }, [choosenSize]);
 
+  useEffect(() => {
+    setChoosenSize('');
+  }, [product]);
+
   return (
     <Form>
       <Dropdown
@@ -134,14 +138,14 @@ AddCartForm.propTypes = {
     price: PropTypes.number,
     picture: PropTypes.objectOf(PropTypes.any),
   }),
-  sizesQuantity: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
+  sizesQuantity: PropTypes.arrayOf(PropTypes.object),
   isOnWishlist: PropTypes.bool.isRequired,
   handleWishlist: PropTypes.func.isRequired,
 };
 
 AddCartForm.defaultProps = {
   product: {},
-  sizesQuantity: [],
+  sizesQuantity: [{ size: '', amount: '' }],
 };
 
 export default AddCartForm;

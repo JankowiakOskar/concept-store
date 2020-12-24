@@ -17,7 +17,7 @@ const CheckBoxLabel = styled.label`
   position: relative;
   margin: 0 0 0 30px;
   color: ${({ theme }) => theme.black};
-  font-weight: ${({ theme }) => theme.font.weight.semiBold};
+  font-weight: ${({ theme }) => theme.font.weight.regular};
   display: inline-flex;
   align-items: center;
   justify-content: space-between;

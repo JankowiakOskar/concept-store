@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
-import { FilterContext } from 'contexts/FilterContext';
 import { UIContext } from 'contexts/GlobalUIContext';
 import { limitRequest } from 'actions/data';
 import PageHeader from 'components/atoms/PageHeader/PageHeader';
@@ -60,15 +59,15 @@ export const cardVariants = {
 
 const Clothes = () => {
   const {
-    data: { products, wishlist, isLoadingProducts, isAllProductsFetched },
+    data: {
+      products,
+      wishlist,
+      isLoadingProducts,
+      numItemsRequest,
+      isAllProductsFetched,
+    },
     handleWishlist,
   } = useContext(StoreContext);
-
-  const {
-    state: { filteredItems, numFetchingItems, isFiltering },
-  } = useContext(FilterContext);
-
-  const arrWithProducts = [...products, ...filteredItems];
 
   const {
     setOpenSidePanel,
@@ -86,15 +85,15 @@ const Clothes = () => {
         <FilterButton onClick={() => setOpenSidePanel(filter)}>
           Filter <FilterIcon />
         </FilterButton>
-        <StyledProductsTemplate
-          isAllProductsFetched={products.length ? isAllProductsFetched : true}
-        >
+        <StyledProductsTemplate isAllProductsFetched={isAllProductsFetched}>
           <SkeletonCardsProvider
-            isLoading={isFiltering || isLoadingProducts}
-            limitCardRender={numFetchingItems || limitRequest}
+            isLoading={isLoadingProducts}
+            limitCardRender={
+              isAllProductsFetched ? numItemsRequest : limitRequest
+            }
           >
-            {arrWithProducts.length > 0 &&
-              arrWithProducts.map(({ id, name, price, picture: { url } }) => (
+            {products.length > 0 &&
+              products.map(({ id, name, price, picture: { url } }) => (
                 <CardWrapper
                   variants={cardVariants}
                   initial="hidden"
@@ -106,7 +105,7 @@ const Clothes = () => {
                     name={name}
                     price={price}
                     pictureURL={url}
-                    handleWishlist={(ID) => handleWishlist(ID, arrWithProducts)}
+                    handleWishlist={(ID) => handleWishlist(ID)}
                     onWishlist={wishlist.some((product) => product.id === id)}
                     cardType="productCard"
                   />

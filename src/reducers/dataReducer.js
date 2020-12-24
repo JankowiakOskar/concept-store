@@ -61,6 +61,7 @@ export const initialState = {
   ],
   isLoadingProducts: false,
   isAllProductsFetched: false,
+  numItemsRequest: 0,
   products: [],
   wishlist: [],
   shoppingCart: [],
@@ -73,6 +74,7 @@ export const dataReducer = (state, action) => {
       return {
         ...state,
         isLoadingProducts: !state.isLoadingProducts,
+        numItemsRequest: action.payload.numItemsRequest,
       };
     case FETCHING_PRODUCTS_SUCCESS:
       return {
@@ -80,11 +82,13 @@ export const dataReducer = (state, action) => {
         isLoadingProducts: !state.isLoadingProducts,
         products: [...state.products, ...action.payload.products],
         isAllProductsFetched: action.payload.isAllProductsFetched,
+        numItemsRequest: 0,
       };
     case FETCHING_PRODUCTS_FAILURE:
       return {
         ...state,
         isLoadingProducts: !state.isLoadingProducts,
+        numItemsRequest: 0,
         error: action.payload,
       };
     case UPDATE_STORE_REQUEST:
@@ -147,6 +151,7 @@ export const dataReducer = (state, action) => {
     case REMOVE_ALL_PRODUCTS: {
       return {
         ...state,
+        numItemsRequest: 0,
         products: [],
       };
     }

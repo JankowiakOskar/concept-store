@@ -21,7 +21,7 @@ const StyledButton = styled(Button)`
 
 const ProductsTemplate = ({ children, className, isAllProductsFetched }) => {
   const {
-    data: { isLoadingProducts, products: currentProducts },
+    data: { isLoadingProducts, products: currProducts },
     fetchProducts,
   } = useContext(StoreContext);
 
@@ -29,7 +29,7 @@ const ProductsTemplate = ({ children, className, isAllProductsFetched }) => {
     <Wrapper className={className}>
       {children}
       {!isAllProductsFetched && (
-        <StyledButton onClick={() => fetchProducts(currentProducts)}>
+        <StyledButton onClick={() => fetchProducts(undefined, currProducts)}>
           {isLoadingProducts ? (
             <Loader type="ThreeDots" color="#ffffff" height={50} width={50} />
           ) : (

@@ -6,13 +6,21 @@ import { StoreContext } from 'store/StoreProvider';
 import CheckBoxElement from 'components/molecules/CheckBoxElement/CheckBoxElement';
 import Button from 'components/atoms/Button/Button';
 
-const Form = styled.form``;
+const Form = styled.form`
+  padding: 0 20px;
+`;
+
+const CategoriesHeading = styled.h3`
+  padding: 10px 0px 10px;
+  font-size: ${({ theme }) => theme.medium};
+  font-weight: ${({ theme }) => theme.font.weight.semiBold};
+`;
 
 const CategoriesListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const StyledCheckBoxElement = styled(CheckBoxElement)`
@@ -21,10 +29,21 @@ const StyledCheckBoxElement = styled(CheckBoxElement)`
   }
 `;
 
-const ButtonsWrapper = styled.div``;
+const ButtonsWrapper = styled.div`
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
 
 const StyledButton = styled(Button)`
-  background-color: ${({ theme }) => theme.grey100};
+  background-color: ${({ theme }) => theme.primary};
+  width: 150px;
+  height: 30px;
+`;
+
+const StyledButtonClear = styled(Button)`
+  margin: 0 0 0 20px;
   width: 100px;
   height: 30px;
 `;
@@ -32,11 +51,9 @@ const StyledButton = styled(Button)`
 const FilterForm = ({ handleClosePanel, saveValues, savedValues }) => {
   const {
     state: { categoriesOptions },
-    getCategories,
-    removeAllFilteredProducts,
   } = useContext(FilterContext);
 
-  const { removeAllProducts, fetchProducts } = useContext(StoreContext);
+  const { fetchProducts, removeAllProducts } = useContext(StoreContext);
 
   const initialValues = Object.keys(savedValues).length
     ? savedValues
@@ -66,9 +83,8 @@ const FilterForm = ({ handleClosePanel, saveValues, savedValues }) => {
 
     saveValues(currValues);
     removeAllProducts();
-    removeAllFilteredProducts();
     handleClosePanel();
-    return anyFilterSelected ? getCategories(selectedFilters) : fetchProducts();
+    return anyFilterSelected ? fetchProducts(selectedFilters) : fetchProducts();
   };
 
   const clearAll = (valuesObj) => {
@@ -83,6 +99,7 @@ const FilterForm = ({ handleClosePanel, saveValues, savedValues }) => {
   return (
     <Form onSubmit={(e) => handleSubmit(e, filterValues)}>
       <CategoriesListWrapper>
+        <CategoriesHeading>Categories</CategoriesHeading>
         {categoriesOptions.map(({ categoryName, productsNum }) => (
           <StyledCheckBoxElement
             key={categoryName}
@@ -95,9 +112,13 @@ const FilterForm = ({ handleClosePanel, saveValues, savedValues }) => {
       </CategoriesListWrapper>
       <ButtonsWrapper>
         <StyledButton type="submit">Filter</StyledButton>
-        <Button type="button" onClick={() => clearAll(filterValues)}>
+        <StyledButtonClear
+          outlined
+          type="button"
+          onClick={() => clearAll(filterValues)}
+        >
           Clear
-        </Button>
+        </StyledButtonClear>
       </ButtonsWrapper>
     </Form>
   );

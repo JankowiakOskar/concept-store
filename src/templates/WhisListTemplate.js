@@ -1,20 +1,67 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { StoreContext } from 'store/StoreProvider';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import EmptyCard from 'components/molecules/EmptyCart/EmptyCart';
+import ProductCard from 'components/molecules/ProductCard/ProductCard';
 
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   padding: 0 8px;
-  text-align: center;
+  text-align: left;
 `;
 
-const WishListTemplate = ({ children }) => {
+const ProductCardWrapper = styled(motion.div)`
+  margin: 20px 0;
+`;
+
+const productCardVariants = {
+  hidden: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+  },
+  exit: {
+    opacity: 0,
+    x: [0, -50],
+    transition: {
+      type: 'easeOut',
+      duration: 0.15,
+    },
+  },
+};
+
+const WishListTemplate = ({ wishlist }) => {
+  const { handleWishlist } = useContext(StoreContext);
+
   return (
-    <Wrapper>
-      {children.length ? (
-        children
+    <Wrapper isEmpty={wishlist.length}>
+      {wishlist.length ? (
+        <>
+          <AnimatePresence initial={false}>
+            {wishlist.map(({ id, name, price, picture: { url } }) => (
+              <ProductCardWrapper
+                key={id}
+                variants={productCardVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <ProductCard
+                  id={id}
+                  name={name}
+                  price={price}
+                  pictureURL={url}
+                  cardType="wishedCard"
+                  removeFromWishlist={(ID = id) => handleWishlist(ID)}
+                />
+              </ProductCardWrapper>
+            ))}
+          </AnimatePresence>
+        </>
       ) : (
         <EmptyCard
           title="You haven't any clothes on wishlist"
@@ -27,11 +74,7 @@ const WishListTemplate = ({ children }) => {
 };
 
 WishListTemplate.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.node),
-};
-
-WishListTemplate.defaultProps = {
-  children: [],
+  wishlist: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default WishListTemplate;

@@ -2,14 +2,14 @@ import {
   GET_CATEGORIES_REQUEST,
   GET_CATEGORIES_SUCCESS,
   GET_CATEGORIES_FAILURE,
-  REMOVE_ALL_PRODUCTS,
-} from 'actions/data';
+  SET_SELECTED_FILTERS,
+  REMOVE_ALL_FILTERS,
+} from 'actions/filterActions';
 
 export const initialState = {
   categoriesOptions: [],
-  filteredItems: [],
-  numFetchingItems: 0,
-  isFiltering: false,
+  selectedFilters: {},
+  isLoadingFilters: false,
   error: {},
 };
 
@@ -18,34 +18,33 @@ export const filterReducer = (state, action) => {
     case GET_CATEGORIES_REQUEST:
       return {
         ...state,
-        isFiltering: !state.isFetching,
-        numFetchingItems: action.payload.numItemsRequest,
+        isLoadingFilters: !state.isLoadingFilters,
       };
     case GET_CATEGORIES_SUCCESS:
       return {
         ...state,
-        isFiltering: !state.isFiltering,
+        isLoadingFilters: !state.isLoadingFilters,
         categoriesOptions: [
           ...state.categoriesOptions,
-          ...action.payload.allCategories,
+          ...action.payload.categoriesWithAmountProducts,
         ],
-        filteredItems: action.payload.categoriesItems
-          ? action.payload.categoriesItems
-          : [],
-        numFetchingItems: 0,
       };
 
     case GET_CATEGORIES_FAILURE:
       return {
         ...state,
-        isFiltering: !state.isFiltering,
+        isLoadingFilters: !state.isFiltering,
         error: action.payload.error,
-        numFetchingItems: 0,
       };
-    case REMOVE_ALL_PRODUCTS:
+    case SET_SELECTED_FILTERS:
       return {
         ...state,
-        filteredItems: [],
+        selectedFilters: action.payload.filters,
+      };
+    case REMOVE_ALL_FILTERS:
+      return {
+        ...state,
+        selectedFilters: {},
       };
     default:
       throw new Error(`Unhandled action: ${action.type}`);

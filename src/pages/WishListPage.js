@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
 import { StoreContext } from 'store/StoreProvider';
-import { FilterContext } from 'contexts/FilterContext';
 import styled from 'styled-components';
 import PageHeader from 'components/atoms/PageHeader/PageHeader';
 import WishListTemplate from 'templates/WhisListTemplate';
-import ProductCard from 'components/molecules/ProductCard/ProductCard';
+
 import TransitionProvider from 'providers/TransitionProvider';
 
 const Wrapper = styled.div`
@@ -19,34 +18,15 @@ const InnerWrapper = styled.div`
 
 const WishListPage = () => {
   const {
-    data: { wishlist, products },
-    handleWishlist,
+    data: { wishlist },
   } = useContext(StoreContext);
-
-  const {
-    state: { filteredItems },
-  } = useContext(FilterContext);
-
-  const productsArr = [...filteredItems, ...products];
-
+  console.log(wishlist);
   return (
     <TransitionProvider>
       <Wrapper>
         <InnerWrapper>
           <PageHeader title="Wishlist" />
-          <WishListTemplate>
-            {wishlist.map(({ id, name, price, picture: { url } }) => (
-              <ProductCard
-                key={name}
-                id={id}
-                name={name}
-                price={price}
-                pictureURL={url}
-                cardType="wishedCard"
-                removeFromWishlist={(ID) => handleWishlist(ID, productsArr)}
-              />
-            ))}
-          </WishListTemplate>
+          <WishListTemplate wishlist={wishlist} />
         </InnerWrapper>
       </Wrapper>
     </TransitionProvider>

@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import AddCartForm from 'components/organisms/AddCartForm/AddCartForm';
 import { arrObjectsFromObjectPairs } from 'helpers';
+import TransitionProvider from 'providers/TransitionProvider';
 import ServicesBox from 'components/molecules/ServicesBox/ServicesBox';
 
 const Wrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  padding: 0 20px;
 `;
 
 const DetailWrapper = styled.div`
@@ -54,7 +54,7 @@ const TitleProduct = styled.h3``;
 
 const Price = styled.span``;
 
-const DetailProductTemplate = ({ product, arrProducts }) => {
+const DetailProductTemplate = ({ product }) => {
   const {
     id,
     name,
@@ -74,9 +74,11 @@ const DetailProductTemplate = ({ product, arrProducts }) => {
   return (
     <Wrapper>
       <DetailWrapper>
-        <ImageWrapper>
-          <Image src={`http://192.168.100.17:1337${url}`} />
-        </ImageWrapper>
+        <TransitionProvider>
+          <ImageWrapper>
+            <Image src={`http://192.168.100.17:1337${url}`} />
+          </ImageWrapper>
+        </TransitionProvider>
         <DescriptionWrapper>
           <TitleProduct>{name}</TitleProduct>
           <Price>{price} €</Price>
@@ -84,7 +86,7 @@ const DetailProductTemplate = ({ product, arrProducts }) => {
             <AddCartForm
               product={product}
               sizesQuantity={formatedSizesQuantity}
-              handleWishlist={() => handleWishlist(id, arrProducts)}
+              handleWishlist={() => handleWishlist(id)}
               isOnWishlist={wishlist.some(
                 (wishProduct) => wishProduct.id === id
               )}
@@ -105,12 +107,10 @@ DetailProductTemplate.propTypes = {
     picture: PropTypes.objectOf(PropTypes.any),
     sizes_quantity: PropTypes.objectOf(PropTypes.string),
   }),
-  arrProducts: PropTypes.arrayOf(PropTypes.shape(PropTypes.object)),
 };
 
 DetailProductTemplate.defaultProps = {
   product: {},
-  arrProducts: [{}],
 };
 
 export default DetailProductTemplate;

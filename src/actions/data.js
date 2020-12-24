@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable camelcase */
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import {
   setItemToLocalStorage,
   removeItemFromLocalStorage,
@@ -17,10 +18,6 @@ import {
 export const FETCHING_PRODUCTS_REQUEST = 'FETCHING_PRODUCTS_REQUEST';
 export const FETCHING_PRODUCTS_SUCCESS = 'FETCHING_PRODUCTS_SUCCESS';
 export const FETCHING_PRODUCTS_FAILURE = 'FETCHING_PRODUCTS_FAILURE';
-
-export const GET_CATEGORIES_REQUEST = 'GET_CATEGORIES_REQUEST';
-export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS';
-export const GET_CATEGORIES_FAILURE = 'GET_CAREGORIES_FAILURE';
 
 export const UPDATE_STORE_REQUEST = 'UPDATE_STORE_REQUEST';
 export const UPDATE_STORE_SUCCESS = 'UPDATE_STORE_REQUEST';
@@ -64,6 +61,8 @@ export const addToShoppingCart = (dispatch, currShoppingCart, product) => {
     currCartExist && containerHasNewItem(currShoppingCart, product);
   const replacedItems =
     isSizePicked && updateSameProduct(currShoppingCart, product);
+  toast.dark('🎁 New product in the shopping cart');
+
   return currCartExist && isSizePicked
     ? dispatch({
         type: REPLACE_ITEM_IN_SHOPPING_CART,
@@ -72,76 +71,49 @@ export const addToShoppingCart = (dispatch, currShoppingCart, product) => {
     : dispatch({ type: ADD_TO_SHOPPING_CART, payload: product });
 };
 
-export const getProducts = async (dispatch, currentProducts = []) => {
-  dispatch({ type: FETCHING_PRODUCTS_REQUEST });
-  const limitQuery = limitQueryParam(currentProducts, limitRequest);
+export const getProducts = async (
+  dispatch,
+  filters = [],
+  currentProducts = []
+) => {
+  const anyFilterSelected = filters.length;
+  const filterNames =
+    anyFilterSelected && filters.map(({ categoryName }) => categoryName);
+
+  const numItemsRequest = anyFilterSelected
+    ? filters.reduce((acc, { productsNum }) => acc + productsNum, 0)
+    : currentProducts.length + limitRequest;
+
+  dispatch({
+    type: FETCHING_PRODUCTS_REQUEST,
+    payload: { numItemsRequest },
+  });
+
+  const endpoint = anyFilterSelected
+    ? categoryQueryFilter(filterNames)
+    : limitQueryParam(currentProducts, limitRequest);
+
   try {
     const { data: products } = await axios.get(
-      `http://192.168.100.17:1337/products?${limitQuery}`
+      `http://192.168.100.17:1337/products${endpoint}`
     );
 
     await sleeper(500);
 
-    const isAllProductsFetched = limitQuery.includes(allDataQueryParam);
+    const isAllProductsFetched = endpoint.includes(allDataQueryParam);
 
     dispatch({
       type: FETCHING_PRODUCTS_SUCCESS,
-      payload: { products, isAllProductsFetched },
+      payload: {
+        products,
+        isAllProductsFetched: anyFilterSelected ? true : isAllProductsFetched,
+      },
     });
   } catch (error) {
     dispatch({
       type: FETCHING_PRODUCTS_FAILURE,
       payload: error,
     });
-  }
-};
-
-export const getCategories = async (dispatch, filters = []) => {
-  const anyFilterSelected = filters.length;
-
-  const filterNames = anyFilterSelected
-    ? filters.map(({ categoryName }) => categoryName)
-    : filters;
-
-  const numItemsRequest =
-    anyFilterSelected &&
-    filters.reduce((acc, { productsNum }) => acc + productsNum, 0);
-
-  dispatch({ type: GET_CATEGORIES_REQUEST, payload: { numItemsRequest } });
-
-  const filterQueryStr = categoryQueryFilter(filterNames);
-
-  const endpoint = anyFilterSelected
-    ? `categories${filterQueryStr}`
-    : 'categories';
-
-  try {
-    const { data } = await axios.get(`http://192.168.100.17:1337/${endpoint}`);
-
-    const categoriesItems = data.reduce((acc, category) => {
-      const categoryName = category.name;
-      const products = category[categoryName];
-      acc.push(...products);
-      return acc;
-    }, []);
-
-    const allCategories = !anyFilterSelected
-      ? data.reduce((acc, category) => {
-          const categoryName = category.name;
-          const productsNum = category[categoryName].length;
-          acc.push({ categoryName, productsNum });
-          return acc;
-        }, [])
-      : [];
-
-    dispatch({
-      type: GET_CATEGORIES_SUCCESS,
-      payload: anyFilterSelected
-        ? { allCategories, categoriesItems }
-        : { allCategories },
-    });
-  } catch (err) {
-    dispatch({ type: GET_CATEGORIES_FAILURE, payload: err });
   }
 };
 
@@ -209,6 +181,7 @@ export const getWishlist = (dispatch) => {
 export const addToWishlist = (dispatch, product) => {
   setItemToLocalStorage('wishlist', product);
   dispatch({ type: ADD_TO_WISHLIST, payload: product });
+  toast.dark('❤ New product on the wishlist');
 };
 
 export const removeFromWishlist = (dispatch, id) => {

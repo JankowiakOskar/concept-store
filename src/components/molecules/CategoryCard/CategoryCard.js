@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { FilterContext } from 'contexts/FilterContext';
 import { StoreContext } from 'store/StoreProvider';
 import { Link } from 'react-router-dom';
 import routes from 'routes';
@@ -40,12 +39,11 @@ const StyledButton = styled(Button)`
 `;
 
 const CategoryCard = ({ image, categoryType: categoryName }) => {
-  const { getCategories } = useContext(FilterContext);
-  const { removeAllProducts } = useContext(StoreContext);
+  const { removeAllProducts, fetchProducts } = useContext(StoreContext);
 
   const handleRedirect = () => {
     removeAllProducts();
-    getCategories([{ categoryName }]);
+    fetchProducts([{ categoryName }]);
   };
   return (
     <Link to={routes.clothes}>

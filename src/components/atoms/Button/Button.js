@@ -26,11 +26,11 @@ const Button = styled.button`
       color: ${({ theme }) => theme.grey500};
     `}
 
-  ${({ tertiary }) =>
-    tertiary &&
+  ${({ outlined }) =>
+    outlined &&
     css`
-      background-color: transparent;
-      border: none;
+      background-color: ${({ theme }) => theme.white};
+      border: border: 1px solid ${({ theme }) => theme.grey100};
       box-shadow: none;
       text-shadow: none;
       color: ${({ theme }) => theme.grey100};

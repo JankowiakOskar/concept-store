@@ -1,11 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import routes from 'routes';
 import { StoreContext } from 'store/StoreProvider';
+import { FilterContext } from 'contexts/FilterContext';
 import styled from 'styled-components';
-import SectionHeading from 'components/atoms/SectionHeading/SectionHeading';
 import Slider from 'components/organisms/Slider/Slider';
 import CategoriesTemplate from 'templates/CategoriesTemplate';
+import SectionTemplate from 'templates/SectionTemplate';
 import CategoryCard from 'components/molecules/CategoryCard/CategoryCard';
 import LoadingProvider from 'providers/LoadingProvider';
 import TransitionProvider from 'providers/TransitionProvider';
@@ -24,8 +25,8 @@ const InnerWrapper = styled.div`
   padding: 0 20px;
 `;
 
-const Section = styled.section`
-  padding: 50px 0;
+const ProductCardWrapper = styled.div`
+  margin: 0 2px;
 `;
 
 const ImageBox = styled.div`
@@ -61,11 +62,30 @@ const Home = () => {
   const {
     data: { slides, categoriesCards, products, wishlist },
     handleWishlist,
+    fetchProducts,
+    removeAllProducts,
   } = useContext(StoreContext);
+
+  const {
+    state: { selectedFilters },
+    removeAllFilters,
+  } = useContext(FilterContext);
 
   const topSellingProducts = products.filter(
     (product) => product.sellingRatio >= 8.2
   );
+
+  useEffect(() => {
+    const isAnyFilterSelected = Object.keys(selectedFilters).length;
+    if (isAnyFilterSelected) {
+      const fetchProductsActions = () => {
+        removeAllFilters();
+        removeAllProducts();
+        fetchProducts();
+      };
+      fetchProductsActions();
+    }
+  }, [fetchProducts, removeAllFilters, selectedFilters, removeAllProducts]);
 
   return (
     <LoadingProvider>
@@ -82,28 +102,30 @@ const Home = () => {
                 />
               ))}
             </CategoriesTemplate>
-            <Section>
-              <SectionHeading
-                title="Top selling products"
-                subtitle="on this week"
-              />
+            <SectionTemplate
+              title="Top selling products"
+              subtitle="on this week"
+            >
               <Carousel>
                 {topSellingProducts.map(
                   ({ id, name, price, picture: { url } }) => (
-                    <ProductCard
-                      key={id}
-                      id={id}
-                      name={name}
-                      price={price}
-                      pictureURL={url}
-                      cardType="productCard"
-                      handleWishlist={handleWishlist}
-                      onWishlist={wishlist.some((product) => product.id === id)}
-                    />
+                    <ProductCardWrapper key={id}>
+                      <ProductCard
+                        id={id}
+                        name={name}
+                        price={price}
+                        pictureURL={url}
+                        cardType="productCard"
+                        handleWishlist={handleWishlist}
+                        onWishlist={wishlist.some(
+                          (product) => product.id === id
+                        )}
+                      />
+                    </ProductCardWrapper>
                   )
                 )}
               </Carousel>
-            </Section>
+            </SectionTemplate>
           </InnerWrapper>
           <ImageBox url={manWithCamera}>
             <ImageBoxDescription>
@@ -113,13 +135,9 @@ const Home = () => {
             </ImageBoxDescription>
           </ImageBox>
           <InnerWrapper>
-            <Section>
-              <SectionHeading
-                title="Our partners"
-                subtitle="well known brands"
-              />
+            <SectionTemplate title="Our partners" subtitle="well known brands">
               <PartnersCarousel />
-            </Section>
+            </SectionTemplate>
           </InnerWrapper>
         </Wrapper>
       </TransitionProvider>

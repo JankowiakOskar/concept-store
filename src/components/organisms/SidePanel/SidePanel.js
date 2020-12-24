@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { UIContext } from 'contexts/GlobalUIContext';
 import { StoreContext } from 'store/StoreProvider';
+import { FilterContext } from 'contexts/FilterContext';
 import styled from 'styled-components';
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,7 +12,6 @@ import ShopingCartTemplate from 'templates/ShoppingCartTemplate';
 import MenuList from 'components/molecules/MenuList/MenuList';
 import routes from 'routes';
 import FilterForm from 'components/organisms/FilterForm/FilteForm';
-import useSavedValues from 'hooks/useSavedValues';
 
 const Wrapper = styled(motion.div)`
   position: fixed;
@@ -34,6 +34,7 @@ const PanelHeader = styled.div`
   align-items: center;
   border-bottom: 2px solid ${({ theme }) => theme.grey200};
 `;
+
 const CloseIconWrapper = styled(motion.span)`
   ${baseIconStyle};
 `;
@@ -85,7 +86,10 @@ const SidePanel = () => {
     data: { shoppingCart },
   } = useContext(StoreContext);
 
-  const [savedValues, handleSavingValues] = useSavedValues();
+  const {
+    state: { selectedFilters },
+    setSelectedFilters,
+  } = useContext(FilterContext);
 
   useEffect(() => {
     if (isOpen) document.body.style = 'overflow: hidden';
@@ -109,6 +113,7 @@ const SidePanel = () => {
               <StyledCloseIcon />
             </CloseIconWrapper>
           </PanelHeader>
+
           {choosenPanel === menu && (
             <MenuList
               handleClosePanel={hideSidePanel}
@@ -129,8 +134,8 @@ const SidePanel = () => {
           {choosenPanel === filter && (
             <FilterForm
               handleClosePanel={hideSidePanel}
-              saveValues={handleSavingValues}
-              savedValues={savedValues}
+              saveValues={setSelectedFilters}
+              savedValues={selectedFilters}
             />
           )}
         </Wrapper>

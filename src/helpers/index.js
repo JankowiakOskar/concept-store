@@ -56,13 +56,15 @@ export const setItemToLocalStorage = (key, item) => {
     : localStorage.setItem(key, JSON.stringify([...itemsContainer, item]));
 };
 
-export const removeItemFromLocalStorage = (key, ID, size) => {
+export const removeItemFromLocalStorage = (key, ID, size = '') => {
   const values = JSON.parse(localStorage.getItem(key));
-  const filteredValues = values.filter(
-    ({ id, sizes_quantity }) =>
-      id !== ID || (id === ID && !sizes_quantity[size])
-  );
-
+  const filteredValues = values.filter(({ id, sizes_quantity }) => {
+    const isSizeSelected = size.length;
+    const idFilterCondtion = id !== ID;
+    const idWithSizeCondition =
+      id !== ID || (id === ID && !sizes_quantity[size]);
+    return isSizeSelected ? idWithSizeCondition : idFilterCondtion;
+  });
   localStorage.setItem(key, JSON.stringify(filteredValues));
 };
 

@@ -24,8 +24,8 @@ const StoreProvider = ({ children }) => {
     addToStore: 'add',
   };
 
-  const fetchProducts = (currentProducts) =>
-    getProductsAction(dispatch, currentProducts);
+  const fetchProducts = (filters, currentProducts) =>
+    getProductsAction(dispatch, filters, currentProducts);
 
   const getWishlist = () => getWishlistAction(dispatch);
 

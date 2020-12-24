@@ -10,6 +10,8 @@ import FilterProvider from 'contexts/FilterContext';
 import Navbar from 'components/organisms/NavBar/NavBar';
 import SidePanel from 'components/organisms/SidePanel/SidePanel';
 import Footer from 'components/organisms/Footer/Footer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const MainTemplate = ({ children }) => {
   return (
@@ -23,6 +25,17 @@ const MainTemplate = ({ children }) => {
               <Navbar />
               <SidePanel />
               {children}
+              <ToastContainer
+                position="bottom-left"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
               <Footer />
             </FilterProvider>
           </GlobalUIProvider>

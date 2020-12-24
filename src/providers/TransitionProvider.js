@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 
 const wrapperVariants = {
   hidden: {
@@ -17,9 +18,11 @@ const wrapperVariants = {
 };
 
 const TransitionProvider = ({ children }) => {
+  const { pathname } = useLocation();
   return (
     <AnimatePresence exitBeforeEnter>
       <motion.div
+        key={pathname}
         variants={wrapperVariants}
         initial="hidden"
         animate="visible"
