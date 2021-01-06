@@ -11,6 +11,8 @@ const WrapperCard = styled.div`
   position: relative;
   width: 100%;
   height: 250px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  border-radius: 10px;
 
   &:before {
     content: '';
@@ -38,7 +40,7 @@ const StyledButton = styled(Button)`
   transform: translate(-50%, -50%);
 `;
 
-const CategoryCard = ({ image, categoryType: categoryName }) => {
+const CategoryCard = ({ className, image, categoryType: categoryName }) => {
   const { removeAllProducts, fetchProducts } = useContext(StoreContext);
 
   const handleRedirect = () => {
@@ -47,7 +49,7 @@ const CategoryCard = ({ image, categoryType: categoryName }) => {
   };
   return (
     <Link to={routes.clothes}>
-      <WrapperCard onClick={handleRedirect}>
+      <WrapperCard className={className} onClick={handleRedirect}>
         <CategoryImg src={image} />
         <StyledButton secondary>{categoryName}</StyledButton>
       </WrapperCard>
@@ -56,8 +58,13 @@ const CategoryCard = ({ image, categoryType: categoryName }) => {
 };
 
 CategoryCard.propTypes = {
+  className: PropTypes.string,
   image: PropTypes.string.isRequired,
   categoryType: PropTypes.string.isRequired,
+};
+
+CategoryCard.defaultProps = {
+  className: '',
 };
 
 export default CategoryCard;

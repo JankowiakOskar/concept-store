@@ -6,6 +6,7 @@ import RedeemIcon from '@material-ui/icons/Redeem';
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
 
 const ServicesWrapper = styled.div`
+  max-width: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;

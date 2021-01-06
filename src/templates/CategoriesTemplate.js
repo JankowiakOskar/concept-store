@@ -9,6 +9,27 @@ const CategoriesWrapper = styled.section`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
+  ${({ theme }) => theme.mq.tablet} {
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    *:nth-child(1) {
+      flex-basis: 100%;
+    }
+
+    * {
+      flex-basis: 49%;
+    }
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    min-height: 500px;
+    *,
+    *:nth-child(1) {
+      flex-basis: 32%;
+    }
+  }
 `;
 
 const CategoriesTemplate = ({ children }) => {

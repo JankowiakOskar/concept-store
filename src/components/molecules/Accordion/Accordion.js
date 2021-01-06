@@ -1,21 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
 
-const AccordionWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-bottom: 0.5px solid ${({ theme }) => theme.grey100};
-`;
-
 const AccordionHeader = styled.div`
-  padding: 0 20px;
-  height: 50px;
+  padding: 10px 20px;
+  width: 100%;
   font-size: ${({ theme }) => theme.font.size.medium};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.white};
@@ -34,13 +27,39 @@ const ArrowIcon = styled(ArrowDropDownIcon)`
 const AccordionList = styled(motion.ul)`
   padding: 0 20px 10px;
   list-style: none;
-  max-height: 0;
+`;
+
+const ListElement = styled.li``;
+
+const AccordionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   overflow: hidden;
-  ${({ isCollapse }) =>
-    isCollapse &&
+
+  ${({ isActive }) =>
+    isActive &&
     css`
-      overflow: auto;
-      max-height: 9999px;
+      & {
+        justify-content: flex-start;
+        border: none;
+      }
+
+      ${AccordionHeader} {
+        font-size: ${({ theme }) => theme.font.size.siteHeader};
+      }
+      ${AccordionList} {
+        max-height: 400px;
+      }
+
+      ${ArrowIcon} {
+        display: none;
+      }
+
+      ${ListElement} {
+        padding: 7px 0;
+      }
     `}
 `;
 
@@ -48,65 +67,61 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: ${({ theme }) => theme.grey300};
 `;
-const ListElement = styled.li`
-  margin: 5px 0;
-`;
 
 const listVariants = {
-  hidden: {
+  closed: {
     opacity: 0,
-    maxHeight: 0,
+    maxHeight: '0px',
   },
-  vissible: {
+  open: {
     opacity: 1,
-    maxHeight: 200,
+    maxHeight: '200px',
     transform: {
       type: 'easeOut',
       duration: 0.05,
     },
   },
-  exit: {
-    opacity: 0,
-    maxHeight: 0,
-    transform: {
-      type: 'easeOut',
-      duartion: 0.2,
-    },
-  },
 };
 
-const Accordion = ({ title, list }) => {
+const Accordion = ({ isActive, title, list }) => {
   const [isCollapse, setCollapse] = useState(false);
 
-  const handleClick = () => setCollapse(!isCollapse);
+  const handleClick = () => {
+    if (isActive) return;
+    setCollapse(!isCollapse);
+  };
+
+  useEffect(() => {
+    setCollapse(isActive);
+  }, [isActive]);
+
   return (
-    <AccordionWrapper onClick={handleClick}>
+    <AccordionWrapper isActive={isActive} onClick={handleClick}>
       <AccordionHeader>
         {title} <ArrowIcon collapse={isCollapse ? 1 : 0} />
       </AccordionHeader>
-      <AnimatePresence exitBeforeEnter>
-        {isCollapse && (
-          <AccordionList
-            variants={listVariants}
-            initial="hidden"
-            animate="vissible"
-            exit="exit"
-          >
-            {list.map(({ name, path }) => (
-              <StyledLink key={name} to={path}>
-                <ListElement>{name}</ListElement>
-              </StyledLink>
-            ))}
-          </AccordionList>
-        )}
-      </AnimatePresence>
+      <AccordionList
+        variants={listVariants}
+        animate={isCollapse ? 'open' : 'closed'}
+      >
+        {list.map(({ name, path }) => (
+          <StyledLink key={name} to={path}>
+            <ListElement>{name}</ListElement>
+          </StyledLink>
+        ))}
+      </AccordionList>
     </AccordionWrapper>
   );
 };
 
 Accordion.propTypes = {
+  isActive: PropTypes.bool,
   title: PropTypes.string.isRequired,
   list: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
+};
+
+Accordion.defaultProps = {
+  isActive: false,
 };
 
 export default Accordion;

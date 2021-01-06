@@ -71,7 +71,7 @@ const DropDownList = styled(motion.ul)`
   background-color: ${({ theme }) => theme.white};
   border: 1px solid ${({ theme }) => theme.grey200};
   box-shadow: 0px 2px 7px -1px rgba(0, 0, 0, 0.75);
-  z-index: ${({ theme }) => theme.zIndex.level7};
+  z-index: ${({ theme }) => theme.zIndex.level10};
 `;
 
 const DropDownElement = styled.li`
@@ -80,7 +80,7 @@ const DropDownElement = styled.li`
   justify-content: space-between;
   padding: 10px 20px;
   border-bottom: 1px solid ${({ theme }) => theme.grey300};
-  transform: all 0.15s ease;
+  transform: all 0.15s 0.2s ease-out;
   cursor: pointer;
 
   ${({ isDisabled, theme }) =>
@@ -90,7 +90,7 @@ const DropDownElement = styled.li`
     `};
   ${({ theme }) => theme.mq.desktop} {
     &:hover {
-      background-color: ${({ theme }) => theme.grey200};
+      background-color: ${({ theme }) => theme.primaryLight};
       color: ${({ theme }) => theme.white};
       border-radius: 10px;
     }
@@ -100,13 +100,21 @@ const DropDownElement = styled.li`
   }
 `;
 
-const Size = styled.span``;
+const Label = styled.span``;
 
 const PiecesLeft = styled.span`
   font-weight: ${({ theme }) => theme.font.weight.bold};
 `;
 
-const Dropdown = ({ setValue, value, setError, error, list }) => {
+const Dropdown = ({
+  className,
+  setValue,
+  title,
+  setError,
+  error,
+  list,
+  listType,
+}) => {
   const [isCollapse, setCollapse] = useState(false);
   const DropDownWrapperRef = useRef(null);
 
@@ -116,10 +124,15 @@ const Dropdown = ({ setValue, value, setError, error, list }) => {
 
   useOutsideClick(DropDownWrapperRef, () => setCollapse(false));
 
-  const handleClick = (size, amount, isDisabled) => {
+  const handleClick = (label, value, isDisabled = false) => {
     if (isDisabled) return;
-    setValue({ size, amount });
     if (error) setError('');
+    const setValuesDependsOfType = () =>
+      listType === 'sizes'
+        ? setValue({ size: label, amount: value })
+        : setValue({ label, value });
+
+    setValuesDependsOfType();
   };
 
   const listVariants = {
@@ -145,10 +158,14 @@ const Dropdown = ({ setValue, value, setError, error, list }) => {
   };
 
   return (
-    <DropDownWrapper ref={DropDownWrapperRef} onClick={handleOpening}>
+    <DropDownWrapper
+      className={className}
+      ref={DropDownWrapperRef}
+      onClick={handleOpening}
+    >
       <DropDownHeader isError={error} isCollapse={isCollapse}>
         <DropDownTitle isError={error}>
-          {error || value.toUpperCase() || 'Choose size'}
+          {error || title || 'Choose size'}
         </DropDownTitle>
         <ArrowIcon collapse={isCollapse ? 1 : 0} />
       </DropDownHeader>
@@ -160,21 +177,33 @@ const Dropdown = ({ setValue, value, setError, error, list }) => {
             animate="vissible"
             exit="exit"
           >
-            {list.map(({ size, amount }) => {
-              const isDisabled = +amount <= 0;
-              return (
-                <DropDownElement
-                  isDisabled={isDisabled}
-                  key={size}
-                  onClick={() => handleClick(size, amount, isDisabled)}
-                >
-                  <Size>{size.toUpperCase()}</Size>{' '}
-                  <PiecesLeft>
-                    {!isDisabled ? `Pieces left: ${amount}` : 'not avilable'}
-                  </PiecesLeft>
-                </DropDownElement>
-              );
-            })}
+            {listType === 'sizes' &&
+              list.map(({ size, amount }) => {
+                const isDisabled = +amount <= 0;
+                return (
+                  <DropDownElement
+                    isDisabled={isDisabled}
+                    key={size}
+                    onClick={() => handleClick(size, amount, isDisabled)}
+                  >
+                    <Label>{size.toUpperCase()}</Label>{' '}
+                    <PiecesLeft>
+                      {!isDisabled ? `Pieces left: ${amount}` : 'not avilable'}
+                    </PiecesLeft>
+                  </DropDownElement>
+                );
+              })}
+            {listType === 'labels' &&
+              list.map(({ label, value }) => {
+                return (
+                  <DropDownElement
+                    key={label}
+                    onClick={() => handleClick(label, value)}
+                  >
+                    <Label>{label}</Label>{' '}
+                  </DropDownElement>
+                );
+              })}
           </DropDownList>
         )}
       </AnimatePresence>
@@ -183,15 +212,18 @@ const Dropdown = ({ setValue, value, setError, error, list }) => {
 };
 
 Dropdown.propTypes = {
-  value: PropTypes.string,
+  className: PropTypes.string,
+  title: PropTypes.string,
   setValue: PropTypes.func,
   setError: PropTypes.func,
   error: PropTypes.string,
   list: PropTypes.arrayOf(PropTypes.object),
+  listType: PropTypes.oneOf(['labels', 'sizes']).isRequired,
 };
 
 Dropdown.defaultProps = {
-  value: '',
+  className: '',
+  title: '',
   error: '',
   setError: () => '',
   setValue: () => '',

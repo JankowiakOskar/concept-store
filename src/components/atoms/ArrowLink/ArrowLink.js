@@ -13,6 +13,10 @@ const StyledLink = styled(Link)`
   color: ${({ theme }) => theme.white};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   font-size: ${({ theme }) => theme.font.size.medium};
+
+  ${({ theme }) => theme.mq.bigTablet} {
+    font-size: ${({ theme }) => theme.font.size.large};
+  }
 `;
 
 const ArrowContainer = styled(motion.span)`
@@ -21,6 +25,10 @@ const ArrowContainer = styled(motion.span)`
 
 const ArrowIcon = styled(ArrowForwardIosIcon)`
   color: ${({ theme }) => theme.white};
+
+  ${({ theme }) => theme.mq.bigTablet} {
+    font-size: 2.5rem !important;
+  }
 `;
 
 const arrowVariants = {

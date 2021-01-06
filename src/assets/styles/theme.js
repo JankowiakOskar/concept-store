@@ -12,7 +12,8 @@ export const colors = {
   primary: 'hsl(233, 57%, 37%)',
   primaryLight: 'hsl(236, 71%, 69%)',
   primaryDark: 'hsl(221, 100%, 26%)',
-  red: 'hsl(346, 100%, 46%)',
+  red: 'hsl(2, 76%, 62%)',
+  green: 'hsl(124, 52%, 56%)',
   grey100: 'hsl(0, 0%, 25%)',
   grey200: 'hsl(0, 0%, 74%)',
   grey300: 'hsl(0, 0%, 87%)',
@@ -30,6 +31,7 @@ export const font = {
     medium: '1.8rem',
     siteHeader: '2.2rem',
     large: '2.9rem',
+    xl: '4rem',
     xxl: '6rem',
   },
   weight: {

@@ -110,8 +110,9 @@ const AddCartForm = ({
         error={error}
         setError={setError}
         setValue={setChoosenSize}
-        value={choosenSize.size}
+        title={choosenSize.size}
         list={sizesQuantity}
+        listType="sizes"
       />
       <StyledCounterQuantity
         quantity={amountItem}

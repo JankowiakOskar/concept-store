@@ -3,13 +3,21 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SectionHeading from 'components/atoms/SectionHeading/SectionHeading';
 
-const SectionWrapper = styled.section`
-  padding: 50px 0;
+export const SectionWrapper = styled.section`
+  padding: 30px 0;
+
+  ${({ theme }) => theme.mq.tablet} {
+    padding: 30px 40px;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 30px 100px;
+  }
 `;
 
-const SectionTemplate = ({ title, subtitle, children }) => {
+const SectionTemplate = ({ className, title, subtitle, children }) => {
   return (
-    <SectionWrapper>
+    <SectionWrapper className={className}>
       <SectionHeading title={title} subtitle={subtitle} />
       {children}
     </SectionWrapper>
@@ -17,12 +25,15 @@ const SectionTemplate = ({ title, subtitle, children }) => {
 };
 
 SectionTemplate.propTypes = {
+  className: PropTypes.string,
   title: PropTypes.string,
+
   subtitle: PropTypes.string,
   children: PropTypes.node,
 };
 
 SectionTemplate.defaultProps = {
+  className: '',
   title: '',
   subtitle: '',
   children: '',

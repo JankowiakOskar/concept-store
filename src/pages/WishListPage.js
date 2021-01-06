@@ -7,20 +7,30 @@ import WishListTemplate from 'templates/WhisListTemplate';
 import TransitionProvider from 'providers/TransitionProvider';
 
 const Wrapper = styled.div`
-  padding: 80px 0 0 0;
   width: 100%;
-  min-height: 100vh;
+  min-height: 80vh;
 `;
 
 const InnerWrapper = styled.div`
-  padding: 0 20px;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 80px 20px 0;
+  width: 100%;
+
+  ${({ theme }) => theme.mq.bigTablet} {
+    padding: 80px 40px 0;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 80px 100px 0;
+  }
 `;
 
 const WishListPage = () => {
   const {
     data: { wishlist },
   } = useContext(StoreContext);
-  console.log(wishlist);
+
   return (
     <TransitionProvider>
       <Wrapper>

@@ -31,7 +31,7 @@ const ContentWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 `;
 
@@ -39,6 +39,7 @@ const ContentTitle = styled.h3`
   font-size: ${({ theme }) => theme.medium};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.grey100};
+  text-align: center;
 `;
 
 const ContentParagraph = styled.p`
@@ -58,15 +59,14 @@ const StyledButton = styled(Button)`
   color: ${({ theme }) => theme.grey400};
 `;
 
-const EmptyCard = ({ title, description, type }) => {
+const EmptyCard = ({ className, title, description, type }) => {
   const { hideSidePanel } = useContext(UIContext);
   return (
-    <Wrapper>
-      {type === 'shoppingCart' && <EmptyBasketDraw />}
-      {type === 'wishList' && <EmptyWishList />}
+    <Wrapper className={className}>
+      {type === 'wishList' ? <EmptyWishList /> : <EmptyBasketDraw />}
       <ContentWrapper>
         <ContentTitle>{title}</ContentTitle>
-        <ContentParagraph>{description}</ContentParagraph>
+        {description && <ContentParagraph>{description}</ContentParagraph>}
         {type === 'shoppingCart' && (
           <StyledLink to={routes.clothes} onClick={hideSidePanel}>
             <StyledButton primary>Continue shopping</StyledButton>
@@ -78,9 +78,16 @@ const EmptyCard = ({ title, description, type }) => {
 };
 
 EmptyCard.propTypes = {
+  className: PropTypes.string,
   title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['shoppingCart', 'wishList']).isRequired,
+  description: PropTypes.string,
+  type: PropTypes.oneOf(['shoppingCart', 'wishList', '']),
+};
+
+EmptyCard.defaultProps = {
+  className: '',
+  description: '',
+  type: '',
 };
 
 export default EmptyCard;

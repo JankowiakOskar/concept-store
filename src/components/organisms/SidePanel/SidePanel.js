@@ -1,8 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { UIContext } from 'contexts/GlobalUIContext';
 import { StoreContext } from 'store/StoreProvider';
-import { FilterContext } from 'contexts/FilterContext';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
 import { motion, AnimatePresence } from 'framer-motion';
 import CloseIcon from '@material-ui/icons/Close';
@@ -12,6 +11,7 @@ import ShopingCartTemplate from 'templates/ShoppingCartTemplate';
 import MenuList from 'components/molecules/MenuList/MenuList';
 import routes from 'routes';
 import FilterForm from 'components/organisms/FilterForm/FilteForm';
+import useSavedValues from 'hooks/useSavedValues';
 
 const Wrapper = styled(motion.div)`
   position: fixed;
@@ -19,6 +19,19 @@ const Wrapper = styled(motion.div)`
   height: 100vh;
   z-index: ${({ theme }) => theme.zIndex.level10};
   background-color: ${({ theme }) => theme.white};
+  ${({ theme }) => theme.mq.tablet} {
+    top: 0;
+    width: 300px;
+    left: calc(100% - 300px);
+    box-shadow: -3px 0px 5px 0px rgba(0, 0, 0, 0.4);
+
+    ${({ isMenuPanel }) =>
+      isMenuPanel &&
+      css`
+        left: 0;
+        box-shadow: 3px 0px 5px 0px rgba(0, 0, 0, 0.4);
+      `}
+  }
 `;
 
 const TitlePanel = styled.h3`
@@ -29,7 +42,7 @@ const TitlePanel = styled.h3`
 const PanelHeader = styled.div`
   display: flex;
   width: 100%;
-  padding: 20px ${({ theme }) => theme.layout.mobileSidesPadding};
+  padding: 20px ${({ theme }) => theme.layout.mobileSidesPadding} 14px;
   justify-content: space-between;
   align-items: center;
   border-bottom: 2px solid ${({ theme }) => theme.grey200};
@@ -61,7 +74,7 @@ const menuPanelVariants = {
 
 const otherVariants = {
   hidden: {
-    x: '50%',
+    x: '100%',
     opacity: 0,
   },
   visible: {
@@ -86,10 +99,7 @@ const SidePanel = () => {
     data: { shoppingCart },
   } = useContext(StoreContext);
 
-  const {
-    state: { selectedFilters },
-    setSelectedFilters,
-  } = useContext(FilterContext);
+  const [savedValues, saveValues] = useSavedValues();
 
   useEffect(() => {
     if (isOpen) document.body.style = 'overflow: hidden';
@@ -106,6 +116,7 @@ const SidePanel = () => {
           initial="hidden"
           animate="visible"
           exit="exit"
+          isMenuPanel={choosenPanel === menu}
         >
           <PanelHeader>
             <TitlePanel>{choosenPanel}</TitlePanel>
@@ -134,8 +145,8 @@ const SidePanel = () => {
           {choosenPanel === filter && (
             <FilterForm
               handleClosePanel={hideSidePanel}
-              saveValues={setSelectedFilters}
-              savedValues={selectedFilters}
+              saveValues={saveValues}
+              savedValues={savedValues}
             />
           )}
         </Wrapper>

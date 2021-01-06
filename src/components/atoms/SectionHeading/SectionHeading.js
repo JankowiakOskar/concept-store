@@ -16,9 +16,9 @@ const SectionSubtitle = styled.h5`
   font-weight: ${({ theme }) => theme.font.weight.semiBold};
 `;
 
-const SectionHeading = ({ title, subtitle }) => {
+const SectionHeading = ({ title, subtitle, className }) => {
   return (
-    <SectionHeadingWrapper>
+    <SectionHeadingWrapper className={className}>
       <SectionTitle>{title}</SectionTitle>
       <SectionSubtitle>{subtitle}</SectionSubtitle>
     </SectionHeadingWrapper>
@@ -28,10 +28,12 @@ const SectionHeading = ({ title, subtitle }) => {
 SectionHeading.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
+  className: PropTypes.string,
 };
 
 SectionHeading.defaultProps = {
   subtitle: '',
+  className: '',
 };
 
 export default SectionHeading;

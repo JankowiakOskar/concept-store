@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import EmptyCard from 'components/molecules/EmptyCart/EmptyCart';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
+import GridTemplate from 'templates/GridTemplate';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -15,6 +16,14 @@ const Wrapper = styled.div`
 
 const ProductCardWrapper = styled(motion.div)`
   margin: 20px 0;
+`;
+
+const EmptyCardWrapper = styled.div`
+  min-height: 50vh;
+  padding: 30px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const productCardVariants = {
@@ -39,36 +48,40 @@ const WishListTemplate = ({ wishlist }) => {
 
   return (
     <Wrapper isEmpty={wishlist.length}>
-      {wishlist.length ? (
-        <>
-          <AnimatePresence initial={false}>
-            {wishlist.map(({ id, name, price, picture: { url } }) => (
-              <ProductCardWrapper
-                key={id}
-                variants={productCardVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <ProductCard
-                  id={id}
-                  name={name}
-                  price={price}
-                  pictureURL={url}
-                  cardType="wishedCard"
-                  removeFromWishlist={(ID = id) => handleWishlist(ID)}
-                />
-              </ProductCardWrapper>
-            ))}
-          </AnimatePresence>
-        </>
-      ) : (
-        <EmptyCard
-          title="You haven't any clothes on wishlist"
-          description="Let's find something with your style."
-          type="wishList"
-        />
-      )}
+      <>
+        {wishlist.length ? (
+          <GridTemplate>
+            <AnimatePresence initial={false}>
+              {wishlist.map(({ id, name, price, picture: { url } }) => (
+                <ProductCardWrapper
+                  key={id}
+                  variants={productCardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                >
+                  <ProductCard
+                    id={id}
+                    name={name}
+                    price={price}
+                    pictureURL={url}
+                    cardType="wishedCard"
+                    removeFromWishlist={(ID = id) => handleWishlist(ID)}
+                  />
+                </ProductCardWrapper>
+              ))}
+            </AnimatePresence>
+          </GridTemplate>
+        ) : (
+          <EmptyCardWrapper>
+            <EmptyCard
+              title="You haven't any clothes on wishlist"
+              description="Let's find something with your style."
+              type="wishList"
+            />
+          </EmptyCardWrapper>
+        )}
+      </>
     </Wrapper>
   );
 };

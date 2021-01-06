@@ -9,6 +9,7 @@ const SliderWrapper = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.75);
 `;
 
 const ControlWrapper = styled.div`

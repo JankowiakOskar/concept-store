@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { UIContext } from 'contexts/GlobalUIContext';
+import { Link } from 'react-router-dom';
+import routes from 'routes';
 import styled from 'styled-components';
 import button from 'components/atoms/Button/Button';
 
@@ -19,6 +22,10 @@ const Price = styled.p`
   font-size: ${({ theme }) => theme.m};
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const StyledButton = styled(button)`
   margin: 10px 0;
   background-color: ${({ theme }) => theme.black};
@@ -32,10 +39,13 @@ const Taxes = styled.p`
 `;
 
 const CostSummary = ({ className, totalPrice }) => {
+  const { hideSidePanel } = useContext(UIContext);
   return (
     <SummaryWrapper className={className}>
       <Price>Total amount: {totalPrice} €</Price>
-      <StyledButton primary>Proceed to checkout</StyledButton>
+      <StyledLink to={routes.checkout} onClick={() => hideSidePanel()}>
+        <StyledButton primary>Proceed to checkout</StyledButton>
+      </StyledLink>
       <Taxes>Price including taxes</Taxes>
     </SummaryWrapper>
   );

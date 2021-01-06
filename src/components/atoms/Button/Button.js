@@ -15,7 +15,7 @@ const Button = styled.button`
   text-shadow: 0 0 5px ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.white};
   text-transform: uppercase;
-  box-shadow: 0px 2px 7px -1px rgba(0, 0, 0, 0.75);
+
   outline: none;
 
   ${({ secondary }) =>

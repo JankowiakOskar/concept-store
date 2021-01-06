@@ -13,30 +13,26 @@ const Wrapper = styled.div`
 `;
 
 const DetailWrapper = styled.div`
+  max-width: 1500px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+
+  ${({ theme }) => theme.mq.tablet} {
+    flex-direction: row;
+  }
 `;
 
 const ImageWrapper = styled.div`
   position: relative;
-  height: 400px;
-  width: 100%;
-
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.1);
-  }
+  max-height: 600px;
+  max-width: 500px;
 `;
 
 const Image = styled.img`
-  object-fit: cover;
+  object-fit: contain;
   width: 100%;
   height: 100%;
 `;
@@ -44,6 +40,13 @@ const Image = styled.img`
 const DescriptionWrapper = styled.div`
   width: 100%;
   margin: 10px 0 0 0;
+
+  ${({ theme }) => theme.mq.tablet} {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 50px 200px;
+  }
 `;
 
 const FormWrapper = styled.div`
@@ -76,7 +79,7 @@ const DetailProductTemplate = ({ product }) => {
       <DetailWrapper>
         <TransitionProvider>
           <ImageWrapper>
-            <Image src={`http://192.168.100.17:1337${url}`} />
+            <Image src={`http://192.168.100.17:8001${url}`} />
           </ImageWrapper>
         </TransitionProvider>
         <DescriptionWrapper>
@@ -92,8 +95,8 @@ const DetailProductTemplate = ({ product }) => {
               )}
             />
           </FormWrapper>
+          <ServicesBox />
         </DescriptionWrapper>
-        <ServicesBox />
       </DetailWrapper>
     </Wrapper>
   );

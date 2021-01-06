@@ -1,6 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
+import { normalize } from 'styled-normalize';
 
 const GlobalStyle = createGlobalStyle`
+${normalize}
+
   html {
     box-sizing: border-box;
     font-size: 62.5%;
@@ -18,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
-    height: 100%;
+    height: 100vh;
     width: 100%;
     font-size: 1.6rem;
     font-family: 'Roboto', sans-serif;

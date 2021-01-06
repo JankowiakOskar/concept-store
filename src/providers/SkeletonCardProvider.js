@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SkeletonCard from 'components/molecules/SkeletonCard/SkeletonCard';
-import { CardWrapper } from 'pages/Clothes';
 
 const SkeletonCardsProvider = ({ isLoading, limitCardRender, children }) => {
   return (
@@ -9,9 +8,8 @@ const SkeletonCardsProvider = ({ isLoading, limitCardRender, children }) => {
       {isLoading
         ? Array.from({ length: `${limitCardRender}` }).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <CardWrapper key={index}>
-              <SkeletonCard />
-            </CardWrapper>
+            // eslint-disable-next-line react/no-array-index-key
+            <SkeletonCard key={index} />
           ))
         : children}
     </>

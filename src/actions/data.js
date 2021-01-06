@@ -13,6 +13,8 @@ import {
   limitQueryParam,
   allDataQueryParam,
   categoryQueryFilter,
+  sortQueryFilter,
+  priceQueryFilter,
 } from 'helpers/queryHelpers';
 
 export const FETCHING_PRODUCTS_REQUEST = 'FETCHING_PRODUCTS_REQUEST';
@@ -61,41 +63,60 @@ export const addToShoppingCart = (dispatch, currShoppingCart, product) => {
     currCartExist && containerHasNewItem(currShoppingCart, product);
   const replacedItems =
     isSizePicked && updateSameProduct(currShoppingCart, product);
-  toast.dark('🎁 New product in the shopping cart');
+
+  const addNewItemActions = () => {
+    toast.dark('🎁 New product in the shopping cart');
+    dispatch({ type: ADD_TO_SHOPPING_CART, payload: product });
+  };
 
   return currCartExist && isSizePicked
     ? dispatch({
         type: REPLACE_ITEM_IN_SHOPPING_CART,
         payload: replacedItems,
       })
-    : dispatch({ type: ADD_TO_SHOPPING_CART, payload: product });
+    : addNewItemActions();
 };
 
 export const getProducts = async (
   dispatch,
-  filters = [],
+  filters = {},
   currentProducts = []
 ) => {
-  const anyFilterSelected = filters.length;
-  const filterNames =
-    anyFilterSelected && filters.map(({ categoryName }) => categoryName);
+  const anyCategorySelected =
+    'categoryFilters' in filters && filters.categoryFilters.length;
 
-  const numItemsRequest = anyFilterSelected
-    ? filters.reduce((acc, { productsNum }) => acc + productsNum, 0)
+  const isPriceFilterSelected = 'priceFilters' in filters;
+
+  const isSortMethodSelected =
+    'sortMethod' in filters && Object.keys(filters.sortMethod).length;
+
+  const categoryNames =
+    anyCategorySelected &&
+    filters.categoryFilters.map(({ categoryName }) => categoryName);
+
+  const numItemsRequest = anyCategorySelected
+    ? filters.categoryFilters.reduce(
+        (acc, { productsNum }) => acc + productsNum,
+        0
+      )
     : currentProducts.length + limitRequest;
-
   dispatch({
     type: FETCHING_PRODUCTS_REQUEST,
     payload: { numItemsRequest },
   });
 
-  const endpoint = anyFilterSelected
-    ? categoryQueryFilter(filterNames)
-    : limitQueryParam(currentProducts, limitRequest);
+  const createEndpoint = () =>
+    Object.keys(filters).length
+      ? `?${categoryQueryFilter(categoryNames)}${priceQueryFilter(
+          filters.priceFilters
+        )}${sortQueryFilter(filters.sortMethod.value)}`
+      : limitQueryParam(currentProducts, limitRequest);
+
+  const endpoint = createEndpoint();
 
   try {
     const { data: products } = await axios.get(
-      `http://192.168.100.17:1337/products${endpoint}`
+      `http://192.168.100.17:8001/products${endpoint}`
     );
 
     await sleeper(500);
@@ -106,7 +127,10 @@ export const getProducts = async (
       type: FETCHING_PRODUCTS_SUCCESS,
       payload: {
         products,
-        isAllProductsFetched: anyFilterSelected ? true : isAllProductsFetched,
+        isAllProductsFetched:
+          anyCategorySelected || isPriceFilterSelected || isSortMethodSelected
+            ? true
+            : isAllProductsFetched,
       },
     });
   } catch (error) {
@@ -126,7 +150,7 @@ export const updateStore = async (
   dispatch({ type: UPDATE_STORE_REQUEST });
   try {
     const { data: productToUpdate } = await axios.get(
-      `http://192.168.100.17:1337/products/${id}`
+      `http://192.168.100.17:8001/products/${id}`
     );
     const { sizes_quantity } = productToUpdate;
 
@@ -152,7 +176,7 @@ export const updateStore = async (
     );
 
     const { data: updatedProduct } = await axios.put(
-      `http://192.168.100.17:1337/products/${id}`,
+      `http://192.168.100.17:8001/products/${id}`,
       {
         sizes_quantity: newSizesQuantity,
       }

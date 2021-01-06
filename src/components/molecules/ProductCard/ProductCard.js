@@ -8,30 +8,37 @@ import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
 import routes from 'routes';
 import { Link } from 'react-router-dom';
 
-const ProductWrapper = styled.div`
-  max-height: 600px;
+export const ProductWrapper = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
+  overflow: hidden;
 `;
 
-const ProductImage = styled(motion.img)`
+export const ProductImage = styled(motion.img)`
   width: 100%;
   height: 100%;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease-out;
+  object-fit: contain;
+  background-color: transparent;
+  overflow: hidden;
 `;
 
-const OuterImageWrapper = styled.div`
+export const OuterImageWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+export const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-`;
 
-const ImageWrapper = styled.div`
-  width: 100%;
-  height: 100%;
   &:after {
     content: '';
     position: absolute;
@@ -72,19 +79,20 @@ const StyledDeleteIcon = styled(DeleteForeverIcon)`
   z-index: ${({ theme }) => theme.zIndex.level7};
 `;
 
-const DescriptionWrapper = styled.div`
+export const DescriptionWrapper = styled.div`
   margin: 10px 0 0 0;
 `;
-const ProductTitle = styled.h3`
+export const ProductTitle = styled.h3`
   font-size: ${({ theme }) => theme.font.size.medium};
   font-weight: ${({ theme }) => theme.font.weight.semiBold};
 `;
 
-const Price = styled.p`
+export const Price = styled.p`
   color: ${({ theme }) => theme.grey100};
 `;
 
 const ProductCard = ({
+  className,
   id,
   name,
   price,
@@ -104,11 +112,11 @@ const ProductCard = ({
   };
 
   return (
-    <ProductWrapper>
+    <ProductWrapper className={className}>
       <OuterImageWrapper>
         <Link to={`${routes.clothes}/${id}`}>
           <ImageWrapper>
-            <ProductImage src={`http://192.168.100.17:1337${pictureURL}`} />
+            <ProductImage src={`http://192.168.100.17:8001${pictureURL}`} />
           </ImageWrapper>
         </Link>
         {cardType === 'productCard' && (
@@ -130,6 +138,7 @@ const ProductCard = ({
 };
 
 ProductCard.propTypes = {
+  className: PropTypes.string,
   id: PropTypes.string,
   name: PropTypes.string,
   price: PropTypes.number,
@@ -141,6 +150,7 @@ ProductCard.propTypes = {
 };
 
 ProductCard.defaultProps = {
+  className: '',
   id: '',
   name: '',
   price: 0,

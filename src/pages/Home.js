@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import routes from 'routes';
 import { StoreContext } from 'store/StoreProvider';
-import { FilterContext } from 'contexts/FilterContext';
+// import { FilterContext } from 'contexts/FilterContext';
 import styled from 'styled-components';
 import Slider from 'components/organisms/Slider/Slider';
 import CategoriesTemplate from 'templates/CategoriesTemplate';
@@ -14,7 +14,7 @@ import Carousel from 'components/organisms/Carousel/Carousel';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
 import manWithCamera from 'assets/images/manWithCamera.jpg';
 import ArrowLink from 'components/atoms/ArrowLink/ArrowLink';
-import PartnersCarousel from 'components/organisms/PartnersCarousel/PartnersCarousel';
+import SkeletonCard from 'components/molecules/SkeletonCard/SkeletonCard';
 
 const Wrapper = styled(motion.div)`
   width: 100%;
@@ -23,10 +23,30 @@ const Wrapper = styled(motion.div)`
 
 const InnerWrapper = styled.div`
   padding: 0 20px;
+
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 0 80px;
+  }
 `;
 
 const ProductCardWrapper = styled.div`
-  margin: 0 2px;
+  margin: 0 5px;
+
+  ${({ theme }) => theme.mq.desktop} {
+    margin: 0 20px;
+  }
+`;
+
+const StyledProductCard = styled(ProductCard)`
+  ${({ theme }) => theme.mq.desktop} {
+    flex: 1;
+  }
+`;
+
+const StyledCategoryCard = styled(CategoryCard)`
+  ${({ theme }) => theme.mq.tablet} {
+    height: 350px;
+  }
 `;
 
 const ImageBox = styled.div`
@@ -42,6 +62,11 @@ const ImageBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+
+  ${({ theme }) => theme.mq.bigTablet} {
+    height: 450px;
+  }
 `;
 
 const ImageBoxDescription = styled.div`
@@ -52,40 +77,49 @@ const ImageBoxDescription = styled.div`
 const ImageBoxTitle = styled.h3`
   font-weight: ${({ theme }) => theme.font.weight.bold};
   font-size: ${({ theme }) => theme.font.size.large};
+
+  ${({ theme }) => theme.mq.bigTablet} {
+    font-size: ${({ theme }) => theme.font.size.xl};
+  }
 `;
 
 const ImageBoxSubtitle = styled.p`
   font-size: ${({ theme }) => theme.font.size.medium};
+
+  ${({ theme }) => theme.mq.bigTablet} {
+    font-size: ${({ theme }) => theme.font.size.large};
+  }
 `;
 
 const Home = () => {
   const {
-    data: { slides, categoriesCards, products, wishlist },
+    data: { slides, categoriesCards, products, wishlist, isLoadingProducts },
     handleWishlist,
-    fetchProducts,
-    removeAllProducts,
+    // fetchProducts,
+    // removeAllProducts,
   } = useContext(StoreContext);
 
-  const {
-    state: { selectedFilters },
-    removeAllFilters,
-  } = useContext(FilterContext);
+  // const {
+  //   state: { categoryFilters },
+  //   removeAllFilters,
+  // } = useContext(FilterContext);
 
   const topSellingProducts = products.filter(
     (product) => product.sellingRatio >= 8.2
   );
 
-  useEffect(() => {
-    const isAnyFilterSelected = Object.keys(selectedFilters).length;
-    if (isAnyFilterSelected) {
-      const fetchProductsActions = () => {
-        removeAllFilters();
-        removeAllProducts();
-        fetchProducts();
-      };
-      fetchProductsActions();
-    }
-  }, [fetchProducts, removeAllFilters, selectedFilters, removeAllProducts]);
+  // useEffect(() => {
+  //   const anyCategorySelected = categoryFilters.length;
+
+  //   if (anyCategorySelected) {
+  //     const fetchProductsActions = () => {
+  //       removeAllFilters();
+  //       removeAllProducts();
+  //       fetchProducts();
+  //     };
+  //     fetchProductsActions();
+  //   }
+  // }, [fetchProducts, removeAllFilters, categoryFilters, removeAllProducts]);
 
   return (
     <LoadingProvider>
@@ -95,7 +129,7 @@ const Home = () => {
           <InnerWrapper>
             <CategoriesTemplate>
               {categoriesCards.map(({ category, image }) => (
-                <CategoryCard
+                <StyledCategoryCard
                   key={category}
                   image={image}
                   categoryType={category}
@@ -107,23 +141,30 @@ const Home = () => {
               subtitle="on this week"
             >
               <Carousel>
-                {topSellingProducts.map(
-                  ({ id, name, price, picture: { url } }) => (
-                    <ProductCardWrapper key={id}>
-                      <ProductCard
-                        id={id}
-                        name={name}
-                        price={price}
-                        pictureURL={url}
-                        cardType="productCard"
-                        handleWishlist={handleWishlist}
-                        onWishlist={wishlist.some(
-                          (product) => product.id === id
-                        )}
-                      />
-                    </ProductCardWrapper>
-                  )
-                )}
+                {products.length && !isLoadingProducts
+                  ? topSellingProducts.map(
+                      ({ id, name, price, picture: { url } }) => (
+                        <ProductCardWrapper key={id}>
+                          <StyledProductCard
+                            id={id}
+                            name={name}
+                            price={price}
+                            pictureURL={url}
+                            cardType="productCard"
+                            handleWishlist={handleWishlist}
+                            onWishlist={wishlist.some(
+                              (product) => product.id === id
+                            )}
+                          />
+                        </ProductCardWrapper>
+                      )
+                    )
+                  : Array.from({ length: 4 }).map((_, index) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <ProductCardWrapper key={index}>
+                        <SkeletonCard />
+                      </ProductCardWrapper>
+                    ))}
               </Carousel>
             </SectionTemplate>
           </InnerWrapper>
@@ -134,11 +175,6 @@ const Home = () => {
               <ArrowLink routeURL={routes.clothes} title="Check out" />
             </ImageBoxDescription>
           </ImageBox>
-          <InnerWrapper>
-            <SectionTemplate title="Our partners" subtitle="well known brands">
-              <PartnersCarousel />
-            </SectionTemplate>
-          </InnerWrapper>
         </Wrapper>
       </TransitionProvider>
     </LoadingProvider>

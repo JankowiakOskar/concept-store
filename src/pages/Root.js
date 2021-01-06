@@ -6,6 +6,7 @@ import Home from './Home';
 import WishListPage from './WishListPage';
 import Clothes from './Clothes';
 import DetailPage from './DetailPage';
+import CheckoutPage from './CheckoutPage';
 
 const Root = () => {
   return (
@@ -17,6 +18,7 @@ const Root = () => {
             <Route path={routes.wishlist} component={WishListPage} />
             <Route exact path={routes.clothes} component={Clothes} />
             <Route path={routes.detailClothes} component={DetailPage} />
+            <Route path={routes.checkout} component={CheckoutPage} />
           </Switch>
         </MainTemplate>
       </div>

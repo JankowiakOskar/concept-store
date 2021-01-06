@@ -8,7 +8,7 @@ import Button from 'components/atoms/Button/Button';
 
 const Wrapper = styled(motion.div)`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   position: absolute;
   width: 100%;
@@ -27,7 +27,16 @@ const Wrapper = styled(motion.div)`
 const InnerWrapper = styled(motion.div)`
   width: 100%;
   padding: 0 30px;
-  margin: 120px 0 0 0;
+
+  ${({ theme }) => theme.mq.tablet} {
+    width: 70%;
+    padding: 0 60px;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 0 150px;
+    max-width: 1700px;
+  }
 `;
 
 const Dot = styled.span`
@@ -43,13 +52,23 @@ const SlideTitle = styled.h2`
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.white};
   text-shadow: 0 0 4px ${({ theme }) => theme.black};
+
+  ${({ theme }) => theme.mq.tablet} {
+    min-width: 600px;
+    font-size: ${({ theme }) => theme.font.size.xxl};
+  }
 `;
 
 const SlideSubTitle = styled.p`
   margin: 5px 0;
-  color: ${({ theme }) => theme.grey300};
+  color: ${({ theme }) => theme.grey500};
   font-weight: ${({ theme }) => theme.font.weight.semiBold};
   text-shadow: 0 0 2px ${({ theme }) => theme.black};
+
+  ${({ theme }) => theme.mq.tablet} {
+    min-width: 600px;
+    font-size: ${({ theme }) => theme.font.size.siteHeader};
+  }
 `;
 
 const StyledButton = styled(Button)`
@@ -66,14 +85,14 @@ const containerVariants = {
     transition: {
       type: 'easeIn',
       when: 'beforeChildren',
-      duration: 0.3,
+      duration: 0.4,
     },
   },
   exit: {
     opacity: 0,
     transition: {
       type: 'easeOut',
-      duration: 0.3,
+      duration: 0.2,
     },
   },
 };
@@ -87,11 +106,18 @@ const childVariants = {
     x: 0,
     opacity: 1,
     transition: {
-      type: 'ease',
-      duration: 0.5,
+      type: 'linear',
+      duration: 0.3,
     },
   },
-  exit: { x: 50, opacity: 0 },
+  exit: {
+    x: 100,
+    opacity: 0,
+    transition: {
+      type: 'linear',
+      duration: 0.4,
+    },
+  },
 };
 
 const Slide = ({ image, title, subTitle, btnContent, isActiveSlide }) => {

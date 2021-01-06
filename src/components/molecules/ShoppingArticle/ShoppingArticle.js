@@ -105,7 +105,7 @@ const ShoppingArticle = ({
     if (!matchedProduct) {
       const fetchProduct = async () => {
         const { data: product } = await axios.get(
-          `http://localhost:1337/products/${id}`
+          `http://localhost:8001/products/${id}`
         );
         setMatchedProduct(product);
       };
@@ -142,7 +142,7 @@ const ShoppingArticle = ({
   return (
     <ArticleWrapper className={className}>
       <ImageWrapper>
-        <ArticleImg src={`http://192.168.100.17:1337${pictureURL}`} />
+        <ArticleImg src={`http://192.168.100.17:8001${pictureURL}`} />
       </ImageWrapper>
       <DetailsGroup>
         <ItemTitle>{name}</ItemTitle>

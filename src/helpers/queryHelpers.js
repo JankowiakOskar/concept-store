@@ -10,10 +10,12 @@ export const limitQueryParam = (currentProducts, fetchLimit) => {
 };
 
 export const categoryQueryFilter = (categories) => {
+  if (!categories.length) return '';
+
   const queryTemplate = 'category=';
   const filterStr = categories.reduce((queryStr, categoryName, currIdx) => {
     if (currIdx === 0) {
-      queryStr = `?${queryTemplate}${categoryName}`;
+      queryStr = `${queryTemplate}${categoryName}`;
     } else {
       queryStr += `&${queryTemplate}${categoryName}`;
     }
@@ -21,4 +23,26 @@ export const categoryQueryFilter = (categories) => {
   }, '');
 
   return filterStr;
+};
+
+export const priceQueryFilter = (priceValues) => {
+  const { min, max } = priceValues;
+  const queryTemplate = `&price_gte=${min}&price_lte=${max}`;
+  return queryTemplate;
+};
+
+export const sortQueryFilter = (sortQuery) => {
+  const sortTemplate = '&_sort=';
+  switch (sortQuery) {
+    case 'ascPrice':
+      return `${sortTemplate}price:ASC`;
+    case 'dscPrice':
+      return `${sortTemplate}price:DESC`;
+    case 'ascName':
+      return `${sortTemplate}name:ASC`;
+    case 'dscName':
+      return `${sortTemplate}name:DESC`;
+    default:
+      return '';
+  }
 };
