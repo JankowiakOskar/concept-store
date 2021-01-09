@@ -8,7 +8,7 @@ import EmptyCart from 'components/molecules/EmptyCart/EmptyCart';
 import Button from 'components/atoms/Button/Button';
 import Loader from 'react-loader-spinner';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 import Dropdown from 'components/molecules/Dropdown/Dropdown';
 import FilterForm from 'components/organisms/FilterForm/FilteForm';
 import GridTemplate from 'templates/GridTemplate';
@@ -122,8 +122,10 @@ const ProductsTemplate = ({ children, className, isAllProductsFetched }) => {
   } = useContext(FilterContext);
 
   const {
-    setOpenSidePanel,
-    panelTypes: { filter },
+    sidePanel: {
+      setOpenSidePanel,
+      panelTypes: { filter },
+    },
   } = useContext(UIContext);
 
   const notFoundProducts = !isLoadingProducts && !currProducts.length;
@@ -135,7 +137,6 @@ const ProductsTemplate = ({ children, className, isAllProductsFetched }) => {
     removeAllProducts();
     fetchProducts({ ...allFilters, sortMethod: sort });
   };
-  console.log(children);
   return (
     <Wrapper className={className}>
       <SortsWrapper>

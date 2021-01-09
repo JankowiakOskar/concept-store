@@ -1,10 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
+import { UIContext } from 'contexts/GlobalUIContext';
+import { StoreContext } from 'store/StoreProvider';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import LocalMallIcon from '@material-ui/icons/LocalMall';
+import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 import routes from 'routes';
 import { Link } from 'react-router-dom';
 
@@ -31,6 +34,7 @@ export const OuterImageWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.74);
 `;
 
 export const ImageWrapper = styled.div`
@@ -58,25 +62,44 @@ export const ImageWrapper = styled.div`
   }
 `;
 
-const StyledFavoriteIcon = styled(FavoriteBorderIcon)`
+const IconCardStyle = css`
   position: absolute;
   top: 10px;
   right: 10px;
-  fill: ${({ liked, theme }) =>
-    liked ? `${theme.red} !important` : `${theme.grey100} !important`};
-  ${baseIconStyle};
-  transition: isFavorite 0.15s ease;
   cursor: pointer;
+  transition: all 0.15s ease;
   z-index: ${({ theme }) => theme.zIndex.level7};
 `;
 
+const StyledFavoriteIcon = styled(FavoriteBorderIcon)`
+  ${baseIconStyle};
+  ${IconCardStyle}
+  transition: all 0.15s ease;
+  fill: ${({ liked, theme }) =>
+    liked ? `${theme.red} !important` : `${theme.grey100} !important`};
+
+  &:hover {
+    fill: ${({ theme }) => theme.red} !important;
+  }
+`;
+
 const StyledDeleteIcon = styled(DeleteForeverIcon)`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  fill: ${({ theme }) => theme.grey100};
   ${baseIconStyle}
-  z-index: ${({ theme }) => theme.zIndex.level7};
+  ${IconCardStyle}
+  fill: ${({ theme }) => theme.grey100};
+`;
+
+const StyledAddCartIcon = styled(LocalMallIcon)`
+  ${baseIconStyle};
+  ${IconCardStyle};
+  top: 50px;
+  fill: ${({ theme }) => theme.grey100};
+
+  ${({ theme }) => theme.mq.desktop} {
+    &:hover {
+      fill: ${({ theme }) => theme.primary};
+    }
+  }
 `;
 
 export const DescriptionWrapper = styled.div`
@@ -104,11 +127,25 @@ const ProductCard = ({
 }) => {
   const [isFavorite, setFavorite] = useState(onWishlist);
 
+  const {
+    modal: {
+      toggleModal,
+      modalTypes: { addNewProduct },
+    },
+  } = useContext(UIContext);
+
+  const { setSelectedID } = useContext(StoreContext);
+
   useCallback(() => setFavorite(onWishlist), [onWishlist]);
 
   const handleClickFavorite = (e, ID) => {
     setFavorite(!isFavorite);
     handleWishlist(ID);
+  };
+
+  const toggleModalProduct = (ID) => {
+    toggleModal(addNewProduct);
+    setSelectedID(ID);
   };
 
   return (
@@ -128,6 +165,9 @@ const ProductCard = ({
         {cardType === 'wishedCard' && (
           <StyledDeleteIcon onClick={() => removeFromWishlist(id)} />
         )}
+        {cardType && (
+          <StyledAddCartIcon onClick={() => toggleModalProduct(id)} />
+        )}
       </OuterImageWrapper>
       <DescriptionWrapper>
         <ProductTitle>{name}</ProductTitle>
@@ -145,7 +185,7 @@ ProductCard.propTypes = {
   pictureURL: PropTypes.string,
   handleWishlist: PropTypes.func,
   onWishlist: PropTypes.bool,
-  cardType: PropTypes.oneOf(['productCard', 'wishedCard']).isRequired,
+  cardType: PropTypes.oneOf(['productCard', 'wishedCard', '']).isRequired,
   removeFromWishlist: PropTypes.func,
 };
 

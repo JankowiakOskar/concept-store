@@ -39,7 +39,9 @@ const Taxes = styled.p`
 `;
 
 const CostSummary = ({ className, totalPrice }) => {
-  const { hideSidePanel } = useContext(UIContext);
+  const {
+    sidePanel: { hideSidePanel },
+  } = useContext(UIContext);
   return (
     <SummaryWrapper className={className}>
       <Price>Total amount: {totalPrice} €</Price>

@@ -1,8 +1,8 @@
+/* eslint-disable import/prefer-default-export */
 import { css } from 'styled-components';
 
-const baseIconStyle = css`
+export const baseIconStyle = css`
   font-size: 3rem !important;
   color: ${({ theme }) => theme.grey100};
+  cursor: pointer;
 `;
-
-export default baseIconStyle;

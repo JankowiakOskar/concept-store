@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Dropdown from 'components/molecules/Dropdown/Dropdown';
 import Button from 'components/atoms/Button/Button';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import CounterQuantity, {
   CounterWrapper,
@@ -70,7 +70,6 @@ const AddCartForm = ({
   const [amountItem, setAmountItem] = useState(1);
   const [error, setError] = useState('');
   const { addToShoppingCart } = useContext(StoreContext);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!choosenSize) {
@@ -124,9 +123,11 @@ const AddCartForm = ({
           <StyledShopingCartIcon />
           <span>Add to cart</span>
         </StyledButton>
-        <FavoriteIconButton type="button" onClick={handleWishlist}>
-          <FavoriteIcon isFavorite={isOnWishlist} />
-        </FavoriteIconButton>
+        {handleWishlist && (
+          <FavoriteIconButton type="button" onClick={handleWishlist}>
+            <FavoriteIcon isFavorite={isOnWishlist} />
+          </FavoriteIconButton>
+        )}
       </ButtonsWrapper>
     </Form>
   );
@@ -140,13 +141,15 @@ AddCartForm.propTypes = {
     picture: PropTypes.objectOf(PropTypes.any),
   }),
   sizesQuantity: PropTypes.arrayOf(PropTypes.object),
-  isOnWishlist: PropTypes.bool.isRequired,
-  handleWishlist: PropTypes.func.isRequired,
+  isOnWishlist: PropTypes.bool,
+  handleWishlist: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
 };
 
 AddCartForm.defaultProps = {
   product: {},
   sizesQuantity: [{ size: '', amount: '' }],
+  isOnWishlist: false,
+  handleWishlist: false,
 };
 
 export default AddCartForm;

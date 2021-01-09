@@ -7,7 +7,7 @@ const SectionHeadingWrapper = styled.div`
   text-align: left;
 `;
 
-const SectionTitle = styled.h2`
+export const SectionTitle = styled.h2`
   font-size: ${({ theme }) => theme.font.size.siteHeader};
 `;
 

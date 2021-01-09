@@ -60,7 +60,9 @@ const StyledButton = styled(Button)`
 `;
 
 const EmptyCard = ({ className, title, description, type }) => {
-  const { hideSidePanel } = useContext(UIContext);
+  const {
+    sidePanel: { hideSidePanel },
+  } = useContext(UIContext);
   return (
     <Wrapper className={className}>
       {type === 'wishList' ? <EmptyWishList /> : <EmptyBasketDraw />}

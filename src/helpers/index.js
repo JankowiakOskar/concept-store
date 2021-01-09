@@ -1,6 +1,16 @@
 /* eslint-disable camelcase */
 export const getFromArrByID = (arr, id) => arr.find((el) => el.id === id);
 
+export const sumItemsPrices = (itemsArr) => {
+  let totalPrice = 0;
+  itemsArr.forEach(({ price, sizes_quantity: sizesQuantity }) => {
+    const [amount] = Object.values(sizesQuantity);
+    const currItemPrice = amount * price;
+    totalPrice += currItemPrice;
+  });
+  return totalPrice.toFixed(2);
+};
+
 export const makeCapitalWord = (str) => {
   const capitalWord = str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   return capitalWord;

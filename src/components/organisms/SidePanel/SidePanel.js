@@ -2,11 +2,10 @@ import React, { useContext, useEffect } from 'react';
 import { UIContext } from 'contexts/GlobalUIContext';
 import { StoreContext } from 'store/StoreProvider';
 import styled, { css } from 'styled-components';
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
 import { motion, AnimatePresence } from 'framer-motion';
-import CloseIcon from '@material-ui/icons/Close';
 import HomeIcon from '@material-ui/icons/Home';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import CloseIconComponent from 'components/atoms/CloseIconComponent/CloseIconComponent';
 import ShopingCartTemplate from 'templates/ShoppingCartTemplate';
 import MenuList from 'components/molecules/MenuList/MenuList';
 import routes from 'routes';
@@ -32,6 +31,11 @@ const Wrapper = styled(motion.div)`
         box-shadow: 3px 0px 5px 0px rgba(0, 0, 0, 0.4);
       `}
   }
+
+  ${({ theme }) => theme.mq.bigTablet} {
+    width: 360px;
+    left: calc(100% - 360px);
+  }
 `;
 
 const TitlePanel = styled.h3`
@@ -47,11 +51,6 @@ const PanelHeader = styled.div`
   align-items: center;
   border-bottom: 2px solid ${({ theme }) => theme.grey200};
 `;
-
-const CloseIconWrapper = styled(motion.span)`
-  ${baseIconStyle};
-`;
-const StyledCloseIcon = styled(CloseIcon)``;
 
 const menuPanelVariants = {
   hidden: {
@@ -90,17 +89,17 @@ const otherVariants = {
 
 const SidePanel = () => {
   const {
-    isOpen,
-    choosenPanel,
-    hideSidePanel,
-    panelTypes: { menu, cart, filter },
+    sidePanel: {
+      isOpen,
+      choosenPanel,
+      hideSidePanel,
+      panelTypes: { menu, cart, filter },
+    },
   } = useContext(UIContext);
   const {
     data: { shoppingCart },
   } = useContext(StoreContext);
-
   const [savedValues, saveValues] = useSavedValues();
-
   useEffect(() => {
     if (isOpen) document.body.style = 'overflow: hidden';
     else {
@@ -120,11 +119,8 @@ const SidePanel = () => {
         >
           <PanelHeader>
             <TitlePanel>{choosenPanel}</TitlePanel>
-            <CloseIconWrapper onClick={() => hideSidePanel()}>
-              <StyledCloseIcon />
-            </CloseIconWrapper>
+            <CloseIconComponent handleClose={hideSidePanel} isActiveAnimation />
           </PanelHeader>
-
           {choosenPanel === menu && (
             <MenuList
               handleClosePanel={hideSidePanel}

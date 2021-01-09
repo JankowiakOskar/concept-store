@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
 const RadioInputWrapper = styled.div`
-  max-width: 290px;
   height: 60px;
   border: 1px solid ${({ theme }) => theme.grey200};
   border-radius: 10px;

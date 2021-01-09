@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 
 const AccordionHeader = styled.div`
   padding: 10px 20px;

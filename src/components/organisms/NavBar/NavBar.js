@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import routes from 'routes';
 import { UIContext } from 'contexts/GlobalUIContext';
 import styled from 'styled-components';
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 import { ReactComponent as Logo } from 'assets/svgs/Logo.svg';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
@@ -138,8 +138,10 @@ const HamburgerIcon = styled(NotesIcon)`
 
 const NavBar = () => {
   const {
-    setOpenSidePanel,
-    panelTypes: { menu, cart },
+    sidePanel: {
+      setOpenSidePanel,
+      panelTypes: { menu, cart },
+    },
   } = useContext(UIContext);
   const [scrollYPos] = useScrollPos(window);
   const [numWishedProducts] = useNumStoredItems('wishlist');

@@ -9,10 +9,6 @@ export const SectionWrapper = styled.section`
   ${({ theme }) => theme.mq.tablet} {
     padding: 30px 40px;
   }
-
-  ${({ theme }) => theme.mq.desktop} {
-    padding: 30px 100px;
-  }
 `;
 
 const SectionTemplate = ({ className, title, subtitle, children }) => {

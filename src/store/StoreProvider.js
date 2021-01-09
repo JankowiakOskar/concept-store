@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { initialState, dataReducer } from 'reducers/dataReducer';
 import {
@@ -18,6 +18,8 @@ export const StoreContext = React.createContext();
 
 const StoreProvider = ({ children }) => {
   const [data, dispatch] = useReducer(dataReducer, initialState);
+  const [choosenID, setChoosenID] = useState('');
+
   const { products, shoppingCart, wishlist } = data;
   const updateStoreActions = {
     removeFromStore: 'remove',
@@ -51,6 +53,8 @@ const StoreProvider = ({ children }) => {
       : addToWishlist(dispatch, choosenProduct);
   };
 
+  const setSelectedID = (id) => setChoosenID(id);
+
   useEffect(() => {
     getWishlist();
     getShoppingCart();
@@ -66,6 +70,8 @@ const StoreProvider = ({ children }) => {
     updateStoreActions,
     fetchProducts,
     removeAllProducts,
+    setSelectedID,
+    choosenID,
   };
 
   return (

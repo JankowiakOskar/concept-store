@@ -20,7 +20,13 @@ export const CounterInput = styled.input`
     isDisabled ? theme.grey200 : theme.grey100};
   font-size: 35px;
   border: 1px solid ${({ theme }) => theme.grey200};
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  ${({ theme }) => theme.mq.desktop} {
+    &:hover {
+      background-color: ${({ theme }) => theme.grey400};
+    }
+  }
 `;
 
 const AmountDisplayer = styled.span`

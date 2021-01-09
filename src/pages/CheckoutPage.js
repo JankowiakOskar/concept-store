@@ -5,9 +5,18 @@ import CheckoutTemplate from 'templates/CheckoutTemplate';
 import TransitionProvider from 'providers/TransitionProvider';
 
 const Wrapper = styled.div`
-  min-height: 100vh;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 80px 20px 0;
   width: 100%;
-  padding: 80px 20px;
+
+  ${({ theme }) => theme.mq.bigTablet} {
+    padding: 80px 40px 0;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 80px 100px 0;
+  }
 `;
 
 const CheckoutPage = () => {

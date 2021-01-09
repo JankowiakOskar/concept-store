@@ -13,6 +13,8 @@ const Form = styled.form`
   overflow: hidden;
 `;
 
+const FormWrapper = styled.div``;
+
 const Section = styled.div`
   &:last-of-type {
     margin: 20px 0;
@@ -22,6 +24,7 @@ const Section = styled.div`
 const StyledSectionHeading = styled(SectionHeading)`
   &&& {
     padding: 0px;
+    font-weight: ${({ theme }) => theme.font.weight.semiBold};
   }
 `;
 
@@ -82,78 +85,84 @@ const OrderForm = () => {
     <Formik initialValues={initialValues} validationSchema={OrderSchema}>
       {({ values, setFieldValue }) => (
         <Form>
-          <Section>
-            <StyledSectionHeading title="Billing details" />
-            <StyledInputElement
-              name="firstName"
-              type="text"
-              label="First Name"
-            />
-            <StyledInputElement name="lastName" type="text" label="Last Name" />
-            <StyledInputElement
-              name="adress"
-              type="text"
-              label="Adress"
-              placeholder="Street with the house number"
-            />
-
-            <StyledInputElement
-              name="postCode"
-              type="number"
-              label="Postcode"
-            />
-
-            <StyledInputElement name="city" type="text" label="City" />
-            <StyledInputElement
-              name="email"
-              type="text"
-              label="Email address"
-              placeholder="We will send you all order details"
-            />
-            <StyledCheckBoxElement
-              name="toggleMobilePhone"
-              description="Add mobile phone (optional)"
-              value={values.toggleMobilePhone}
-              toggleCheckbox={(name) =>
-                setFieldValue(name, !values.toggleMobilePhone)
-              }
-            />
-            {values.toggleMobilePhone && (
+          <FormWrapper>
+            <Section>
+              <StyledSectionHeading title="Billing details" />
               <StyledInputElement
-                name="mobilePhone"
+                name="firstName"
                 type="text"
-                label="Mobile number"
+                label="First Name"
               />
-            )}
-          </Section>
-          <Section>
-            <StyledSectionHeading
-              title="Payment methods"
-              subtitle="Choose good one for you"
-            />
-            <ActiveProvider defaultActive={1}>
-              {({ active, changeActive }) => (
-                <>
-                  <StyledRadioInput
-                    value={active === 0}
-                    setActive={() => changeActive(0)}
-                    label="Credit card"
-                  />
-                  <StyledRadioInput
-                    value={active === 1}
-                    setActive={() => changeActive(1)}
-                    label="Bank transfer"
-                  />
-                  <StyledRadioInput
-                    value={active === 2}
-                    setActive={() => changeActive(2)}
-                    label="Cash on delivery"
-                  />
-                </>
+              <StyledInputElement
+                name="lastName"
+                type="text"
+                label="Last Name"
+              />
+              <StyledInputElement
+                name="adress"
+                type="text"
+                label="Adress"
+                placeholder="Street with the house number"
+              />
+
+              <StyledInputElement
+                name="postCode"
+                type="number"
+                label="Postcode"
+              />
+
+              <StyledInputElement name="city" type="text" label="City" />
+              <StyledInputElement
+                name="email"
+                type="text"
+                label="Email address"
+                placeholder="We will send you all order details"
+              />
+              <StyledCheckBoxElement
+                name="toggleMobilePhone"
+                description="Add mobile phone (optional)"
+                value={values.toggleMobilePhone}
+                toggleCheckbox={(name) =>
+                  setFieldValue(name, !values.toggleMobilePhone)
+                }
+              />
+              {values.toggleMobilePhone && (
+                <StyledInputElement
+                  name="mobilePhone"
+                  type="text"
+                  label="Mobile number"
+                />
               )}
-            </ActiveProvider>
-          </Section>
-          <StyledButton type="submit">Complete order</StyledButton>
+            </Section>
+            <Section>
+              <StyledSectionHeading
+                title="Payment methods"
+                subtitle="Choose good one for you"
+              />
+              <ActiveProvider defaultActive={1}>
+                {({ active, changeActive }) => (
+                  <>
+                    <StyledRadioInput
+                      value={active === 0}
+                      setActive={() => changeActive(0)}
+                      label="Credit card"
+                    />
+                    <StyledRadioInput
+                      value={active === 1}
+                      setActive={() => changeActive(1)}
+                      label="Bank transfer"
+                    />
+                    <StyledRadioInput
+                      value={active === 2}
+                      setActive={() => changeActive(2)}
+                      label="Cash on delivery"
+                    />
+                  </>
+                )}
+              </ActiveProvider>
+            </Section>
+            <StyledButton type="submit">Complete order</StyledButton>
+          </FormWrapper>
         </Form>
       )}
     </Formik>

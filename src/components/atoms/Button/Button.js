@@ -37,4 +37,14 @@ const Button = styled.button`
     `}
 `;
 
+export const UnderlineButton = styled.button`
+  padding: 0 0 2px 0;
+  background-color: transparent;
+  font-weight: ${({ theme }) => theme.font.weight.semiBold};
+  font-size: ${({ theme }) => theme.font.size.medium};
+  color: ${({ theme }) => theme.grey100};
+  border: none;
+  border-bottom: 1px solid ${(theme) => theme.grey};
+`;
+
 export default Button;

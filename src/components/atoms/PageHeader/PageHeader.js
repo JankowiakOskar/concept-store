@@ -12,6 +12,10 @@ const PageTitle = styled.h1`
   font-size: ${({ theme }) => theme.font.size.siteHeader};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.black};
+
+  ${({ theme }) => theme.mq.desktop} {
+    font-size: ${({ theme }) => theme.font.size.large};
+  }
 `;
 
 const PageHeader = ({ title }) => (

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { AnimatePresence, motion } from 'framer-motion';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 import useOutsideClick from 'hooks/useOutsideClick';
 
 const DropDownWrapper = styled.div`

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import RestoreIcon from '@material-ui/icons/Restore';
 import RedeemIcon from '@material-ui/icons/Redeem';
-import baseIconStyle from 'components/atoms/ExternalIcon/ExternalIcon';
+import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 
 const ServicesWrapper = styled.div`
   max-width: 500px;

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { sumItemsPrices } from 'helpers';
 import TransitionProvider from 'providers/TransitionProvider';
 import EmptyCard from 'components/molecules/EmptyCart/EmptyCart';
 import ShoppingArticle from 'components/molecules/ShoppingArticle/ShoppingArticle';
@@ -58,15 +59,7 @@ const articlesVariants = {
 };
 
 const ShoppingCartTemplate = ({ shoppingCart }) => {
-  const calcTotal = () => {
-    let totalPrice = 0;
-    shoppingCart.forEach(({ price, sizes_quantity: sizesQuantity }) => {
-      const [amount] = Object.values(sizesQuantity);
-      const currItemPrice = amount * price;
-      totalPrice += currItemPrice;
-    });
-    return totalPrice.toFixed(2);
-  };
+  const totalPrice = sumItemsPrices(shoppingCart);
 
   return (
     <Wrapper>
@@ -109,7 +102,7 @@ const ShoppingCartTemplate = ({ shoppingCart }) => {
               )}
             </AnimatePresence>
           </ArticlesWrapper>
-          <StyledCostSummary totalPrice={calcTotal()} />
+          <StyledCostSummary totalPrice={totalPrice} />
         </>
       ) : (
         <TransitionProvider>

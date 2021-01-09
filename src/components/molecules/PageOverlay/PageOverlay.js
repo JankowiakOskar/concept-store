@@ -14,7 +14,9 @@ const Wrapper = styled.div`
 `;
 
 const PageOverlay = () => {
-  const { isOpen } = useContext(UIContext);
+  const {
+    sidePanel: { isOpen },
+  } = useContext(UIContext);
 
   return <Wrapper isVisible={isOpen || 0} />;
 };

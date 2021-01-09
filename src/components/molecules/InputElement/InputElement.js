@@ -6,7 +6,6 @@ import { useField } from 'formik';
 
 export const InputWrapper = styled.div`
   width: 100%;
-  max-width: 300px;
 `;
 
 const Label = styled.label`

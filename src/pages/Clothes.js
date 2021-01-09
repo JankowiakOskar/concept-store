@@ -55,6 +55,7 @@ const Clothes = () => {
     },
     handleWishlist,
   } = useContext(StoreContext);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

@@ -17,7 +17,6 @@ const ArticleWrapper = styled.article`
   padding: 10px;
   position: relative;
   max-height: 200px;
-  max-width: 300px;
   display: grid;
   grid-template-columns: 1.5fr 3fr;
   grid-template-rows: 1fr;
@@ -86,6 +85,11 @@ const DeleteIcon = styled(DeleteForeverIcon)`
   right: 1px;
   font-size: 2.5rem !important;
   fill: ${({ theme }) => theme.grey100} !important;
+  cursor: pointer;
+
+  &:hover {
+    fill: ${({ theme }) => theme.black} !important;
+  }
 `;
 
 const ShoppingArticle = ({
