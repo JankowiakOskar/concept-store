@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
 import { useParams, useLocation } from 'react-router-dom';
 import { getFromArrByID, setItemToLocalStorage } from 'helpers';
+import LoadingProvider from 'providers/LoadingProvider';
 import Carousel from 'components/organisms/Carousel/Carousel';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
 import DetailProductTemplate from 'templates/DetailProductTemplate';
 import SectionTemplate from 'templates/SectionTemplate';
-import LoadingProvider from 'providers/LoadingProvider';
 
 const Wrapper = styled.div`
   padding: 120px 20px;

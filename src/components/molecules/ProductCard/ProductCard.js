@@ -185,7 +185,7 @@ ProductCard.propTypes = {
   pictureURL: PropTypes.string,
   handleWishlist: PropTypes.func,
   onWishlist: PropTypes.bool,
-  cardType: PropTypes.oneOf(['productCard', 'wishedCard', '']).isRequired,
+  cardType: PropTypes.oneOf(['productCard', 'wishedCard', '']),
   removeFromWishlist: PropTypes.func,
 };
 
@@ -198,6 +198,7 @@ ProductCard.defaultProps = {
   handleWishlist: () => {},
   removeFromWishlist: () => {},
   onWishlist: false,
+  cardType: '',
 };
 
 export default ProductCard;

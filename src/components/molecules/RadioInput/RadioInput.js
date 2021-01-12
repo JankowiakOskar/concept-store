@@ -11,6 +11,7 @@ const RadioInputWrapper = styled.div`
   align-items: center;
   color: ${({ theme }) => theme.grey200};
   transition: all 0.15s ease-in;
+  cursor: pointer;
 
   ${({ isSelected }) =>
     isSelected &&
@@ -75,7 +76,7 @@ const RadioInput = ({ label, value, setActive, className }) => {
     >
       <ContentWrapper>
         <RadioLabel>{label}</RadioLabel>
-        <RadioElement type="radio" value={value} checked={value} />
+        <RadioElement type="radio" value={value} />
         <CustomRadioInput isSelected={value} />
       </ContentWrapper>
     </RadioInputWrapper>

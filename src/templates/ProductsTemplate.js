@@ -4,6 +4,7 @@ import { UIContext } from 'contexts/GlobalUIContext';
 import { FilterContext } from 'contexts/FilterContext';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import TransitionProvider from 'providers/TransitionProvider';
 import EmptyCart from 'components/molecules/EmptyCart/EmptyCart';
 import Button from 'components/atoms/Button/Button';
 import Loader from 'react-loader-spinner';
@@ -14,7 +15,7 @@ import FilterForm from 'components/organisms/FilterForm/FilteForm';
 import GridTemplate from 'templates/GridTemplate';
 
 const Wrapper = styled.div`
-  height: auto;
+  min-height: 100vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -138,44 +139,46 @@ const ProductsTemplate = ({ children, className, isAllProductsFetched }) => {
     fetchProducts({ ...allFilters, sortMethod: sort });
   };
   return (
-    <Wrapper className={className}>
-      <SortsWrapper>
-        <FilterButton onClick={() => setOpenSidePanel(filter)}>
-          Filter <FilterIcon />
-        </FilterButton>
-        <StyledDropdown
-          title={isSortMethodSelected ? sortMethod.label : 'Sort methods'}
-          listType="labels"
-          list={sortOptions}
-          setValue={handleSorting}
-        />
-      </SortsWrapper>
-      <InnerWrapper>
-        <Aside>
-          <StyledFilterForm />
-        </Aside>
-        <StyledGridTemplate>
-          {children}
-          {notFoundProducts && (
-            <EmptyCartWrapper>
-              <EmptyCart
-                title="We can't match any products"
-                description="Please, change your filters"
-              />
-            </EmptyCartWrapper>
-          )}
-        </StyledGridTemplate>
-      </InnerWrapper>
-      {!isAllProductsFetched && (
-        <StyledButton onClick={() => fetchProducts(undefined, currProducts)}>
-          {isLoadingProducts ? (
-            <Loader type="ThreeDots" color="#ffffff" height={50} width={50} />
-          ) : (
-            'Load more'
-          )}
-        </StyledButton>
-      )}
-    </Wrapper>
+    <TransitionProvider>
+      <Wrapper className={className}>
+        <SortsWrapper>
+          <FilterButton onClick={() => setOpenSidePanel(filter)}>
+            Filter <FilterIcon />
+          </FilterButton>
+          <StyledDropdown
+            title={isSortMethodSelected ? sortMethod.label : 'Sort methods'}
+            listType="labels"
+            list={sortOptions}
+            setValue={handleSorting}
+          />
+        </SortsWrapper>
+        <InnerWrapper>
+          <Aside>
+            <StyledFilterForm />
+          </Aside>
+          <StyledGridTemplate>
+            {children}
+            {notFoundProducts && (
+              <EmptyCartWrapper>
+                <EmptyCart
+                  title="We can't match any products"
+                  description="Please, change your filters"
+                />
+              </EmptyCartWrapper>
+            )}
+          </StyledGridTemplate>
+        </InnerWrapper>
+        {!isAllProductsFetched && (
+          <StyledButton onClick={() => fetchProducts(undefined, currProducts)}>
+            {isLoadingProducts ? (
+              <Loader type="ThreeDots" color="#ffffff" height={50} width={50} />
+            ) : (
+              'Load more'
+            )}
+          </StyledButton>
+        )}
+      </Wrapper>
+    </TransitionProvider>
   );
 };
 

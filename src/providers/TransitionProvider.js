@@ -9,9 +9,10 @@ const wrapperVariants = {
   },
   visible: {
     opacity: 1,
+
     transition: {
       type: 'ease',
-      duration: 0.5,
+      duration: 0.7,
     },
   },
   exit: { opacity: 0 },

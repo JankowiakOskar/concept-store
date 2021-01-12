@@ -9,14 +9,14 @@ const LoadingProvider = ({ children }) => {
   useEffect(() => {
     const handleLoading = () => setLoading(!isLoading);
 
-    if (isLoading) setTimeout(handleLoading, 1200);
+    if (isLoading) setTimeout(handleLoading, 1000);
 
     return () => clearTimeout(handleLoading);
   }, [isLoading]);
 
   return (
     <AnimatePresence exitBeforeEnter>
-      {isLoading ? <LoadingPage /> : children}
+      {isLoading ? <LoadingPage isLoading={isLoading} /> : children}
     </AnimatePresence>
   );
 };

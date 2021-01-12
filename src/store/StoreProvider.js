@@ -26,6 +26,14 @@ const StoreProvider = ({ children }) => {
     addToStore: 'add',
   };
 
+  const numProductsInCart = shoppingCart.reduce((acc, product) => {
+    const { sizes_quantity: sizesQuantity } = product;
+    const [amount] = Object.values(sizesQuantity);
+    // eslint-disable-next-line no-param-reassign
+    acc += amount;
+    return acc;
+  }, 0);
+
   const fetchProducts = (filters, currentProducts) =>
     getProductsAction(dispatch, filters, currentProducts);
 
@@ -72,6 +80,7 @@ const StoreProvider = ({ children }) => {
     removeAllProducts,
     setSelectedID,
     choosenID,
+    shoppingCartAmount: numProductsInCart,
   };
 
   return (

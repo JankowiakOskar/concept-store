@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const useSavedValues = (initialValues) => {
-  const [savedValues, saveValues] = useState(initialValues || {});
+const useSavedValues = (values) => {
+  const [savedValues, saveValues] = useState({});
+
+  useEffect(() => {
+    saveValues(values);
+  }, [values]);
 
   return [savedValues, saveValues];
 };

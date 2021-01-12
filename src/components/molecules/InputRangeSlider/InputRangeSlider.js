@@ -71,7 +71,7 @@ InputRangeSlider.propTypes = {
   className: PropTypes.string,
   minValue: PropTypes.number.isRequired,
   maxValue: PropTypes.number.isRequired,
-  value: PropTypes.objectOf({
+  value: PropTypes.shape({
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
   }).isRequired,

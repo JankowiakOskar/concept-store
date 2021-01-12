@@ -21,6 +21,7 @@ const CheckBoxLabel = styled.label`
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
 
   &:after {
     content: '\\2713';

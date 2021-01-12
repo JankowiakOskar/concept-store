@@ -85,6 +85,8 @@ export const getProducts = async (
   const anyCategorySelected =
     'categoryFilters' in filters && filters.categoryFilters.length;
 
+  const isNumRequestProvided = filters.categoryFilters?.productsNum || false;
+
   const isPriceFilterSelected = 'priceFilters' in filters;
 
   const isSortMethodSelected =
@@ -94,12 +96,14 @@ export const getProducts = async (
     anyCategorySelected &&
     filters.categoryFilters.map(({ categoryName }) => categoryName);
 
-  const numItemsRequest = anyCategorySelected
-    ? filters.categoryFilters.reduce(
-        (acc, { productsNum }) => acc + productsNum,
-        0
-      )
-    : currentProducts.length + limitRequest;
+  const numItemsRequest =
+    anyCategorySelected && isNumRequestProvided
+      ? filters.categoryFilters.reduce(
+          (acc, { productsNum }) => acc + productsNum,
+          0
+        )
+      : currentProducts.length + limitRequest;
+
   dispatch({
     type: FETCHING_PRODUCTS_REQUEST,
     payload: { numItemsRequest },

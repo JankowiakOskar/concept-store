@@ -1,30 +1,46 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { UIContext } from 'contexts/GlobalUIContext';
 import { StoreContext } from 'store/StoreProvider';
 import { getFromArrByID, arrObjectsFromObjectPairs } from 'helpers';
+import useSavedValues from 'hooks/useSavedValues';
 import ProductCard, {
   DescriptionWrapper,
+  OuterImageWrapper,
 } from 'components/molecules/ProductCard/ProductCard';
 import Modal from 'components/organisms/Modal/Modal';
 import AddCartForm from 'components/organisms/AddCartForm/AddCartForm';
 
+const ModalContent = styled.div`
+  padding: 10px 0;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: ${({ theme }) => theme.zIndex.level10};
+`;
+
 const StyledProductCard = styled(ProductCard)`
   &&& {
-    margin: 10px 0 20px;
+    margin: 10px 0px;
     flex-direction: row;
-    align-items: flex-start;
-
+    align-items: center;
+    justify-content: flex-start;
     ${DescriptionWrapper} {
-      margin: 10px 0 0 20px;
+      margin: 0 0 0 20px;
+    }
+
+    ${OuterImageWrapper} {
+      max-width: 120px;
     }
   }
 `;
 
-const ModalContent = styled.div`
-  position: relative;
-  z-index: ${({ theme }) => theme.zIndex.level10};
+const AddCartFormWrapper = styled.div`
+  width: 100%;
+  margin: 10px 0;
 `;
 
 const ProductModalProvider = ({ children }) => {
@@ -36,19 +52,25 @@ const ProductModalProvider = ({ children }) => {
       modalTypes: { addNewProduct },
     },
   } = useContext(UIContext);
-
   const {
-    data: { products, shoppingCart },
+    data: { products },
     choosenID,
     setSelectedID,
+    shoppingCartAmount,
   } = useContext(StoreContext);
+
+  const [savedValues] = useSavedValues(shoppingCartAmount);
 
   const closeModal = () => {
     toggleModal();
     setSelectedID('');
   };
 
-  useCallback(() => closeModal(), [shoppingCart, closeModal]);
+  useEffect(() => {
+    if (isOpen && savedValues !== shoppingCartAmount) {
+      closeModal();
+    }
+  });
 
   const RenderModalContent = () => {
     const choosenProduct = getFromArrByID(products, choosenID);
@@ -67,10 +89,12 @@ const ProductModalProvider = ({ children }) => {
     return (
       <ModalContent>
         <StyledProductCard id={id} name={name} price={price} pictureURL={url} />
-        <AddCartForm
-          product={choosenProduct}
-          sizesQuantity={formatedSizesQuantity}
-        />
+        <AddCartFormWrapper>
+          <AddCartForm
+            product={choosenProduct}
+            sizesQuantity={formatedSizesQuantity}
+          />
+        </AddCartFormWrapper>
       </ModalContent>
     );
   };

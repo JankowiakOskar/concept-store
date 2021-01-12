@@ -18,8 +18,8 @@ const Wrapper = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.grey300};
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
   z-index: ${({ theme }) => theme.zIndex.level9};
-  background-color: ${({ isOverScrolled, theme }) =>
-    isOverScrolled ? theme.white : 'transparent'};
+  background-color: ${({ $scrolled, theme }) =>
+    $scrolled ? theme.white : 'transparent'};
   transition: background-color 0.2s 0.1s ease;
 `;
 
@@ -86,8 +86,7 @@ const StyledLink = styled(Link)`
   align-items: center;
   text-decoration: none;
   font-weight: ${({ theme }) => theme.font.weight.bold};
-  color: ${({ theme, isOverScrolled }) =>
-    isOverScrolled ? theme.black : theme.white};
+  color: ${({ theme, $scrolled }) => ($scrolled ? theme.black : theme.white)};
 
   transition: all 0.15s ease-in-out;
 `;
@@ -147,16 +146,16 @@ const NavBar = () => {
   const [numWishedProducts] = useNumStoredItems('wishlist');
   const [numProductsInBasket] = useNumStoredItems('shoppingCart');
   return (
-    <Wrapper isOverScrolled={scrollYPos > 100}>
+    <Wrapper $scrolled={scrollYPos > 100}>
       <Nav>
         <MenuList>
           <MenuElement>
-            <StyledLink isOverScrolled={scrollYPos > 100} to={routes.home}>
+            <StyledLink $scrolled={scrollYPos > 100} to={routes.home}>
               Home
             </StyledLink>
           </MenuElement>
           <MenuElement>
-            <StyledLink isOverScrolled={scrollYPos > 100} to={routes.clothes}>
+            <StyledLink $scrolled={scrollYPos > 100} to={routes.clothes}>
               Clothes
             </StyledLink>
           </MenuElement>

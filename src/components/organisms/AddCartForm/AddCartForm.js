@@ -30,15 +30,17 @@ const ButtonsWrapper = styled.div`
 `;
 
 const StyledButton = styled(Button)`
-  display: inline-flex;
+  padding: 0;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 200px;
+  height: 55px;
 `;
 
 const StyledShopingCartIcon = styled(ShoppingCartIcon)`
   ${baseIconStyle}
+  margin: 0 10px 0 0;
   fill: ${({ theme }) => theme.white} !important;
 `;
 
@@ -125,7 +127,7 @@ const AddCartForm = ({
         </StyledButton>
         {handleWishlist && (
           <FavoriteIconButton type="button" onClick={handleWishlist}>
-            <FavoriteIcon isFavorite={isOnWishlist} />
+            <FavoriteIcon $isFavorite={isOnWishlist} />
           </FavoriteIconButton>
         )}
       </ButtonsWrapper>

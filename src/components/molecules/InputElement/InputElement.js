@@ -64,7 +64,7 @@ InputElement.propTypes = {
   type: PropTypes.string.isRequired,
   error: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType(PropTypes.string, PropTypes.number),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   placeholder: PropTypes.string,
   className: PropTypes.string,
 };
