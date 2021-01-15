@@ -10,7 +10,9 @@ import DetailProductTemplate from 'templates/DetailProductTemplate';
 import SectionTemplate from 'templates/SectionTemplate';
 
 const Wrapper = styled.div`
-  padding: 120px 20px;
+  padding: 120px 20px 0;
+  max-width: 1500px;
+  margin: 0 auto;
 `;
 
 const ProductWrapper = styled.div`

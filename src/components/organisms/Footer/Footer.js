@@ -1,7 +1,10 @@
 import React from 'react';
 import useWindowWidth from 'hooks/useWindowWidth';
 import styled, { css } from 'styled-components';
-import Accordion from 'components/molecules/Accordion/Accordion';
+import Accordion, {
+  AccordionHeader,
+  AccordionList,
+} from 'components/molecules/Accordion/Accordion';
 import { ReactComponent as FaceBookIcon } from 'assets/svgs/FacebookIcon.svg';
 import { ReactComponent as InstagramIcon } from 'assets/svgs/InstagramIcon.svg';
 import { ReactComponent as YouTubeIcon } from 'assets/svgs/YoutubeIcon.svg';
@@ -18,19 +21,28 @@ const AccordionsWrapper = styled.div`
 `;
 
 const FooterDescription = styled.div`
-  color: ${({ theme }) => theme.white};
+  color: ${({ theme }) => theme.primaryLight};
   font-weight: ${({ theme }) => theme.font.weight.bold};
-  text-align: center;
-  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
 
   ${({ theme }) => theme.mq.tablet} {
-    border-top: 1px solid ${(theme) => theme.grey500};
+    justify-content: flex-start;
   }
 `;
 
 const iconStyle = css`
   fill: ${({ theme }) => theme.grey300};
+
   margin: 0 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    fill: ${({ theme }) => theme.primaryLight};
+  }
 `;
 
 const StyledFaceBookIcon = styled(FaceBookIcon)`
@@ -49,52 +61,46 @@ const FooterWrapper = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.black};
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+`;
+
+const InnerWrapper = styled.div`
+  margin: 0 auto;
+  max-width: 1500px;
 
   ${({ theme }) => theme.mq.tablet} {
-    & {
-      padding: 20px 20px;
-    }
+    padding: 50px 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 
     ${IconsWrapper} {
-      width: 20%;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
 
       & > * {
-        margin: 10px 0;
+        margin: 0 0 10px 0;
       }
     }
 
     ${AccordionsWrapper} {
       flex-direction: row;
-      width: 80%;
       justify-content: space-between;
+      flex-basis: 70%;
+
+      ${AccordionHeader} {
+        padding: 0px 50px 20px 0px;
+      }
+
+      ${AccordionList} {
+        padding: 0px;
+      }
     }
 
     ${FooterDescription} {
       width: 100%;
     }
-  }
-`;
-
-const InnerWrapper = styled.div`
-  width: 100%;
-  margin: 0 auto;
-  max-width: 1500px;
-
-  ${({ theme }) => theme.mq.tablet} {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  ${({ theme }) => theme.mq.bigTablet} {
-    padding: 0 40px;
-  }
-
-  ${({ theme }) => theme.mq.desktop} {
-    padding: 0 80px;
   }
 `;
 

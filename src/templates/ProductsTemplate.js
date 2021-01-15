@@ -15,7 +15,7 @@ import FilterForm from 'components/organisms/FilterForm/FilteForm';
 import GridTemplate from 'templates/GridTemplate';
 
 const Wrapper = styled.div`
-  min-height: 100vh;
+  height: auto;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

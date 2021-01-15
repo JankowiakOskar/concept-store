@@ -45,7 +45,7 @@ const StyledProductCard = styled(ProductCard)`
 
 const StyledCategoryCard = styled(CategoryCard)`
   ${({ theme }) => theme.mq.tablet} {
-    height: 350px;
+    height: 280px;
   }
 `;
 

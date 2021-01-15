@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import RestoreIcon from '@material-ui/icons/Restore';
@@ -51,9 +52,9 @@ const ReturnIcon = styled(RestoreIcon)`
   fill: ${({ theme }) => theme.black} !important;
 `;
 
-const ServicesBox = () => {
+const ServicesBox = ({ className }) => {
   return (
-    <ServicesWrapper>
+    <ServicesWrapper className={className}>
       <Service>
         <DeliveryIcon />
         <ServiceDescription>Delivery within 3 business days</ServiceDescription>
@@ -68,6 +69,14 @@ const ServicesBox = () => {
       </Service>
     </ServicesWrapper>
   );
+};
+
+ServicesBox.propTypes = {
+  className: PropTypes.string,
+};
+
+ServicesBox.defaultProps = {
+  className: '',
 };
 
 export default ServicesBox;

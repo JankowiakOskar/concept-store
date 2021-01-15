@@ -15,14 +15,20 @@ const Form = styled.form`
   width: 100%;
 `;
 
+const StyledDropdown = styled(Dropdown)`
+  &&& {
+    max-width: none;
+  }
+`;
+
 const StyledCounterQuantity = styled(CounterQuantity)`
   ${CounterWrapper} {
-    margin: 15px 0 0 0;
+    margin: 20px 0 0 0;
   }
 `;
 
 const ButtonsWrapper = styled.div`
-  max-width: 300px;
+  width: 100%;
   margin: 20px 0 0 0;
   display: flex;
   align-items: center;
@@ -107,7 +113,7 @@ const AddCartForm = ({
 
   return (
     <Form>
-      <Dropdown
+      <StyledDropdown
         error={error}
         setError={setError}
         setValue={setChoosenSize}

@@ -12,7 +12,7 @@ const wrapperVariants = {
 
     transition: {
       type: 'ease',
-      duration: 0.7,
+      duration: 0.5,
     },
   },
   exit: { opacity: 0 },

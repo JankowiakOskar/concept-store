@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 
-const AccordionHeader = styled.div`
+export const AccordionHeader = styled.div`
   padding: 10px 20px;
   width: 100%;
   font-size: ${({ theme }) => theme.font.size.medium};
@@ -24,12 +24,14 @@ const ArrowIcon = styled(ArrowDropDownIcon)`
   transition: transform 0.2s ease !important;
 `;
 
-const AccordionList = styled(motion.ul)`
+export const AccordionList = styled(motion.ul)`
   padding: 0 20px 10px;
   list-style: none;
 `;
 
-const ListElement = styled.li``;
+const ListElement = styled.li`
+  color: ${({ theme }) => theme.primaryLight};
+`;
 
 const AccordionWrapper = styled.div`
   display: flex;
@@ -83,7 +85,7 @@ const listVariants = {
   },
 };
 
-const Accordion = ({ isActive, title, list }) => {
+const Accordion = ({ className, isActive, title, list }) => {
   const [isCollapse, setCollapse] = useState(false);
 
   const handleClick = () => {
@@ -96,7 +98,11 @@ const Accordion = ({ isActive, title, list }) => {
   }, [isActive]);
 
   return (
-    <AccordionWrapper isActive={isActive} onClick={handleClick}>
+    <AccordionWrapper
+      className={className}
+      isActive={isActive}
+      onClick={handleClick}
+    >
       <AccordionHeader>
         {title} <ArrowIcon collapse={isCollapse ? 1 : 0} />
       </AccordionHeader>
@@ -115,12 +121,14 @@ const Accordion = ({ isActive, title, list }) => {
 };
 
 Accordion.propTypes = {
+  className: PropTypes.string,
   isActive: PropTypes.bool,
   title: PropTypes.string.isRequired,
   list: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
 };
 
 Accordion.defaultProps = {
+  className: '',
   isActive: false,
 };
 

@@ -22,6 +22,7 @@ export const ProductWrapper = styled.div`
 `;
 
 export const ProductImage = styled(motion.img)`
+  position: relative;
   width: 100%;
   height: 100%;
   transition: transform 0.3s ease-out;
@@ -34,7 +35,7 @@ export const OuterImageWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.74);
+  overflow: hidden;
 `;
 
 export const ImageWrapper = styled.div`
@@ -42,24 +43,6 @@ export const ImageWrapper = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  ${({ theme }) => theme.mq.desktop} {
-    &:hover {
-      ${ProductImage} {
-        transform: scale(1.1);
-      }
-    }
-  }
 `;
 
 const IconCardStyle = css`
@@ -153,7 +136,11 @@ const ProductCard = ({
       <OuterImageWrapper>
         <Link to={`${routes.clothes}/${id}`}>
           <ImageWrapper>
-            <ProductImage src={`http://192.168.100.17:8001${pictureURL}`} />
+            <ProductImage
+              src={`http://192.168.100.17:8001${pictureURL}`}
+              whileHover={{ scale: 1.09 }}
+              transition={{ type: 'easeIn', duration: 0.3 }}
+            />
           </ImageWrapper>
         </Link>
         {cardType === 'productCard' && (

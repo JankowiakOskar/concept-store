@@ -33,12 +33,8 @@ const Nav = styled.nav`
   align-items: center;
   justify-content: space-between;
 
-  ${({ theme }) => theme.mq.bigTablet} {
+  ${({ theme }) => theme.mq.tablet} {
     padding: 0px 40px 0;
-  }
-
-  ${({ theme }) => theme.mq.desktop} {
-    padding: 0px 100px 0;
   }
 `;
 

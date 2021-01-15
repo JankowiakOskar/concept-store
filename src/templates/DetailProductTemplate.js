@@ -9,24 +9,44 @@ import ServicesBox from 'components/molecules/ServicesBox/ServicesBox';
 
 const Wrapper = styled.div`
   width: 100%;
-  min-height: 100vh;
+
+  ${({ theme }) => theme.mq.tablet} {
+    max-height: 70vh;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    min-height: 100vh;
+  }
 `;
 
 const DetailWrapper = styled.div`
-  max-width: 1500px;
-  margin: 0 auto;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
 
   ${({ theme }) => theme.mq.tablet} {
+    padding: 30px 20px;
     flex-direction: row;
+    justify-content: center;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    min-height: 100vh;
+    justify-content: flex-start;
+  }
+`;
+
+const OuterImageWrapper = styled.div`
+  ${({ theme }) => theme.mq.tablet} {
+    padding: 0 30px 0 0;
+    height: 100vh;
   }
 `;
 
 const ImageWrapper = styled.div`
-  position: relative;
+  min-height: 392px;
   max-height: 600px;
   max-width: 500px;
 `;
@@ -42,10 +62,25 @@ const DescriptionWrapper = styled.div`
   margin: 10px 0 0 0;
 
   ${({ theme }) => theme.mq.tablet} {
+    margin: 0;
     display: flex;
     flex-direction: column;
-    margin: 0;
-    padding: 50px 200px;
+    max-width: 300px;
+  }
+
+  ${({ theme }) => theme.mq.bigTablet} {
+    max-width: 400px;
+    margin: 0 0 0 50px;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
+    margin: 0 0 0 200px;
+  }
+`;
+
+const StyledServicesBox = styled(ServicesBox)`
+  &&& {
+    margin: 40px 0;
   }
 `;
 
@@ -77,11 +112,13 @@ const DetailProductTemplate = ({ product }) => {
   return (
     <Wrapper>
       <DetailWrapper>
-        <TransitionProvider>
-          <ImageWrapper>
-            <Image src={`http://192.168.100.17:8001${url}`} />
-          </ImageWrapper>
-        </TransitionProvider>
+        <OuterImageWrapper>
+          <TransitionProvider>
+            <ImageWrapper>
+              <Image src={`http://192.168.100.17:8001${url}`} />
+            </ImageWrapper>
+          </TransitionProvider>
+        </OuterImageWrapper>
         <DescriptionWrapper>
           <TitleProduct>{name}</TitleProduct>
           <Price>{price} €</Price>
@@ -95,7 +132,7 @@ const DetailProductTemplate = ({ product }) => {
               )}
             />
           </FormWrapper>
-          <ServicesBox />
+          <StyledServicesBox />
         </DescriptionWrapper>
       </DetailWrapper>
     </Wrapper>

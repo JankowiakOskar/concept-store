@@ -6,6 +6,7 @@ import GlobalStyle from 'assets/styles/GlobalStyle';
 import StoreProvider from 'store/StoreProvider';
 import GlobalUIProvider from 'contexts/GlobalUIContext';
 import FilterProvider from 'contexts/FilterContext';
+import useScrollToTop from 'hooks/useScrollToTop';
 import PageOverlay from 'components/molecules/PageOverlay/PageOverlay';
 import Navbar from 'components/organisms/NavBar/NavBar';
 import SidePanel from 'components/organisms/SidePanel/SidePanel';
@@ -18,20 +19,16 @@ import 'react-toastify/dist/ReactToastify.css';
 const StyledSectionTemplate = styled(SectionTemplate)`
   &&& {
     padding: 0px 20px;
-
+    max-width: 1500px;
+    margin: 0 auto;
     @media (min-width: 767px) {
       padding: 30px 40px;
-    }
-
-    @media (min-width: 1024px) {
-      max-width: 1500px;
-      margin: 0 auto;
-      padding: 30px 80px;
     }
   }
 `;
 
 const MainTemplate = ({ children }) => {
+  useScrollToTop();
   return (
     <>
       <ThemeProvider theme={theme}>
