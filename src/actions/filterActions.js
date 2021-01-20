@@ -7,6 +7,7 @@ export const GET_CATEGORIES_FAILURE = 'GET_CAREGORIES_FAILURE';
 export const SET_SELECTED_FILTERS = 'SET_SELECTED_FILTERS';
 export const SET_PRICE_FILTERS = 'SET_PRICE_FILTERS';
 export const SET_SORT_METHOD = 'SET_SORT_METHOD';
+export const SET_SEARCH_VALUE = 'SET_SEARCH_VALUE';
 export const REMOVE_ALL_FILTERS = 'REMOVE_ALL_FILTERS';
 
 export const getCategories = async (dispatch) => {
@@ -41,6 +42,10 @@ export const setPriceFilters = (dispatch, filters) => {
 
 export const setSortMethod = (dispatch, sortMethod) => {
   dispatch({ type: SET_SORT_METHOD, payload: { sortMethod } });
+};
+
+export const setSearchValue = (dispatch, searchValue) => {
+  dispatch({ type: SET_SEARCH_VALUE, payload: { searchValue } });
 };
 
 export const removeAllFilters = (dispatch) =>

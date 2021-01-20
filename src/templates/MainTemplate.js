@@ -29,6 +29,7 @@ const StyledSectionTemplate = styled(SectionTemplate)`
 
 const MainTemplate = ({ children }) => {
   useScrollToTop();
+
   return (
     <>
       <ThemeProvider theme={theme}>

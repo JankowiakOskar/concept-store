@@ -4,7 +4,10 @@ import styled from 'styled-components';
 import { FilterContext } from 'contexts/FilterContext';
 import { StoreContext } from 'store/StoreProvider';
 import CheckBoxElement from 'components/molecules/CheckBoxElement/CheckBoxElement';
-import Button from 'components/atoms/Button/Button';
+import Button, {
+  HoverPrimaryDarkBtn,
+  HoverPrimaryBtn,
+} from 'components/atoms/Button/Button';
 import InputRangeSlider from 'components/molecules/InputRangeSlider/InputRangeSlider';
 
 const Form = styled.form`
@@ -46,22 +49,20 @@ const StyledButton = styled(Button)`
   background-color: ${({ theme }) => theme.primary};
   width: 150px;
   height: 30px;
+  ${HoverPrimaryDarkBtn}
 `;
 
 const StyledButtonClear = styled(Button)`
   margin: 0 0 0 20px;
   width: 100px;
   height: 30px;
+
+  ${HoverPrimaryBtn};
 `;
 
-const FilterForm = ({
-  className,
-  handleClosePanel,
-  saveValues,
-  savedValues,
-}) => {
+const FilterForm = ({ className, handleClosePanel }) => {
   const {
-    state: { categoriesOptions, priceFilters },
+    state: { categoriesOptions, priceFilters, categoryFilters },
     allFilters,
     setPriceFilters,
     setCategoryFilters,
@@ -69,13 +70,17 @@ const FilterForm = ({
 
   const { fetchProducts, removeAllProducts } = useContext(StoreContext);
 
-  const initialValues = Object.keys(savedValues).length
-    ? savedValues
-    : categoriesOptions.reduce((initialState, { categoryName }) => {
-        // eslint-disable-next-line no-param-reassign
-        initialState[categoryName] = false;
-        return initialState;
-      }, {});
+  const initialValues = categoriesOptions.reduce(
+    (initialState, { categoryName }) => {
+      const isFilterSelected = categoryFilters.some(
+        (category) => category.categoryName === categoryName
+      );
+      // eslint-disable-next-line no-param-reassign
+      initialState[categoryName] = isFilterSelected;
+      return initialState;
+    },
+    {}
+  );
 
   const [filterValues, setFilterValues] = useState(initialValues);
 
@@ -89,14 +94,14 @@ const FilterForm = ({
   const handleSubmit = (e, values) => {
     e.preventDefault();
     const currValues = values;
-    const categoryFilters = categoriesOptions.filter(
+    const selectedFilters = categoriesOptions.filter(
       ({ categoryName }) => currValues[categoryName]
     );
-    saveValues(currValues);
-    setCategoryFilters(categoryFilters);
+
+    setCategoryFilters(selectedFilters);
     removeAllProducts();
     handleClosePanel();
-    fetchProducts({ ...allFilters, categoryFilters });
+    fetchProducts({ ...allFilters, categoryFilters: selectedFilters });
   };
 
   const clearAll = (valuesObj) => {
@@ -150,16 +155,13 @@ const FilterForm = ({
 
 FilterForm.propTypes = {
   className: PropTypes.string,
-  saveValues: PropTypes.func,
-  savedValues: PropTypes.objectOf(PropTypes.bool),
+
   handleClosePanel: PropTypes.func,
 };
 
 FilterForm.defaultProps = {
   className: '',
-  saveValues: () => {},
   handleClosePanel: () => {},
-  savedValues: {},
 };
 
 export default FilterForm;

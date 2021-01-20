@@ -16,7 +16,7 @@ const MediumBoldText = css`
 `;
 
 const Wrapper = styled.div`
-  min-width: 300px;
+  min-width: 310px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -132,7 +132,9 @@ const CartSummary = ({
             const subtotalPrice = (price * amount).toFixed(2);
             return (
               <Item key={id + size}>
-                <ItemHeading>2 x {itemName}</ItemHeading>
+                <ItemHeading>
+                  {amount} x {itemName}
+                </ItemHeading>
                 <ItemBody>
                   <ItemDescription>Size: {size}</ItemDescription>
                 </ItemBody>

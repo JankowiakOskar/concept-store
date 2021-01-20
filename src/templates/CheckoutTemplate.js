@@ -14,7 +14,6 @@ const Wrapper = styled.div``;
 
 const FlexWrapper = styled.div`
   ${({ theme }) => theme.mq.tablet} {
-    padding: 0 30px;
     height: auto;
     display: flex;
     align-items: flex-start;

@@ -1,26 +1,37 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import routes from 'routes';
 import { UIContext } from 'contexts/GlobalUIContext';
-import styled from 'styled-components';
-import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
+import styled, { css } from 'styled-components';
+import { motion } from 'framer-motion';
+import {
+  baseIconStyle,
+  hoverIconStyle,
+} from 'components/atoms/ExternalIcon/ExternalIcon';
 import { ReactComponent as Logo } from 'assets/svgs/Logo.svg';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import NotesIcon from '@material-ui/icons/Notes';
 import useScrollPos from 'hooks/useScrollPos';
 import useNumStoredItems from 'hooks/useNumStoredItems';
+import SearchForm from 'components/organisms/SearchForm/SearchForm';
+import useWindowWidth from 'hooks/useWindowWidth';
 
 const Wrapper = styled.div`
   position: fixed;
   width: 100%;
   height: 80px;
-  border-bottom: 1px solid ${({ theme }) => theme.grey300};
+  border-bottom: 1px solid ${({ theme }) => theme.grey400};
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
   z-index: ${({ theme }) => theme.zIndex.level9};
-  background-color: ${({ $scrolled, theme }) =>
-    $scrolled ? theme.white : 'transparent'};
-  transition: background-color 0.2s 0.1s ease;
+  background-color: ${({ theme }) => theme.white};
+  transition: all 0.2s 0.1s ease-in-out;
+
+  ${({ $isHomePage, $scrolled, theme }) =>
+    $isHomePage &&
+    css`
+      background-color: ${$scrolled ? theme.white : 'transparent'};
+    `}
 `;
 
 const Nav = styled.nav`
@@ -34,6 +45,10 @@ const Nav = styled.nav`
   justify-content: space-between;
 
   ${({ theme }) => theme.mq.tablet} {
+    padding: 0px 20px 0;
+  }
+
+  ${({ theme }) => theme.mq.desktop} {
     padding: 0px 40px 0;
   }
 `;
@@ -41,18 +56,18 @@ const Nav = styled.nav`
 const MenuList = styled.ul`
   display: none;
   ${({ theme }) => theme.mq.bigTablet} {
+    height: 100%;
     flex: 3 1 0%;
     display: block;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    color: ${({ theme }) => theme.white};
   }
 `;
 
 const MenuElement = styled.li`
+  height: 100%;
   width: 100px;
-
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -77,27 +92,44 @@ const LogoWrapper = styled.div`
   align-items: center;
 `;
 
-const StyledLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  font-weight: ${({ theme }) => theme.font.weight.bold};
-  color: ${({ theme, $scrolled }) => ($scrolled ? theme.black : theme.white)};
+const activeClassName = 'nav-item--active';
 
-  transition: all 0.15s ease-in-out;
+const StyledLink = styled(NavLink).attrs({ activeClassName })`
+  text-decoration: none;
+  height: 100%;
+  color: ${({ theme }) => theme.black};
+  transition: all 0.15s ease-out;
+
+  ${({ $isHomePage, $scrolled, theme }) =>
+    $isHomePage &&
+    css`
+      color: ${$scrolled ? theme.black : theme.white};
+    `}
+
+  &.${activeClassName} {
+    color: ${({ theme }) => theme.primary};
+    font-weight: ${({ theme }) => theme.font.weight.bold};
+  }
+
+  &:hover {
+    color: ${({ theme }) => theme.primary};
+  }
 `;
 
 const ElementWrapper = styled.div`
   position: relative;
   display: flex;
+  padding: 5px;
   ${({ theme }) => theme.mq.tablet} {
     margin: 0 20px;
   }
+
+  ${hoverIconStyle}
 `;
 
-const Circle = styled.span`
+const Circle = styled(motion.span)`
   position: absolute;
-  top: -5px;
+  top: -3px;
   right: -8px;
   width: 16px;
   height: 16px;
@@ -109,6 +141,7 @@ const Circle = styled.span`
   font-size: ${({ theme }) => theme.font.size.small};
   border-radius: 50%;
   background-color: ${({ theme }) => theme.primaryDark};
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
 `;
 
 const StyledLogo = styled(Logo)`
@@ -126,10 +159,16 @@ const BasketIcon = styled(ShoppingBasketIcon)`
 const HamburgerIcon = styled(NotesIcon)`
   ${baseIconStyle}
 
-  ${({ theme }) => theme.mq.bigTablet} {
+  ${({ theme }) => theme.mq.desktop} {
     display: none !important;
   }
 `;
+
+const circleVariants = {
+  animate: {
+    scale: [1, 1.2, 1],
+  },
+};
 
 const NavBar = () => {
   const {
@@ -138,36 +177,60 @@ const NavBar = () => {
       panelTypes: { menu, cart },
     },
   } = useContext(UIContext);
+  const overDesktopMedia = '(min-width: 1150px)';
+
+  const { pathname } = useLocation();
+
   const [scrollYPos] = useScrollPos(window);
   const [numWishedProducts] = useNumStoredItems('wishlist');
   const [numProductsInBasket] = useNumStoredItems('shoppingCart');
+
+  const [isMatchedWidth] = useWindowWidth(overDesktopMedia);
+
+  const isHomePage = pathname === routes.home;
+  const scrollOver100 = scrollYPos > 100;
+
   return (
-    <Wrapper $scrolled={scrollYPos > 100}>
+    <Wrapper $isHomePage={isHomePage} $scrolled={scrollOver100}>
       <Nav>
         <MenuList>
-          <MenuElement>
-            <StyledLink $scrolled={scrollYPos > 100} to={routes.home}>
-              Home
-            </StyledLink>
-          </MenuElement>
-          <MenuElement>
-            <StyledLink $scrolled={scrollYPos > 100} to={routes.clothes}>
-              Clothes
-            </StyledLink>
-          </MenuElement>
+          <StyledLink
+            $isHomePage={isHomePage}
+            $scrolled={scrollYPos > 100}
+            exact
+            to={routes.home}
+          >
+            <MenuElement>Home</MenuElement>
+          </StyledLink>
+          <StyledLink
+            $isHomePage={isHomePage}
+            $scrolled={scrollYPos > 100}
+            to={routes.clothes}
+          >
+            <MenuElement>Clothes</MenuElement>
+          </StyledLink>
         </MenuList>
         <LogoWrapper>
-          <StyledLink to={routes.home}>
+          <Link exact to={routes.home}>
             <StyledLogo />
-          </StyledLink>
+          </Link>
         </LogoWrapper>
         <NavList>
-          <StyledLink to={routes.wishlist}>
+          {isMatchedWidth && <SearchForm onNavBar />}
+
+          <Link to={routes.wishlist}>
             <ElementWrapper>
               <StyledFavoriteIcon />
-              {numWishedProducts > 0 && <Circle>{numWishedProducts}</Circle>}
+              {numWishedProducts > 0 && (
+                <Circle
+                  variants={circleVariants}
+                  animate={numWishedProducts < 3 && 'animate'}
+                >
+                  {numWishedProducts}
+                </Circle>
+              )}
             </ElementWrapper>
-          </StyledLink>
+          </Link>
           <ElementWrapper onClick={() => setOpenSidePanel(cart)}>
             <BasketIcon />
             {numProductsInBasket > 0 && <Circle>{numProductsInBasket}</Circle>}

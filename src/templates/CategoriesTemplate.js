@@ -24,7 +24,6 @@ const CategoriesWrapper = styled.section`
   }
 
   ${({ theme }) => theme.mq.desktop} {
-    min-height: 500px;
     *,
     *:nth-child(1) {
       flex-basis: 32%;

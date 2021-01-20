@@ -17,3 +17,6 @@
 [0106/001502.990:ERROR:directory_reader_win.cc(43)] FindFirstFile: System nie moze odnalezc okreslonej sciezki. (0x3)
 [0107/205137.105:ERROR:directory_reader_win.cc(43)] FindFirstFile: System nie moze odnalezc okreslonej sciezki. (0x3)
 [0109/140209.416:ERROR:directory_reader_win.cc(43)] FindFirstFile: System nie moze odnalezc okreslonej sciezki. (0x3)
+[0116/213008.562:ERROR:directory_reader_win.cc(43)] FindFirstFile: System nie moze odnalezc okreslonej sciezki. (0x3)
+[0118/174714.288:ERROR:directory_reader_win.cc(43)] FindFirstFile: System nie moze odnalezc okreslonej sciezki. (0x3)
+[0118/194117.321:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\48796\AppData\Local\Google\Chrome\User Data\Crashpad\attachments\950e9013-2625-4147-a0fb-eddbb2027be5: System nie moze odnalezc okreslonej sciezki. (0x3)

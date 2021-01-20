@@ -4,7 +4,7 @@ import { UIContext } from 'contexts/GlobalUIContext';
 import { Link } from 'react-router-dom';
 import routes from 'routes';
 import styled from 'styled-components';
-import button from 'components/atoms/Button/Button';
+import Button, { HoverPrimaryBtn } from 'components/atoms/Button/Button';
 
 export const SummaryWrapper = styled.div`
   padding: 10px 0 0 0;
@@ -26,10 +26,12 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-const StyledButton = styled(button)`
+const StyledButton = styled(Button)`
   margin: 10px 0;
   background-color: ${({ theme }) => theme.black};
   width: 280px;
+
+  ${HoverPrimaryBtn}
 `;
 
 const Taxes = styled.p`

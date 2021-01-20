@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import TransitionProvider from 'providers/TransitionProvider';
 import EmptyCart from 'components/molecules/EmptyCart/EmptyCart';
-import Button from 'components/atoms/Button/Button';
+import Button, { HoverPrimaryBtn } from 'components/atoms/Button/Button';
 import Loader from 'react-loader-spinner';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
@@ -16,7 +16,6 @@ import GridTemplate from 'templates/GridTemplate';
 
 const Wrapper = styled.div`
   height: auto;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,9 +23,11 @@ const Wrapper = styled.div`
 `;
 
 const InnerWrapper = styled.div`
-  display: flex;
-  width: 100%;
   max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+
+  width: 100%;
 `;
 
 const Aside = styled.aside`
@@ -34,7 +35,7 @@ const Aside = styled.aside`
   height: auto;
   margin: 0 30px 0 0;
 
-  ${({ theme }) => theme.mq.bigTablet} {
+  ${({ theme }) => theme.mq.desktop} {
     display: block;
   }
 `;
@@ -55,6 +56,10 @@ const SortsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
+  ${({ theme }) => theme.mq.desktop} {
+    justify-content: flex-end;
+  }
 `;
 
 const StyledDropdown = styled(Dropdown)`
@@ -65,7 +70,13 @@ const StyledDropdown = styled(Dropdown)`
 
 const StyledButton = styled(Button)`
   background-color: ${({ theme }) => theme.grey100};
-  margin: 0 0 50px 0;
+  margin: 50px auto;
+
+  ${HoverPrimaryBtn};
+
+  ${({ theme }) => theme.mq.tablet} {
+    grid-column: 2;
+  }
 `;
 
 const FilterButton = styled.button`
@@ -166,17 +177,24 @@ const ProductsTemplate = ({ children, className, isAllProductsFetched }) => {
                 />
               </EmptyCartWrapper>
             )}
+            {!isAllProductsFetched && (
+              <StyledButton
+                onClick={() => fetchProducts(undefined, currProducts)}
+              >
+                {isLoadingProducts ? (
+                  <Loader
+                    type="ThreeDots"
+                    color="#ffffff"
+                    height={50}
+                    width={50}
+                  />
+                ) : (
+                  'Load more'
+                )}
+              </StyledButton>
+            )}
           </StyledGridTemplate>
         </InnerWrapper>
-        {!isAllProductsFetched && (
-          <StyledButton onClick={() => fetchProducts(undefined, currProducts)}>
-            {isLoadingProducts ? (
-              <Loader type="ThreeDots" color="#ffffff" height={50} width={50} />
-            ) : (
-              'Load more'
-            )}
-          </StyledButton>
-        )}
       </Wrapper>
     </TransitionProvider>
   );

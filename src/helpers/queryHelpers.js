@@ -46,3 +46,6 @@ export const sortQueryFilter = (sortQuery) => {
       return '';
   }
 };
+
+export const searchQueryParam = (searchValue) =>
+  `&name_contains=${searchValue}`;

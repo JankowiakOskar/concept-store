@@ -1,6 +1,12 @@
 /* eslint-disable camelcase */
 export const getFromArrByID = (arr, id) => arr.find((el) => el.id === id);
 
+export const makeFirstLetterUpperCase = (string) => {
+  const firstLetter = string.charAt(0).toUpperCase();
+  const restWord = string.substring(1);
+  return firstLetter + restWord;
+};
+
 export const sumItemsPrices = (itemsArr) => {
   let totalPrice = 0;
   itemsArr.forEach(({ price, sizes_quantity: sizesQuantity }) => {

@@ -124,10 +124,10 @@ const CounterQuantity = ({
           isDisabled={subtractConditionDisabling}
           onClick={(e) => handleCounting(e, quantity, setQuantity)}
         />
-        <AnimatePresence>
+        <AnimatePresence exitBeforeEnter>
           {limitQuantity === quantity && (
             <ToolTip variants={toolTipVariants} animate="animation" exit="exit">
-              Size limit reached !
+              Product limit reached !
             </ToolTip>
           )}
         </AnimatePresence>

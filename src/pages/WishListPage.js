@@ -20,10 +20,6 @@ const InnerWrapper = styled.div`
   ${({ theme }) => theme.mq.bigTablet} {
     padding: 80px 40px 0;
   }
-
-  ${({ theme }) => theme.mq.desktop} {
-    padding: 80px 100px 0;
-  }
 `;
 
 const WishListPage = () => {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getFromArrByID, setItemToLocalStorage } from 'helpers';
 import LoadingProvider from 'providers/LoadingProvider';
 import Carousel from 'components/organisms/Carousel/Carousel';
@@ -13,6 +13,10 @@ const Wrapper = styled.div`
   padding: 120px 20px 0;
   max-width: 1500px;
   margin: 0 auto;
+
+  ${({ theme }) => theme.mq.tablet} {
+    padding: 120px 40px;
+  }
 `;
 
 const ProductWrapper = styled.div`
@@ -26,7 +30,6 @@ const DetailPage = () => {
   } = useContext(StoreContext);
   const storedProductRef = useRef(null);
   const { id: ID } = useParams();
-  const { pathname } = useLocation();
 
   const choosenProduct = getFromArrByID(products, ID);
 
@@ -40,10 +43,6 @@ const DetailPage = () => {
 
     return () => localStorage.removeItem('choosenProduct');
   }, [choosenProduct]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
 
   const getSameCategoryProducts = (arrProducts, selectedProduct) => {
     return arrProducts.filter(

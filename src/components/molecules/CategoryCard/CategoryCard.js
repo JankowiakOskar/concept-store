@@ -1,9 +1,5 @@
-import React, { useContext } from 'react';
-import { StoreContext } from 'store/StoreProvider';
-import { FilterContext } from 'contexts/FilterContext';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import { motion } from 'framer-motion';
-import routes from 'routes';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from 'components/atoms/Button/Button';
@@ -76,21 +72,16 @@ const cardVariants = {
   },
 };
 
-const CategoryCard = ({ className, image, categoryType: categoryName }) => {
-  const { removeAllProducts, fetchProducts } = useContext(StoreContext);
-  const { allFilters } = useContext(FilterContext);
-  const history = useHistory();
-
-  const handleRedirect = () => {
-    setTimeout(() => history.push(routes.clothes), 200);
-    removeAllProducts();
-    fetchProducts({ ...allFilters, categoryFilters: [{ categoryName }] });
-  };
-
+const CategoryCard = ({
+  className,
+  image,
+  categoryType: categoryName,
+  handleRedirect,
+}) => {
   return (
     <WrapperCard
       className={className}
-      onClick={handleRedirect}
+      onClick={() => handleRedirect(categoryName)}
       cardVariants={cardVariants}
       whileHover={{ scale: 1.15, zIndex: 2, opacity: 1 }}
       transition={{ type: 'easeIn', duration: 0.32 }}
@@ -108,10 +99,12 @@ CategoryCard.propTypes = {
   className: PropTypes.string,
   image: PropTypes.string.isRequired,
   categoryType: PropTypes.string.isRequired,
+  handleRedirect: PropTypes.func,
 };
 
 CategoryCard.defaultProps = {
   className: '',
+  handleRedirect: () => {},
 };
 
 export default CategoryCard;

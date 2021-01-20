@@ -20,6 +20,7 @@ const SpecialModalBackground = styled.div`
   height: 100vh;
   z-index: 999999;
   background-color: rgba(0, 0, 0, 0.5);
+  transition: all 0.5s ease-out;
 `;
 
 const Root = () => {

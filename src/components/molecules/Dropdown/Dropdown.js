@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 import useOutsideClick from 'hooks/useOutsideClick';
+import { makeFirstLetterUpperCase } from 'helpers';
 
 const DropDownWrapper = styled.div`
   width: 100%;
@@ -80,7 +81,7 @@ const DropDownElement = styled.li`
   justify-content: space-between;
   padding: 10px 20px;
   border-bottom: 1px solid ${({ theme }) => theme.grey300};
-  transform: all 0.15s 0.2s ease-out;
+  transform: all 0.15s ease-in;
   cursor: pointer;
 
   ${({ isDisabled, theme }) =>
@@ -90,9 +91,10 @@ const DropDownElement = styled.li`
     `};
   ${({ theme }) => theme.mq.desktop} {
     &:hover {
-      background-color: ${({ theme }) => theme.primaryLight};
+      background-color: ${({ theme }) => theme.primary};
+      opacity: 0.9;
       color: ${({ theme }) => theme.white};
-      border-radius: 10px;
+      border-radius: 5px;
     }
   }
   &:last-child {
@@ -100,11 +102,33 @@ const DropDownElement = styled.li`
   }
 `;
 
-const Label = styled.span``;
-
-const PiecesLeft = styled.span`
+const Label = styled.span`
   font-weight: ${({ theme }) => theme.font.weight.bold};
 `;
+
+const PiecesLeft = styled.span``;
+
+const listVariants = {
+  hidden: {
+    opacity: 0,
+  },
+  vissible: {
+    opacity: [0, 0.5, 1],
+    scaleY: [0, 1],
+    transition: {
+      type: 'easeOut',
+      duration: 0.25,
+    },
+  },
+  exit: {
+    opacity: [1, 0.5, 0],
+    scaleY: [1, 0],
+    transition: {
+      type: 'easeIn',
+      duration: 0.15,
+    },
+  },
+};
 
 const Dropdown = ({
   className,
@@ -135,27 +159,7 @@ const Dropdown = ({
     setValuesDependsOfType();
   };
 
-  const listVariants = {
-    hidden: {
-      opacity: 0,
-    },
-    vissible: {
-      opacity: [0, 0.5, 1],
-      scaleY: [0, 1],
-      transition: {
-        type: 'easeOut',
-        duration: 0.25,
-      },
-    },
-    exit: {
-      opacity: [1, 0.5, 0],
-      scaleY: [1, 0],
-      transition: {
-        type: 'easeIn',
-        duration: 0.15,
-      },
-    },
-  };
+  const upperTitle = title && makeFirstLetterUpperCase(title);
 
   return (
     <DropDownWrapper
@@ -165,7 +169,7 @@ const Dropdown = ({
     >
       <DropDownHeader isError={error} isCollapse={isCollapse}>
         <DropDownTitle isError={error}>
-          {error || title || 'Choose size'}
+          {error || upperTitle || 'Choose size'}
         </DropDownTitle>
         <ArrowIcon collapse={isCollapse ? 1 : 0} />
       </DropDownHeader>
@@ -188,7 +192,7 @@ const Dropdown = ({
                   >
                     <Label>{size.toUpperCase()}</Label>{' '}
                     <PiecesLeft>
-                      {!isDisabled ? `Pieces left: ${amount}` : 'not avilable'}
+                      {!isDisabled ? `Pieces left: ${amount}` : 'not available'}
                     </PiecesLeft>
                   </DropDownElement>
                 );

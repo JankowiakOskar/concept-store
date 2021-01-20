@@ -27,7 +27,7 @@ export const adventagesLinks = [
     path: '/',
   },
   {
-    name: '90-day policy return',
+    name: '14-day policy return',
     path: '/',
   },
 ];

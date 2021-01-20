@@ -12,11 +12,10 @@ const Button = styled.button`
   border-radius: 10px;
   font-weight: ${({ theme }) => theme.font.weight.bold};
   font-size: ${({ theme }) => theme.font.size.small};
-  text-shadow: 0 0 5px ${({ theme }) => theme.black};
   color: ${({ theme }) => theme.white};
   text-transform: uppercase;
-
   outline: none;
+  transition: all 0.3s ease-out;
 
   ${({ secondary }) =>
     secondary &&
@@ -45,6 +44,28 @@ export const UnderlineButton = styled.button`
   color: ${({ theme }) => theme.grey100};
   border: none;
   border-bottom: 1px solid ${(theme) => theme.grey};
+`;
+
+export const HoverPrimaryBtn = css`
+  &:hover {
+    background-color: ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.white};
+  }
+`;
+
+export const HoverPrimaryDarkBtn = css`
+  &:hover {
+    background-color: ${({ theme }) => theme.primaryDark};
+    color: ${({ theme }) => theme.white};
+  }
+`;
+
+export const HoverBlackBtn = css`
+  &:hover {
+    background-color: ${({ theme }) => theme.black};
+    opacity: 0.9;
+    color: ${({ theme }) => theme.primaryLight};
+  }
 `;
 
 export default Button;

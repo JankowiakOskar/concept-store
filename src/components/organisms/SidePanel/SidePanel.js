@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import routes from 'routes';
 import { UIContext } from 'contexts/GlobalUIContext';
 import { StoreContext } from 'store/StoreProvider';
 import styled, { css } from 'styled-components';
@@ -8,9 +9,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import CloseIconComponent from 'components/atoms/CloseIconComponent/CloseIconComponent';
 import ShopingCartTemplate from 'templates/ShoppingCartTemplate';
 import MenuList from 'components/molecules/MenuList/MenuList';
-import routes from 'routes';
+import SearchForm from 'components/organisms/SearchForm/SearchForm';
 import FilterForm from 'components/organisms/FilterForm/FilteForm';
-import useSavedValues from 'hooks/useSavedValues';
 
 const Wrapper = styled(motion.div)`
   position: fixed;
@@ -23,19 +23,19 @@ const Wrapper = styled(motion.div)`
     width: 300px;
     left: calc(100% - 300px);
     box-shadow: -3px 0px 5px 0px rgba(0, 0, 0, 0.4);
-
-    ${({ isMenuPanel }) =>
-      isMenuPanel &&
-      css`
-        left: 0;
-        box-shadow: 3px 0px 5px 0px rgba(0, 0, 0, 0.4);
-      `}
   }
 
   ${({ theme }) => theme.mq.bigTablet} {
     width: 360px;
     left: calc(100% - 360px);
   }
+
+  ${({ isMenuPanel }) =>
+    isMenuPanel &&
+    css`
+      left: 0;
+      box-shadow: 3px 0px 5px 0px rgba(0, 0, 0, 0.4);
+    `}
 `;
 
 const TitlePanel = styled.h3`
@@ -45,6 +45,7 @@ const TitlePanel = styled.h3`
 
 const PanelHeader = styled.div`
   display: flex;
+  height: 80px;
   width: 100%;
   padding: 20px ${({ theme }) => theme.layout.mobileSidesPadding} 14px;
   justify-content: space-between;
@@ -52,39 +53,27 @@ const PanelHeader = styled.div`
   border-bottom: 2px solid ${({ theme }) => theme.grey200};
 `;
 
-const menuPanelVariants = {
-  hidden: {
-    x: '-50%',
+const panelVariants = {
+  hidden: (isMenuPanel) => ({
+    x: isMenuPanel ? -100 : 100,
     opacity: 0,
-  },
+  }),
   visible: {
     x: 0,
     opacity: 1,
     transition: {
-      type: 'ease',
+      type: 'easeIn',
       duration: 0.3,
     },
   },
-  exit: {
-    x: '-100%',
-    opacity: 0,
-  },
-};
-
-const otherVariants = {
-  hidden: {
-    x: '100%',
-    opacity: 0,
-  },
-  visible: {
-    x: 0,
-    opacity: 1,
-    transition: menuPanelVariants.visible.transition,
-  },
-  exit: {
-    x: '100%',
-    opacity: 0,
-  },
+  exit: (isMenuPanel) => ({
+    x: isMenuPanel ? -100 : 100,
+    opacity: [1, 0.5, 0],
+    transition: {
+      type: 'easeOut',
+      duration: 0.3,
+    },
+  }),
 };
 
 const SidePanel = () => {
@@ -96,10 +85,11 @@ const SidePanel = () => {
       panelTypes: { menu, cart, filter },
     },
   } = useContext(UIContext);
+
   const {
     data: { shoppingCart },
   } = useContext(StoreContext);
-  const [savedValues, saveValues] = useSavedValues();
+
   useEffect(() => {
     if (isOpen) document.body.style = 'overflow: hidden';
     else {
@@ -107,43 +97,45 @@ const SidePanel = () => {
     }
   }, [isOpen]);
 
+  const isMenuPanel = choosenPanel === menu;
+
   return (
     <AnimatePresence exitBeforeEnter>
       {isOpen && (
         <Wrapper
-          variants={choosenPanel === menu ? menuPanelVariants : otherVariants}
+          variants={panelVariants}
+          custom={isMenuPanel}
           initial="hidden"
           animate="visible"
           exit="exit"
-          isMenuPanel={choosenPanel === menu}
+          isMenuPanel={isMenuPanel}
         >
           <PanelHeader>
             <TitlePanel>{choosenPanel}</TitlePanel>
             <CloseIconComponent handleClose={hideSidePanel} isActiveAnimation />
           </PanelHeader>
           {choosenPanel === menu && (
-            <MenuList
-              handleClosePanel={hideSidePanel}
-              list={[
-                { name: 'Home', link: `${routes.home}`, icon: HomeIcon },
-                {
-                  name: 'Wishlist',
-                  link: `${routes.wishlist}`,
-                  icon: FavoriteIcon,
-                },
-                { name: 'Clothes', link: `${routes.clothes}` },
-              ]}
-            />
+            <>
+              <SearchForm />
+              <MenuList
+                handleClosePanel={hideSidePanel}
+                list={[
+                  { name: 'Home', link: `${routes.home}`, icon: HomeIcon },
+                  {
+                    name: 'Wishlist',
+                    link: `${routes.wishlist}`,
+                    icon: FavoriteIcon,
+                  },
+                  { name: 'Clothes', link: `${routes.clothes}` },
+                ]}
+              />
+            </>
           )}
           {choosenPanel === cart && (
-            <ShopingCartTemplate shoppingCart={shoppingCart} />
+            <ShopingCartTemplate isOpen={isOpen} shoppingCart={shoppingCart} />
           )}
           {choosenPanel === filter && (
-            <FilterForm
-              handleClosePanel={hideSidePanel}
-              saveValues={saveValues}
-              savedValues={savedValues}
-            />
+            <FilterForm handleClosePanel={hideSidePanel} />
           )}
         </Wrapper>
       )}

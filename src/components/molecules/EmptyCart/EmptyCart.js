@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ReactComponent as EmptyBasket } from 'assets/svgs/EmptyBasket.svg';
 import { ReactComponent as WishDraw } from 'assets/svgs/WishDraw.svg';
-import Button from 'components/atoms/Button/Button';
+import Button, { HoverBlackBtn } from 'components/atoms/Button/Button';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -36,7 +36,7 @@ const ContentWrapper = styled.div`
 `;
 
 const ContentTitle = styled.h3`
-  font-size: ${({ theme }) => theme.medium};
+  font-size: ${({ theme }) => theme.font.size.medium};
   font-weight: ${({ theme }) => theme.font.weight.bold};
   color: ${({ theme }) => theme.grey100};
   text-align: center;
@@ -56,7 +56,8 @@ const StyledLink = styled(Link)`
 const StyledButton = styled(Button)`
   margin-top: 20px;
   width: 200px;
-  color: ${({ theme }) => theme.grey400};
+
+  ${HoverBlackBtn};
 `;
 
 const EmptyCard = ({ className, title, description, type }) => {

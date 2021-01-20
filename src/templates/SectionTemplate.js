@@ -5,10 +5,6 @@ import SectionHeading from 'components/atoms/SectionHeading/SectionHeading';
 
 export const SectionWrapper = styled.section`
   padding: 30px 0;
-
-  ${({ theme }) => theme.mq.tablet} {
-    padding: 30px 20px;
-  }
 `;
 
 const SectionTemplate = ({ className, title, subtitle, children }) => {

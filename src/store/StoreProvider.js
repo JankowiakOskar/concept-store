@@ -1,7 +1,10 @@
 import React, { useReducer, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
+import routes from 'routes';
 import { initialState, dataReducer } from 'reducers/dataReducer';
 import {
+  limitRequest,
   getProducts as getProductsAction,
   addToWishlist,
   removeFromWishlist,
@@ -19,6 +22,7 @@ export const StoreContext = React.createContext();
 const StoreProvider = ({ children }) => {
   const [data, dispatch] = useReducer(dataReducer, initialState);
   const [choosenID, setChoosenID] = useState('');
+  const { pathname } = useLocation();
 
   const { products, shoppingCart, wishlist } = data;
   const updateStoreActions = {
@@ -68,6 +72,22 @@ const StoreProvider = ({ children }) => {
     getShoppingCart();
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    const isHomeRoute = routes.home === pathname;
+
+    if (
+      isHomeRoute &&
+      products.length !== 0 &&
+      products.length !== limitRequest
+    ) {
+      const loadDefaultProducts = () => {
+        removeAllProducts();
+        fetchProducts();
+      };
+      loadDefaultProducts();
+    }
+  }, [pathname, products.length]);
 
   const values = {
     data,

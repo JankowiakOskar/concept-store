@@ -88,9 +88,23 @@ const FormWrapper = styled.div`
   margin: 10px 0;
 `;
 
-const TitleProduct = styled.h3``;
+const Title = styled.h3`
+  font-size: ${({ theme }) => theme.font.size.medium};
+  font-weight: ${({ theme }) => theme.font.size.bold};
 
-const Price = styled.span``;
+  ${({ theme }) => theme.mq.desktop} {
+    font-size: ${({ theme }) => theme.font.size.large};
+  }
+`;
+
+const Subtitle = styled.span`
+  font-size: ${({ theme }) => theme.font.size.medium};
+  font-weight: ${({ theme }) => theme.font.weight.semiBold};
+
+  ${({ theme }) => theme.mq.desktop} {
+    font-size: ${({ theme }) => theme.font.size.medium};
+  }
+`;
 
 const DetailProductTemplate = ({ product }) => {
   const {
@@ -120,8 +134,8 @@ const DetailProductTemplate = ({ product }) => {
           </TransitionProvider>
         </OuterImageWrapper>
         <DescriptionWrapper>
-          <TitleProduct>{name}</TitleProduct>
-          <Price>{price} €</Price>
+          <Title>{name}</Title>
+          <Subtitle>{price} €</Subtitle>
           <FormWrapper>
             <AddCartForm
               product={product}

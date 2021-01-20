@@ -65,7 +65,7 @@ const FavoriteIconButton = styled.button`
 
 const FavoriteIcon = styled(FavoriteBorderIcon)`
   ${baseIconStyle};
-  color: ${({ isFavorite, theme }) => isFavorite && theme.red};
+  color: ${({ $isFavorite, theme }) => $isFavorite && theme.red};
 `;
 
 const AddCartForm = ({

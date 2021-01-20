@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { AnimatePresence, motion } from 'framer-motion';
-import Button from 'components/atoms/Button/Button';
+import Button, { HoverPrimaryBtn } from 'components/atoms/Button/Button';
 
 const Wrapper = styled(motion.div)`
   display: flex;
@@ -25,17 +25,13 @@ const Wrapper = styled(motion.div)`
 `;
 
 const InnerWrapper = styled(motion.div)`
+  padding: 0 20px;
+  max-width: 1500px;
+  margin: 0 auto;
   width: 100%;
-  padding: 0 30px;
 
   ${({ theme }) => theme.mq.tablet} {
-    width: 70%;
-    padding: 0 60px;
-  }
-
-  ${({ theme }) => theme.mq.desktop} {
-    padding: 0 150px;
-    max-width: 1700px;
+    padding: 0 800px 0 40px;
   }
 `;
 
@@ -71,9 +67,14 @@ const SlideSubTitle = styled.p`
   }
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const StyledButton = styled(Button)`
   margin: 20px 0 0;
-  opacity: 0.9;
+  /* opacity: 0.9; */
+  ${HoverPrimaryBtn}
 `;
 
 const containerVariants = {
@@ -92,7 +93,7 @@ const containerVariants = {
     opacity: 0,
     transition: {
       type: 'easeOut',
-      duration: 0.2,
+      duration: 0.4,
     },
   },
 };
@@ -106,16 +107,16 @@ const childVariants = {
     x: 0,
     opacity: 1,
     transition: {
-      type: 'linear',
+      type: 'easeIn',
       duration: 0.3,
     },
   },
   exit: {
-    x: 100,
+    x: 50,
     opacity: 0,
     transition: {
-      type: 'linear',
-      duration: 0.4,
+      type: 'easeOut',
+      duration: 0.3,
     },
   },
 };
@@ -125,6 +126,8 @@ const Slide = ({ image, title, subTitle, btnContent, isActiveSlide }) => {
     <AnimatePresence exitBeforeEnter>
       {isActiveSlide && (
         <Wrapper
+          layout
+          key={title}
           img={image}
           variants={containerVariants}
           initial="hidden"
@@ -136,9 +139,9 @@ const Slide = ({ image, title, subTitle, btnContent, isActiveSlide }) => {
               {title} <Dot />
             </SlideTitle>
             <SlideSubTitle>{subTitle}</SlideSubTitle>
-            <Link to={routes.clothes}>
-              <StyledButton>{btnContent}</StyledButton>
-            </Link>
+            <StyledLink to={routes.clothes}>
+              <StyledButton secondary>{btnContent}</StyledButton>
+            </StyledLink>
           </InnerWrapper>
         </Wrapper>
       )}

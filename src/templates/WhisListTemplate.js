@@ -54,6 +54,7 @@ const WishListTemplate = ({ wishlist }) => {
             <AnimatePresence initial={false}>
               {wishlist.map(({ id, name, price, picture: { url } }) => (
                 <ProductCardWrapper
+                  layout
                   key={id}
                   variants={productCardVariants}
                   initial="hidden"

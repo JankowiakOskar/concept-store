@@ -62,6 +62,7 @@ export const initialState = {
   isLoadingProducts: false,
   isAllProductsFetched: false,
   numItemsRequest: 0,
+  topSellingRatio: 8.2,
   products: [],
   wishlist: [],
   shoppingCart: [],

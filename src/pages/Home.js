@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import routes from 'routes';
 import { StoreContext } from 'store/StoreProvider';
-// import { FilterContext } from 'contexts/FilterContext';
+import { FilterContext } from 'contexts/FilterContext';
 import styled from 'styled-components';
 import Slider from 'components/organisms/Slider/Slider';
 import CategoriesTemplate from 'templates/CategoriesTemplate';
@@ -22,10 +23,12 @@ const Wrapper = styled(motion.div)`
 `;
 
 const InnerWrapper = styled.div`
+  max-width: 1500px;
+  margin: 60px auto;
   padding: 0 20px;
 
-  ${({ theme }) => theme.mq.desktop} {
-    padding: 0 80px;
+  ${({ theme }) => theme.mq.tablet} {
+    padding: 0 40px;
   }
 `;
 
@@ -70,9 +73,15 @@ const ImageBox = styled.div`
 `;
 
 const ImageBoxDescription = styled.div`
-  padding: 30px 0;
-  width: 90%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  width: 100%;
   color: ${({ theme }) => theme.white};
+
+  ${({ theme }) => theme.mq.tablet} {
+    padding: 30px 40px;
+  }
 `;
 const ImageBoxTitle = styled.h3`
   font-weight: ${({ theme }) => theme.font.weight.bold};
@@ -93,33 +102,25 @@ const ImageBoxSubtitle = styled.p`
 
 const Home = () => {
   const {
-    data: { slides, categoriesCards, products, wishlist, isLoadingProducts },
+    data: { slides, categoriesCards, products, wishlist, topSellingRatio },
     handleWishlist,
-    // fetchProducts,
-    // removeAllProducts,
   } = useContext(StoreContext);
 
-  // const {
-  //   state: { categoryFilters },
-  //   removeAllFilters,
-  // } = useContext(FilterContext);
+  const history = useHistory();
 
-  const topSellingProducts = products.filter(
-    (product) => product.sellingRatio >= 8.2
+  const { setCategoryFilters, toggleCategoryCardFilter } = useContext(
+    FilterContext
   );
 
-  // useEffect(() => {
-  //   const anyCategorySelected = categoryFilters.length;
+  const handleRedirect = (categoryName) => {
+    setTimeout(() => history.push(routes.clothes), 200);
+    toggleCategoryCardFilter();
+    setCategoryFilters([{ categoryName }]);
+  };
 
-  //   if (anyCategorySelected) {
-  //     const fetchProductsActions = () => {
-  //       removeAllFilters();
-  //       removeAllProducts();
-  //       fetchProducts();
-  //     };
-  //     fetchProductsActions();
-  //   }
-  // }, [fetchProducts, removeAllFilters, categoryFilters, removeAllProducts]);
+  const topSellingProducts = products.filter(
+    (product) => product.sellingRatio >= topSellingRatio
+  );
 
   return (
     <LoadingProvider>
@@ -133,6 +134,7 @@ const Home = () => {
                   key={category}
                   image={image}
                   categoryType={category}
+                  handleRedirect={handleRedirect}
                 />
               ))}
             </CategoriesTemplate>
@@ -141,7 +143,7 @@ const Home = () => {
               subtitle="on this week"
             >
               <Carousel>
-                {products.length && !isLoadingProducts
+                {products.length
                   ? topSellingProducts.map(
                       ({ id, name, price, picture: { url } }) => (
                         <ProductCardWrapper key={id}>

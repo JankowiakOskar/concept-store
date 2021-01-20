@@ -1,12 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
+import { FilterContext } from 'contexts/FilterContext';
 import { limitRequest } from 'actions/data';
 import PageHeader from 'components/atoms/PageHeader/PageHeader';
 import ProductsTemplate from 'templates/ProductsTemplate';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
-import SkeletonCardsProvider from 'providers/SkeletonCardProvider';
+import SkeletonCard from 'components/molecules/SkeletonCard/SkeletonCard';
 import TransitionProvider from 'providers/TransitionProvider';
 
 const Wrapper = styled.div`
@@ -17,10 +18,6 @@ const Wrapper = styled.div`
 
   ${({ theme }) => theme.mq.bigTablet} {
     padding: 80px 40px 0;
-  }
-
-  ${({ theme }) => theme.mq.desktop} {
-    padding: 80px 100px 0;
   }
 `;
 
@@ -35,11 +32,11 @@ export const CardWrapper = styled(motion.div)`
 
 export const cardVariants = {
   hidden: { opacity: 0 },
-  vissible: {
+  visible: {
     opacity: 1,
     transition: {
+      delay: 0.15,
       type: 'ease',
-      duration: 1,
     },
   },
 };
@@ -54,26 +51,51 @@ const Clothes = () => {
       isAllProductsFetched,
     },
     handleWishlist,
+    removeAllProducts,
+    fetchProducts,
   } = useContext(StoreContext);
+
+  const {
+    state: { categoryFilters },
+    allFilters,
+    isSelectedCategoryCard,
+    toggleCategoryCardFilter,
+  } = useContext(FilterContext);
+
+  const limitCardRender = isAllProductsFetched ? numItemsRequest : limitRequest;
+
+  useEffect(() => {
+    const isFilteredByCategoryCard = isSelectedCategoryCard;
+    let mounted = true;
+    if (mounted && isFilteredByCategoryCard) {
+      toggleCategoryCardFilter();
+      removeAllProducts();
+      fetchProducts({ ...allFilters, categoryFilters });
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [
+    categoryFilters,
+    fetchProducts,
+    allFilters,
+    removeAllProducts,
+    isSelectedCategoryCard,
+    toggleCategoryCardFilter,
+  ]);
 
   return (
     <TransitionProvider>
       <Wrapper>
         <PageHeader title="Clothes" />
         <StyledProductsTemplate isAllProductsFetched={isAllProductsFetched}>
-          <SkeletonCardsProvider
-            isLoading={isLoadingProducts}
-            limitCardRender={
-              isAllProductsFetched ? numItemsRequest : limitRequest
-            }
-          >
-            {products.length > 0 &&
-              !isLoadingProducts &&
-              products.map(({ id, name, price, picture: { url } }) => (
+          {products.length > 0 && !isLoadingProducts
+            ? products.map(({ id, name, price, picture: { url } }) => (
                 <CardWrapper
                   variants={cardVariants}
                   initial="hidden"
-                  animate="vissible"
+                  animate="visible"
                   key={id}
                 >
                   <ProductCard
@@ -86,8 +108,11 @@ const Clothes = () => {
                     cardType="productCard"
                   />
                 </CardWrapper>
+              ))
+            : Array.from({ length: limitCardRender }).map((_, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <SkeletonCard key={index} />
               ))}
-          </SkeletonCardsProvider>
         </StyledProductsTemplate>
       </Wrapper>
     </TransitionProvider>

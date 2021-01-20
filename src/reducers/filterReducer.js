@@ -5,6 +5,7 @@ import {
   SET_SELECTED_FILTERS,
   SET_PRICE_FILTERS,
   SET_SORT_METHOD,
+  SET_SEARCH_VALUE,
   REMOVE_ALL_FILTERS,
 } from 'actions/filterActions';
 
@@ -12,6 +13,7 @@ export const initialState = {
   categoriesOptions: [],
   categoryFilters: [],
   priceFilters: { min: 0, max: 200 },
+  searchValue: '',
   sortMethod: {},
   isLoadingFilters: false,
   error: {},
@@ -55,12 +57,18 @@ export const filterReducer = (state, action) => {
         ...state,
         sortMethod: action.payload.sortMethod,
       };
+    case SET_SEARCH_VALUE:
+      return {
+        ...state,
+        searchValue: action.payload.searchValue,
+      };
     case REMOVE_ALL_FILTERS:
       return {
         ...state,
-        selectedFilters: {},
+        categoryFilters: [],
         priceFilters: { min: 0, max: 200 },
-        sorthMethod: {},
+        sortMethod: {},
+        searchValue: '',
       };
     default:
       throw new Error(`Unhandled action: ${action.type}`);

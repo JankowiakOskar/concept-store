@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StoreContext } from 'store/StoreProvider';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -10,7 +10,6 @@ import CounterQuantity, {
   ToolTip,
 } from 'components/molecules/CounterQuantity/CounterQuantity';
 import { arrObjectsFromObjectPairs, getKeyMatchedValue } from 'helpers';
-import axios from 'axios';
 
 const ArticleWrapper = styled.article`
   margin: 5px 10px;
@@ -44,6 +43,8 @@ const DetailsGroup = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transform: all 0.2s ease-in;
+  opacity: ${({ isAvailable }) => (isAvailable ? 1 : 0.6)};
 `;
 
 const ItemTitle = styled.h3`
@@ -99,23 +100,12 @@ const ShoppingArticle = ({
   sizesQuantity,
   pictureURL,
   className,
+  isAvailable,
+  choosenProduct,
 }) => {
   const { addToShoppingCart, removeFromShoppingCart } = useContext(
     StoreContext
   );
-  const [matchedProduct, setMatchedProduct] = useState(null);
-
-  useEffect(() => {
-    if (!matchedProduct) {
-      const fetchProduct = async () => {
-        const { data: product } = await axios.get(
-          `http://localhost:8001/products/${id}`
-        );
-        setMatchedProduct(product);
-      };
-      fetchProduct();
-    }
-  }, [id, matchedProduct]);
 
   const [{ size, amount }] = arrObjectsFromObjectPairs(
     sizesQuantity,
@@ -124,7 +114,7 @@ const ShoppingArticle = ({
   );
 
   const handleUpdateItem = (newAmount) => {
-    const product = matchedProduct;
+    const product = choosenProduct;
     const { sizes_quantity } = product;
     const arrSizesAmounts = arrObjectsFromObjectPairs(
       sizes_quantity,
@@ -132,7 +122,7 @@ const ShoppingArticle = ({
       'amount'
     );
     const hasSizesAmounts = arrSizesAmounts.some(
-      (item) => item.size === size && item.amount > 0
+      (item) => item.size === size && item.amount >= amount
     );
     return (
       hasSizesAmounts &&
@@ -142,21 +132,29 @@ const ShoppingArticle = ({
       })
     );
   };
+
   const totalPrice = (cost, quantity) => (cost * quantity).toFixed(2);
+
+  useEffect(() => {
+    if (!isAvailable) {
+      setTimeout(() => removeFromShoppingCart(id, size), 1500);
+    }
+  }, [isAvailable, id, size, removeFromShoppingCart]);
+
   return (
     <ArticleWrapper className={className}>
       <ImageWrapper>
         <ArticleImg src={`http://192.168.100.17:8001${pictureURL}`} />
       </ImageWrapper>
-      <DetailsGroup>
-        <ItemTitle>{name}</ItemTitle>
+      <DetailsGroup isAvailable={isAvailable}>
+        <ItemTitle>{isAvailable ? name : 'Product not available'}</ItemTitle>
         <Size>Size: {size.toUpperCase()}</Size>
         <Price>{totalPrice(price, +amount)} €</Price>
         <StyledCounterQuantity
           quantity={+amount}
           limitQuantity={
-            matchedProduct &&
-            +getKeyMatchedValue(matchedProduct.sizes_quantity, size)
+            Object.keys(choosenProduct).length &&
+            +getKeyMatchedValue(choosenProduct.sizes_quantity, size)
           }
           setQuantity={handleUpdateItem}
         />
@@ -175,10 +173,14 @@ ShoppingArticle.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.number])
   ).isRequired,
   pictureURL: PropTypes.string.isRequired,
+  isAvailable: PropTypes.bool,
+  choosenProduct: PropTypes.objectOf(PropTypes.sha),
 };
 
 ShoppingArticle.defaultProps = {
   className: '',
+  isAvailable: true,
+  choosenProduct: {},
 };
 
 export default ShoppingArticle;

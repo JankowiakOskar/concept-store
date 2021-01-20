@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { UIContext } from 'contexts/GlobalUIContext';
@@ -59,7 +60,9 @@ const ProductModalProvider = ({ children }) => {
     shoppingCartAmount,
   } = useContext(StoreContext);
 
+  const { pathname } = useLocation();
   const [savedValues] = useSavedValues(shoppingCartAmount);
+  const [savedPath] = useSavedValues(pathname);
 
   const closeModal = () => {
     toggleModal();
@@ -68,6 +71,10 @@ const ProductModalProvider = ({ children }) => {
 
   useEffect(() => {
     if (isOpen && savedValues !== shoppingCartAmount) {
+      closeModal();
+    }
+
+    if (isOpen && savedPath !== pathname) {
       closeModal();
     }
   });

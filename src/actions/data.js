@@ -15,6 +15,7 @@ import {
   categoryQueryFilter,
   sortQueryFilter,
   priceQueryFilter,
+  searchQueryParam,
 } from 'helpers/queryHelpers';
 
 export const FETCHING_PRODUCTS_REQUEST = 'FETCHING_PRODUCTS_REQUEST';
@@ -85,12 +86,17 @@ export const getProducts = async (
   const anyCategorySelected =
     'categoryFilters' in filters && filters.categoryFilters.length;
 
-  const isNumRequestProvided = filters.categoryFilters?.productsNum || false;
-
   const isPriceFilterSelected = 'priceFilters' in filters;
 
   const isSortMethodSelected =
     'sortMethod' in filters && Object.keys(filters.sortMethod).length;
+
+  const isSearchValueProvided =
+    'searchValue' in filters && filters.searchValue.length;
+
+  const isNumRequestProvided = filters.categoryFilters?.some(
+    (category) => category.productsNum
+  );
 
   const categoryNames =
     anyCategorySelected &&
@@ -113,11 +119,13 @@ export const getProducts = async (
     Object.keys(filters).length
       ? `?${categoryQueryFilter(categoryNames)}${priceQueryFilter(
           filters.priceFilters
-        )}${sortQueryFilter(filters.sortMethod.value)}`
+        )}${searchQueryParam(filters.searchValue)}${sortQueryFilter(
+          filters.sortMethod.value
+        )}`
       : limitQueryParam(currentProducts, limitRequest);
 
   const endpoint = createEndpoint();
-
+  console.log(endpoint);
   try {
     const { data: products } = await axios.get(
       `http://192.168.100.17:8001/products${endpoint}`
@@ -132,7 +140,10 @@ export const getProducts = async (
       payload: {
         products,
         isAllProductsFetched:
-          anyCategorySelected || isPriceFilterSelected || isSortMethodSelected
+          anyCategorySelected ||
+          isPriceFilterSelected ||
+          isSortMethodSelected ||
+          isSearchValueProvided
             ? true
             : isAllProductsFetched,
       },

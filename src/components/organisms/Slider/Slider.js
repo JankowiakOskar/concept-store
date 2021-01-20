@@ -37,7 +37,7 @@ const Slider = ({ slides }) => {
     };
     const interval = setInterval(
       () => slideChanger(slides, activeSlideIndex),
-      3600
+      3000
     );
 
     return () => clearInterval(interval);

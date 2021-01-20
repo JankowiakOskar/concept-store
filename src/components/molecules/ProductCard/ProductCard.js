@@ -90,12 +90,10 @@ export const DescriptionWrapper = styled.div`
 `;
 export const ProductTitle = styled.h3`
   font-size: ${({ theme }) => theme.font.size.medium};
-  font-weight: ${({ theme }) => theme.font.weight.semiBold};
+  font-weight: ${({ theme }) => theme.font.weight.bold};
 `;
 
-export const Price = styled.p`
-  color: ${({ theme }) => theme.grey100};
-`;
+export const Price = styled.p``;
 
 const ProductCard = ({
   className,
