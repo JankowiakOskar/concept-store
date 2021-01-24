@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import routes from 'routes';
 import { UIContext } from 'contexts/GlobalUIContext';
-import { StoreContext } from 'store/StoreProvider';
+
 import styled, { css } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import HomeIcon from '@material-ui/icons/Home';
@@ -86,10 +86,6 @@ const SidePanel = () => {
     },
   } = useContext(UIContext);
 
-  const {
-    data: { shoppingCart },
-  } = useContext(StoreContext);
-
   useEffect(() => {
     if (isOpen) document.body.style = 'overflow: hidden';
     else {
@@ -131,9 +127,7 @@ const SidePanel = () => {
               />
             </>
           )}
-          {choosenPanel === cart && (
-            <ShopingCartTemplate isOpen={isOpen} shoppingCart={shoppingCart} />
-          )}
+          {choosenPanel === cart && <ShopingCartTemplate />}
           {choosenPanel === filter && (
             <FilterForm handleClosePanel={hideSidePanel} />
           )}

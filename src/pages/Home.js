@@ -113,7 +113,7 @@ const Home = () => {
   );
 
   const handleRedirect = (categoryName) => {
-    setTimeout(() => history.push(routes.clothes), 200);
+    setTimeout(() => history.push(routes.clothes), 50);
     toggleCategoryCardFilter();
     setCategoryFilters([{ categoryName }]);
   };

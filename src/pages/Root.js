@@ -10,6 +10,7 @@ import WishListPage from './WishListPage';
 import Clothes from './Clothes';
 import DetailPage from './DetailPage';
 import CheckoutPage from './CheckoutPage';
+import Cart from './Cart';
 
 const SpecialModalBackground = styled.div`
   display: flex;
@@ -36,6 +37,7 @@ const Root = () => {
                 <Route exact path={routes.clothes} component={Clothes} />
                 <Route path={routes.detailClothes} component={DetailPage} />
                 <Route path={routes.checkout} component={CheckoutPage} />
+                <Route path={routes.shoppingCart} component={Cart} />
               </Switch>
             </ProductModalProvider>
           </MainTemplate>

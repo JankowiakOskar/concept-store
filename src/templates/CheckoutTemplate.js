@@ -9,8 +9,26 @@ import { UnderlineButton } from 'components/atoms/Button/Button';
 import CartSummary from 'components/molecules/CartSummary/CartSummary';
 import OrderForm from 'components/organisms/OrderForm/OrderForm';
 import Modal from 'components/organisms/Modal/Modal';
+import Stepper from 'components/molecules/Stepper/Stepper';
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 100%;
+`;
+
+const StepperWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const StyledStepper = styled(Stepper)`
+  && {
+    margin: 0 0 20px 0;
+  }
+  ${({ theme }) => theme.mq.tablet} {
+    min-width: 700px;
+  }
+`;
 
 const FlexWrapper = styled.div`
   ${({ theme }) => theme.mq.tablet} {
@@ -68,6 +86,9 @@ const CheckoutTemplate = () => {
   const totalOrderPrice = sumItemsPrices(shoppingCart);
   return (
     <Wrapper>
+      <StepperWrapper>
+        <StyledStepper />
+      </StepperWrapper>
       <FlexWrapper>
         <InnerWrapper>
           <OrderForm />

@@ -4,5 +4,6 @@ const routes = {
   clothes: '/clothes',
   detailClothes: '/clothes/:id',
   checkout: '/checkout',
+  shoppingCart: '/shoppingcart',
 };
 export default routes;

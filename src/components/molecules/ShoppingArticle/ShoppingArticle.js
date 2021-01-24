@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useContext, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { StoreContext } from 'store/StoreProvider';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -11,7 +12,7 @@ import CounterQuantity, {
 } from 'components/molecules/CounterQuantity/CounterQuantity';
 import { arrObjectsFromObjectPairs, getKeyMatchedValue } from 'helpers';
 
-const ArticleWrapper = styled.article`
+export const ArticleWrapper = styled(motion.article)`
   margin: 5px 10px;
   padding: 10px;
   position: relative;
@@ -26,19 +27,19 @@ const ArticleWrapper = styled.article`
   border-radius: 10px;
 `;
 
-const ImageWrapper = styled.div`
+export const ImageWrapper = styled.div`
   grid-area: image;
   border: 1px solid ${({ theme }) => theme.grey400};
   border-radius: 10px;
 `;
 
-const ArticleImg = styled.img`
+export const ArticleImg = styled.img`
   object-fit: cover;
   width: 100%;
   height: 100%;
 `;
 
-const DetailsGroup = styled.div`
+export const DetailsGroup = styled.div`
   grid-area: details;
   display: flex;
   flex-direction: column;
@@ -47,22 +48,22 @@ const DetailsGroup = styled.div`
   opacity: ${({ isAvailable }) => (isAvailable ? 1 : 0.6)};
 `;
 
-const ItemTitle = styled.h3`
+export const ItemTitle = styled.h3`
   font-weight: ${({ theme }) => theme.font.weight.semiBold};
   font-size: ${({ theme }) => theme.font.size.regular};
 `;
 
-const Size = styled.span`
+export const Size = styled.span`
   color: ${({ theme }) => theme.grey200};
   font-size: ${({ theme }) => theme.font.size.small};
 `;
 
-const Price = styled.span`
+export const Price = styled.span`
   color: ${({ theme }) => theme.black};
   font-weight: ${({ theme }) => theme.font.weight.bold};
 `;
 
-const StyledCounterQuantity = styled(CounterQuantity)`
+export const StyledCounterQuantity = styled(CounterQuantity)`
   min-height: 60px;
   ${CounterWrapper} {
     margin: 5px 0 0;
@@ -93,8 +94,33 @@ const DeleteIcon = styled(DeleteForeverIcon)`
   }
 `;
 
+const articlesVariants = {
+  initial: {
+    opacity: 0,
+    x: -30,
+  },
+  visible: (index) => ({
+    opacity: [0, 1],
+    x: [-30, 0],
+    transition: {
+      delay: index * 0.2,
+      type: 'easeIn',
+    },
+  }),
+  exit: {
+    opacity: [1, 0],
+    x: [0, -100],
+    transition: {
+      type: 'easeOut',
+      duration: 0.3,
+    },
+  },
+};
+
 const ShoppingArticle = ({
   id,
+  key,
+  index,
   name,
   price,
   sizesQuantity,
@@ -142,7 +168,16 @@ const ShoppingArticle = ({
   }, [isAvailable, id, size, removeFromShoppingCart]);
 
   return (
-    <ArticleWrapper className={className}>
+    <ArticleWrapper
+      className={className}
+      layout
+      key={key}
+      custom={index}
+      variants={articlesVariants}
+      initial="initial"
+      animate="visible"
+      exit="exit"
+    >
       <ImageWrapper>
         <ArticleImg src={`http://192.168.100.17:8001${pictureURL}`} />
       </ImageWrapper>
@@ -167,6 +202,8 @@ const ShoppingArticle = ({
 ShoppingArticle.propTypes = {
   className: PropTypes.string,
   id: PropTypes.string.isRequired,
+  key: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   sizesQuantity: PropTypes.objectOf(

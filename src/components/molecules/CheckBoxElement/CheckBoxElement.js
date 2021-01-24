@@ -60,6 +60,7 @@ const CheckBoxElement = ({
 }) => {
   return (
     <CheckBoxElementWrapper
+      data-testid="checkbox-wrapper"
       onClick={() => toggleCheckbox(name)}
       className={className}
     >

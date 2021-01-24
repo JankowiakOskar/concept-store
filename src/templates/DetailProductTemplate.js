@@ -9,7 +9,7 @@ import ServicesBox from 'components/molecules/ServicesBox/ServicesBox';
 
 const Wrapper = styled.div`
   width: 100%;
-
+  border-bottom: 1px solid ${({ theme }) => theme.grey300};
   ${({ theme }) => theme.mq.tablet} {
     max-height: 70vh;
   }

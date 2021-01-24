@@ -4,9 +4,14 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'assets/styles/theme';
+import { MemoryRouter } from 'react-router-dom';
 
 const AllTheProviders = ({ children }) => {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return (
+    <MemoryRouter>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </MemoryRouter>
+  );
 };
 
 const customRender = (ui, options) =>

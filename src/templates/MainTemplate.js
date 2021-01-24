@@ -4,6 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { theme } from 'assets/styles/theme';
 import GlobalStyle from 'assets/styles/GlobalStyle';
 import StoreProvider from 'store/StoreProvider';
+import { StylesProvider } from '@material-ui/core/styles';
 import GlobalUIProvider from 'contexts/GlobalUIContext';
 import FilterProvider from 'contexts/FilterContext';
 import useScrollToTop from 'hooks/useScrollToTop';
@@ -18,9 +19,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const StyledSectionTemplate = styled(SectionTemplate)`
   &&& {
-    padding: 0px 20px;
+    padding: 15px 20px;
     max-width: 1500px;
     margin: 0 auto;
+    border-top: 1px solid hsl(0, 0%, 87%);
+
     @media (min-width: 767px) {
       padding: 30px 40px;
     }
@@ -33,36 +36,38 @@ const MainTemplate = ({ children }) => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <StoreProvider>
-          <GlobalUIProvider>
-            <FilterProvider>
-              <GlobalStyle />
-              <PageOverlay />
-              <Navbar />
-              <SidePanel />
-              {children}
-              <StyledSectionTemplate
-                title="Our partners"
-                subtitle="well known brands"
-              >
-                <PartnersCarousel />
-              </StyledSectionTemplate>
+        <StylesProvider injectFirst>
+          <StoreProvider>
+            <GlobalUIProvider>
+              <FilterProvider>
+                <GlobalStyle />
+                <PageOverlay />
+                <Navbar />
+                <SidePanel />
+                {children}
+                <StyledSectionTemplate
+                  title="Our partners"
+                  subtitle="well known brands"
+                >
+                  <PartnersCarousel />
+                </StyledSectionTemplate>
 
-              <ToastContainer
-                position="bottom-left"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-              />
-              <Footer />
-            </FilterProvider>
-          </GlobalUIProvider>
-        </StoreProvider>
+                <ToastContainer
+                  position="bottom-left"
+                  autoClose={3000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                />
+                <Footer />
+              </FilterProvider>
+            </GlobalUIProvider>
+          </StoreProvider>
+        </StylesProvider>
       </ThemeProvider>
     </>
   );

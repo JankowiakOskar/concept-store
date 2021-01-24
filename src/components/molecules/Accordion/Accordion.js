@@ -99,6 +99,7 @@ const Accordion = ({ className, isActive, title, list }) => {
 
   return (
     <AccordionWrapper
+      data-testid="accordion-wrapper"
       className={className}
       isActive={isActive}
       onClick={handleClick}
@@ -107,12 +108,13 @@ const Accordion = ({ className, isActive, title, list }) => {
         {title} <ArrowIcon collapse={isCollapse ? 1 : 0} />
       </AccordionHeader>
       <AccordionList
+        data-testid="accordion-list"
         variants={listVariants}
         animate={isCollapse ? 'open' : 'closed'}
       >
         {list.map(({ name, path }) => (
           <StyledLink key={name} to={path}>
-            <ListElement>{name}</ListElement>
+            <ListElement data-testid="list-name">{name}</ListElement>
           </StyledLink>
         ))}
       </AccordionList>
