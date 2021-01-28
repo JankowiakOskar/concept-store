@@ -7,7 +7,7 @@ const useSavedValues = (values) => {
     saveValues(values);
   }, [values]);
 
-  return [savedValues];
+  return [savedValues, saveValues];
 };
 
 export default useSavedValues;

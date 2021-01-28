@@ -74,12 +74,12 @@ const StoreProvider = ({ children }) => {
   useEffect(() => {
     getWishlist();
     getShoppingCart();
-    fetchProducts();
   }, []);
 
   useEffect(() => {
     const isHomeRoute = routes.home === pathname;
-    if (isHomeRoute) {
+    const isClothesPage = pathname.includes(routes.clothes);
+    if (isHomeRoute || isClothesPage) {
       const loadDefaultProducts = () => {
         removeAllProducts();
         fetchProducts();
