@@ -56,10 +56,11 @@ const Clothes = () => {
   } = useContext(StoreContext);
 
   const {
-    state: { categoryFilters },
+    state: { categoryFilters, searchValue },
     allFilters,
     isSelectedCategoryCard,
     toggleCategoryCardFilter,
+    setSearchValue,
   } = useContext(FilterContext);
   const isMounted = useRef(null);
   const limitCardRender = isAllProductsFetched ? numItemsRequest : limitRequest;
@@ -83,6 +84,20 @@ const Clothes = () => {
     removeAllProducts,
     isSelectedCategoryCard,
     toggleCategoryCardFilter,
+  ]);
+
+  useEffect(() => {
+    if (searchValue && isMounted.current) {
+      removeAllProducts();
+      fetchProducts({ ...allFilters, searchValue });
+      setSearchValue('');
+    }
+  }, [
+    searchValue,
+    allFilters,
+    fetchProducts,
+    removeAllProducts,
+    setSearchValue,
   ]);
 
   return (
