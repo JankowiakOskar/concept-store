@@ -164,12 +164,6 @@ const HamburgerIcon = styled(NotesIcon)`
   }
 `;
 
-const circleVariants = {
-  animate: {
-    scale: [1, 1.2, 1],
-  },
-};
-
 const NavBar = () => {
   const {
     sidePanel: {
@@ -221,14 +215,7 @@ const NavBar = () => {
           <Link to={routes.wishlist}>
             <ElementWrapper>
               <StyledFavoriteIcon />
-              {numWishedProducts > 0 && (
-                <Circle
-                  variants={circleVariants}
-                  animate={numWishedProducts < 3 && 'animate'}
-                >
-                  {numWishedProducts}
-                </Circle>
-              )}
+              {numWishedProducts > 0 && <Circle>{numWishedProducts}</Circle>}
             </ElementWrapper>
           </Link>
           <ElementWrapper onClick={() => setOpenSidePanel(cart)}>

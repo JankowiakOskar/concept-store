@@ -23,12 +23,12 @@ export const ProductWrapper = styled.div`
 
 export const ProductImage = styled(motion.img)`
   position: relative;
+  min-height: 200px;
   width: 100%;
   height: 100%;
-  transition: transform 0.3s ease-out;
   object-fit: contain;
+  transition: transform 0.3s ease-out;
   background-color: transparent;
-  overflow: hidden;
 `;
 
 export const OuterImageWrapper = styled.div`
@@ -39,10 +39,8 @@ export const OuterImageWrapper = styled.div`
 `;
 
 export const ImageWrapper = styled.div`
-  position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
 `;
 
 const IconCardStyle = css`
@@ -135,7 +133,7 @@ const ProductCard = ({
         <Link to={`${routes.clothes}/${id}`}>
           <ImageWrapper>
             <ProductImage
-              src={`http://192.168.100.17:8001${pictureURL}`}
+              src={pictureURL}
               whileHover={{ scale: 1.09 }}
               transition={{ type: 'easeIn', duration: 0.3 }}
             />

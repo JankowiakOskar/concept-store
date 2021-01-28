@@ -73,6 +73,7 @@ const ShoppingCartTemplate = () => {
                   <ShoppingArticle
                     id={id}
                     key={key}
+                    customKey={key}
                     index={index}
                     name={name}
                     price={price}

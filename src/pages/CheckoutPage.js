@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { StoreContext } from 'store/StoreProvider';
+import routes from 'routes';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import PageHeader from 'components/atoms/PageHeader/PageHeader';
 import CheckoutTemplate from 'templates/CheckoutTemplate';
@@ -16,13 +19,23 @@ const Wrapper = styled.div`
 `;
 
 const CheckoutPage = () => {
+  const {
+    data: { shoppingCart },
+  } = useContext(StoreContext);
+
   return (
-    <TransitionProvider>
-      <Wrapper>
-        <PageHeader title="Checkout" />
-        <CheckoutTemplate />
-      </Wrapper>
-    </TransitionProvider>
+    <>
+      {shoppingCart.length ? (
+        <TransitionProvider>
+          <Wrapper>
+            <PageHeader title="Checkout" />
+            <CheckoutTemplate />
+          </Wrapper>
+        </TransitionProvider>
+      ) : (
+        <Redirect to={routes.home} />
+      )}
+    </>
   );
 };
 

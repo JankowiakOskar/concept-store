@@ -7,24 +7,24 @@ const wrapperVariants = {
   hidden: {
     opacity: 0,
   },
-  visible: {
+  visible: (duration) => ({
     opacity: 1,
-
     transition: {
-      type: 'ease',
-      duration: 0.5,
+      duration: duration || 0.5,
+      type: 'easeIn',
     },
-  },
+  }),
   exit: { opacity: 0 },
 };
 
-const TransitionProvider = ({ children }) => {
+const TransitionProvider = ({ children, customKey, duration }) => {
   const { pathname } = useLocation();
   return (
     <AnimatePresence exitBeforeEnter>
       <motion.div
-        key={pathname}
+        key={customKey || pathname}
         variants={wrapperVariants}
+        custom={duration}
         initial="hidden"
         animate="visible"
         exit="exit"
@@ -37,6 +37,13 @@ const TransitionProvider = ({ children }) => {
 
 TransitionProvider.propTypes = {
   children: PropTypes.node.isRequired,
+  customKey: PropTypes.string,
+  duration: PropTypes.number,
+};
+
+TransitionProvider.defaultProps = {
+  customKey: '',
+  duration: 0,
 };
 
 export default TransitionProvider;

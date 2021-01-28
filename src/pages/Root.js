@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import ProtectedRoute from 'providers/ProtectedRoute';
 import { ModalProvider } from 'styled-react-modal';
 import ProductModalProvider from 'providers/ProductModalProvider';
 import MainTemplate from 'templates/MainTemplate';
@@ -11,6 +12,7 @@ import Clothes from './Clothes';
 import DetailPage from './DetailPage';
 import CheckoutPage from './CheckoutPage';
 import Cart from './Cart';
+import OrderCompletePage from './OrderCompletePage';
 
 const SpecialModalBackground = styled.div`
   display: flex;
@@ -36,8 +38,13 @@ const Root = () => {
                 <Route path={routes.wishlist} component={WishListPage} />
                 <Route exact path={routes.clothes} component={Clothes} />
                 <Route path={routes.detailClothes} component={DetailPage} />
-                <Route path={routes.checkout} component={CheckoutPage} />
+                <Route exact path={routes.checkout} component={CheckoutPage} />
                 <Route path={routes.shoppingCart} component={Cart} />
+                <ProtectedRoute
+                  path={routes.orderCompleted}
+                  component={OrderCompletePage}
+                />
+                <Route component={Home} />
               </Switch>
             </ProductModalProvider>
           </MainTemplate>

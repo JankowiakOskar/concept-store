@@ -14,7 +14,7 @@ export const getCategories = async (dispatch) => {
   dispatch({ type: GET_CATEGORIES_REQUEST });
 
   try {
-    const { data } = await axios.get(`http://192.168.100.17:8001/categories`);
+    const { data } = await axios.get(`${process.env.REACT_APP_API}/categories`);
 
     const categoriesWithAmountProducts = data.reduce((acc, category) => {
       const categoryName = category.name;

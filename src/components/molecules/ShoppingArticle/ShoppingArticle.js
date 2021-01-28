@@ -13,7 +13,7 @@ import CounterQuantity, {
 import { arrObjectsFromObjectPairs, getKeyMatchedValue } from 'helpers';
 
 export const ArticleWrapper = styled(motion.article)`
-  margin: 5px 10px;
+  margin: 20px 10px;
   padding: 10px;
   position: relative;
   max-height: 200px;
@@ -28,6 +28,7 @@ export const ArticleWrapper = styled(motion.article)`
 `;
 
 export const ImageWrapper = styled.div`
+  max-height: 200px;
   grid-area: image;
   border: 1px solid ${({ theme }) => theme.grey400};
   border-radius: 10px;
@@ -40,6 +41,7 @@ export const ArticleImg = styled.img`
 `;
 
 export const DetailsGroup = styled.div`
+  max-height: 200px;
   grid-area: details;
   display: flex;
   flex-direction: column;
@@ -119,7 +121,7 @@ const articlesVariants = {
 
 const ShoppingArticle = ({
   id,
-  key,
+  customKey,
   index,
   name,
   price,
@@ -171,7 +173,7 @@ const ShoppingArticle = ({
     <ArticleWrapper
       className={className}
       layout
-      key={key}
+      key={customKey}
       custom={index}
       variants={articlesVariants}
       initial="initial"
@@ -179,7 +181,7 @@ const ShoppingArticle = ({
       exit="exit"
     >
       <ImageWrapper>
-        <ArticleImg src={`http://192.168.100.17:8001${pictureURL}`} />
+        <ArticleImg src={pictureURL} />
       </ImageWrapper>
       <DetailsGroup isAvailable={isAvailable}>
         <ItemTitle>{isAvailable ? name : 'Product not available'}</ItemTitle>
@@ -202,7 +204,7 @@ const ShoppingArticle = ({
 ShoppingArticle.propTypes = {
   className: PropTypes.string,
   id: PropTypes.string.isRequired,
-  key: PropTypes.string.isRequired,
+  customKey: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
@@ -211,7 +213,15 @@ ShoppingArticle.propTypes = {
   ).isRequired,
   pictureURL: PropTypes.string.isRequired,
   isAvailable: PropTypes.bool,
-  choosenProduct: PropTypes.objectOf(PropTypes.sha),
+  choosenProduct: PropTypes.objectOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.bool,
+      PropTypes.number,
+      PropTypes.object,
+      PropTypes.array,
+    ])
+  ),
 };
 
 ShoppingArticle.defaultProps = {

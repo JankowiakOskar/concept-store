@@ -64,6 +64,7 @@ const FilterForm = ({ className, handleClosePanel }) => {
   const {
     state: { categoriesOptions, priceFilters, categoryFilters },
     allFilters,
+    removeAllFilters,
     setPriceFilters,
     setCategoryFilters,
   } = useContext(FilterContext);
@@ -111,7 +112,7 @@ const FilterForm = ({ className, handleClosePanel }) => {
       return acc;
     }, {});
     setFilterValues(clearedValues);
-    setPriceFilters({ min: 0, max: 200 });
+    removeAllFilters();
   };
 
   return (

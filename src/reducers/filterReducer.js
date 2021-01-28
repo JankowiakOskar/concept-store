@@ -13,6 +13,7 @@ export const initialState = {
   categoriesOptions: [],
   categoryFilters: [],
   priceFilters: { min: 0, max: 200 },
+  topSellingRatio: 8,
   searchValue: '',
   sortMethod: {},
   isLoadingFilters: false,

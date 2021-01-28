@@ -151,12 +151,12 @@ const Text = styled.span``;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  margin: 8px 0;
 `;
 
 const StyledButton = styled(Button)`
   ${HoverBlackBtn}
   width: 100%;
+  margin: 8px 0;
 `;
 
 const StyledCheckoutButton = styled(Button)`
@@ -210,6 +210,7 @@ const FullShopingCart = () => {
 
           return (
             <StyledShoppingArticle
+              customKey={key}
               key={key}
               id={id}
               index={index}

@@ -13,6 +13,10 @@ import Stepper from 'components/molecules/Stepper/Stepper';
 
 const Wrapper = styled.div`
   width: 100%;
+
+  ${({ theme }) => theme.mq.desktop} {
+    padding: 0 100px;
+  }
 `;
 
 const StepperWrapper = styled.div`

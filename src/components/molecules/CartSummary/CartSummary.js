@@ -16,7 +16,7 @@ const MediumBoldText = css`
 `;
 
 const Wrapper = styled.div`
-  min-width: 310px;
+  max-width: 310px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -165,7 +165,8 @@ CartSummary.propTypes = {
   className: PropTypes.string,
   withBorder: PropTypes.bool,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  totalPrice: PropTypes.number.isRequired,
+  totalPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
   deliveryCost: PropTypes.string.isRequired,
 };
 

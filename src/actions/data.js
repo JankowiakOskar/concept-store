@@ -8,6 +8,7 @@ import {
   sleeper,
   containerHasNewItem,
   updateSameProduct,
+  getFromArrByID,
 } from 'helpers';
 import {
   limitQueryParam,
@@ -23,8 +24,8 @@ export const FETCHING_PRODUCTS_SUCCESS = 'FETCHING_PRODUCTS_SUCCESS';
 export const FETCHING_PRODUCTS_FAILURE = 'FETCHING_PRODUCTS_FAILURE';
 
 export const UPDATE_STORE_REQUEST = 'UPDATE_STORE_REQUEST';
-export const UPDATE_STORE_SUCCESS = 'UPDATE_STORE_REQUEST';
-export const UPDATE_STORE_FAILURE = 'UPDATE_STORE_REQUEST';
+export const UPDATE_STORE_SUCCESS = 'UPDATE_STORE_SUCCESS';
+export const UPDATE_STORE_FAILURE = 'UPDATE_STORE_FAILURE';
 
 export const GET_WISHLIST = 'GET_WISHLIST';
 export const ADD_TO_WISHLIST = 'ADD_TO_WISHLIST';
@@ -37,6 +38,7 @@ export const REMOVE_FROM_SHOPPING_CART = 'REMOVE_FROM_SHOPPING_CART';
 
 export const REMOVE_MATCHED_PRODUCT = 'REMOVE_MATCHED_PRODUCT';
 export const REMOVE_ALL_PRODUCTS = 'REMOVE_ALL_PRODUCTS';
+export const UPDATE_ORDER_STATUS = 'UPDATE_ORDER_STATUS';
 
 export const limitRequest = 12;
 
@@ -49,15 +51,20 @@ export const getShoppingCart = (dispatch) => {
   });
 };
 
-export const removeFromShoppingCart = (dispatch, id, size) => {
+export const removeFromShoppingCart = (dispatch, id, size, orderStatus) => {
   removeItemFromLocalStorage('shoppingCart', id, size);
   dispatch({
     type: REMOVE_FROM_SHOPPING_CART,
-    payload: { id, size },
+    payload: { id, size, orderStatus: orderStatus.notRegistered },
   });
 };
 
-export const addToShoppingCart = (dispatch, currShoppingCart, product) => {
+export const addToShoppingCart = (
+  dispatch,
+  currShoppingCart,
+  product,
+  orderStatus
+) => {
   setItemToLocalStorage('shoppingCart', product);
   const currCartExist = currShoppingCart.length;
   const isSizePicked =
@@ -67,15 +74,29 @@ export const addToShoppingCart = (dispatch, currShoppingCart, product) => {
 
   const addNewItemActions = () => {
     toast.dark('🎁 New product in the shopping cart');
-    dispatch({ type: ADD_TO_SHOPPING_CART, payload: product });
+    dispatch({
+      type: ADD_TO_SHOPPING_CART,
+      payload: { product, orderStatus: orderStatus.pending },
+    });
   };
 
   return currCartExist && isSizePicked
     ? dispatch({
         type: REPLACE_ITEM_IN_SHOPPING_CART,
-        payload: replacedItems,
+        payload: { replacedItems, orderStatus: orderStatus.pending },
       })
     : addNewItemActions();
+};
+
+export const fetchProduct = async (id) => {
+  try {
+    const { data: product } = await axios.get(
+      `${process.env.REACT_APP_API}/products/${id}`
+    );
+    return product;
+  } catch (err) {
+    throw new Error('Something went wrong or product is not available anymore');
+  }
 };
 
 export const getProducts = async (
@@ -125,10 +146,10 @@ export const getProducts = async (
       : limitQueryParam(currentProducts, limitRequest);
 
   const endpoint = createEndpoint();
-  console.log(endpoint);
+
   try {
     const { data: products } = await axios.get(
-      `http://192.168.100.17:8001/products${endpoint}`
+      `${process.env.REACT_APP_API}/products${endpoint}`
     );
 
     await sleeper(500);
@@ -156,58 +177,59 @@ export const getProducts = async (
   }
 };
 
-export const updateStore = async (
-  dispatch,
-  id,
-  updateActionType,
-  selectedProduct
-) => {
-  dispatch({ type: UPDATE_STORE_REQUEST });
+export const updateStore = async (dispatch, products, orderStatus) => {
+  dispatch({
+    type: UPDATE_STORE_REQUEST,
+    payload: { orderStatus: orderStatus.pending },
+  });
   try {
-    const { data: productToUpdate } = await axios.get(
-      `http://192.168.100.17:8001/products/${id}`
-    );
-    const { sizes_quantity } = productToUpdate;
+    const productsOnStore = await Promise.all(
+      products.map(async ({ id }) => {
+        const { data: product } = await axios.get(
+          `${process.env.REACT_APP_API}/products/${id}`
+        );
 
-    const updateAmounts = (currentState, actionType, valueToUpdate) => {
-      const [updateKey] = Object.keys(valueToUpdate);
-      return Object.keys(currentState).reduce((acc, key) => {
-        if (key !== updateKey) {
-          acc[key] = currentState[key];
-        } else if (key === updateKey) {
-          acc[key] =
-            actionType === 'remove'
-              ? String(+currentState[key] - +valueToUpdate[updateKey])
-              : String(+currentState[key] + +valueToUpdate[updateKey]);
-        }
-        return acc;
+        return product;
+      })
+    );
+
+    const updatedProducts = await productsOnStore.reduce((acc, product) => {
+      const { id, sizes_quantity } = product;
+      const matchedProduct = getFromArrByID(products, id);
+      const { sizes_quantity: selectedSizeAmount } = matchedProduct;
+      const [selectedKey] = Object.keys(selectedSizeAmount);
+      const updatedAmount = Object.keys(sizes_quantity).reduce((obj, key) => {
+        const isKeyMatched = key === selectedKey;
+        // eslint-disable-next-line no-param-reassign
+        obj[key] = isKeyMatched
+          ? String(+sizes_quantity[key] - +selectedSizeAmount[key])
+          : sizes_quantity[key];
+        return obj;
       }, {});
-    };
+      const updatedProduct = { ...product, sizes_quantity: updatedAmount };
+      acc.push(updatedProduct);
+      return acc;
+    }, []);
 
-    const newSizesQuantity = updateAmounts(
-      sizes_quantity,
-      updateActionType,
-      selectedProduct
+    await Promise.all(
+      updatedProducts.map(async ({ id, sizes_quantity }) =>
+        axios.put(`${process.env.REACT_APP_API}/products/${id}`, {
+          sizes_quantity,
+        })
+      )
     );
 
-    const { data: updatedProduct } = await axios.put(
-      `http://192.168.100.17:8001/products/${id}`,
-      {
-        sizes_quantity: newSizesQuantity,
-      }
-    );
-
-    const choosenProduct = {
-      ...updatedProduct,
-      selectedProduct,
-    };
+    localStorage.removeItem('shoppingCart');
 
     dispatch({
       type: UPDATE_STORE_SUCCESS,
-      payload: updateActionType === 'remove' ? { id } : choosenProduct,
+      payload: { orderStatus: orderStatus.completed },
     });
   } catch (err) {
-    dispatch({ type: UPDATE_STORE_FAILURE, payload: err });
+    dispatch({
+      type: UPDATE_STORE_FAILURE,
+      payload: { err, orderStatus: orderStatus.notRegistered },
+    });
   }
 };
 
@@ -234,3 +256,7 @@ export const removeExactProduct = (dispatch, id) => {
 
 export const removeAllProducts = (dispatch) =>
   dispatch({ type: REMOVE_ALL_PRODUCTS });
+
+export const updateOrderStatus = (dispatch, status) => {
+  dispatch({ type: UPDATE_ORDER_STATUS, payload: { status } });
+};

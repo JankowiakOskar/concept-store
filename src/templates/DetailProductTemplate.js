@@ -10,12 +10,11 @@ import ServicesBox from 'components/molecules/ServicesBox/ServicesBox';
 const Wrapper = styled.div`
   width: 100%;
   border-bottom: 1px solid ${({ theme }) => theme.grey300};
-  ${({ theme }) => theme.mq.tablet} {
-    max-height: 70vh;
-  }
+  overflow: hidden;
 
   ${({ theme }) => theme.mq.desktop} {
-    min-height: 100vh;
+    height: auto;
+    padding: 0 0 50px 0;
   }
 `;
 
@@ -41,14 +40,14 @@ const DetailWrapper = styled.div`
 const OuterImageWrapper = styled.div`
   ${({ theme }) => theme.mq.tablet} {
     padding: 0 30px 0 0;
-    height: 100vh;
   }
 `;
 
 const ImageWrapper = styled.div`
   min-height: 392px;
-  max-height: 600px;
+  max-height: 700px;
   max-width: 500px;
+  overflow: hidden;
 `;
 
 const Image = styled.img`
@@ -129,7 +128,7 @@ const DetailProductTemplate = ({ product }) => {
         <OuterImageWrapper>
           <TransitionProvider>
             <ImageWrapper>
-              <Image src={`http://192.168.100.17:8001${url}`} />
+              <Image src={url} />
             </ImageWrapper>
           </TransitionProvider>
         </OuterImageWrapper>

@@ -1,6 +1,13 @@
 /* eslint-disable camelcase */
 export const getFromArrByID = (arr, id) => arr.find((el) => el.id === id);
 
+export const getSameCategoryProducts = (arrProducts, selectedProduct) => {
+  return arrProducts.filter(
+    ({ id, category }) =>
+      id !== selectedProduct.id && category === selectedProduct.category
+  );
+};
+
 export const makeFirstLetterUpperCase = (string) => {
   const firstLetter = string.charAt(0).toUpperCase();
   const restWord = string.substring(1);

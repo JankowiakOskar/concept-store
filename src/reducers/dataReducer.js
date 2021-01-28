@@ -11,6 +11,7 @@ import {
   UPDATE_STORE_REQUEST,
   UPDATE_STORE_SUCCESS,
   UPDATE_STORE_FAILURE,
+  UPDATE_ORDER_STATUS,
   GET_WISHLIST,
   ADD_TO_WISHLIST,
   REMOVE_FROM_WISHLIST,
@@ -59,6 +60,7 @@ export const initialState = {
       image: accessoriesCategory,
     },
   ],
+  orderTrackingStatus: 'ORDER_NOT_REGISTERED',
   isLoadingProducts: false,
   isAllProductsFetched: false,
   numItemsRequest: 0,
@@ -95,18 +97,19 @@ export const dataReducer = (state, action) => {
     case UPDATE_STORE_REQUEST:
       return {
         ...state,
-        isUpdating: !state.isUpdating,
+        orderTrackingStatus: action.payload.orderStatus,
       };
     case UPDATE_STORE_SUCCESS:
       return {
         ...state,
-        isUpdating: !state.isUpdating,
+        orderTrackingStatus: action.payload.orderStatus,
+        shoppingCart: [],
       };
     case UPDATE_STORE_FAILURE:
       return {
         ...state,
-        isUpdating: !state.isUpdating,
-        error: action.payload,
+        error: action.payload.err,
+        orderTrackingStatus: action.payload.orderStatus,
       };
     case GET_WISHLIST:
       return {
@@ -131,12 +134,20 @@ export const dataReducer = (state, action) => {
     case ADD_TO_SHOPPING_CART:
       return {
         ...state,
-        shoppingCart: [...state.shoppingCart, action.payload],
+        shoppingCart: [...state.shoppingCart, action.payload.product],
+        orderTrackingStatus: action.payload.orderStatus,
       };
     case REPLACE_ITEM_IN_SHOPPING_CART: {
       return {
         ...state,
-        shoppingCart: action.payload,
+        shoppingCart: action.payload.replacedItems,
+        orderTrackingStatus: action.payload.orderStatus,
+      };
+    }
+    case UPDATE_ORDER_STATUS: {
+      return {
+        ...state,
+        orderTrackingStatus: action.payload.status,
       };
     }
     case REMOVE_FROM_SHOPPING_CART: {
@@ -147,6 +158,10 @@ export const dataReducer = (state, action) => {
             id !== action.payload.id ||
             (id === action.payload.id && !sizesQuantity[action.payload.size])
         ),
+        orderTrackingStatus:
+          state.shoppingCart.length === 1
+            ? action.payload.orderStatus
+            : state.orderTrackingStatus,
       };
     }
     case REMOVE_ALL_PRODUCTS: {

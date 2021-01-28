@@ -1,10 +1,9 @@
 import React, { useReducer, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
 import routes from 'routes';
+import { useLocation } from 'react-router-dom';
 import { initialState, dataReducer } from 'reducers/dataReducer';
 import {
-  limitRequest,
   getProducts as getProductsAction,
   addToWishlist,
   removeFromWishlist,
@@ -12,6 +11,7 @@ import {
   getShoppingCart as getShoppingCartAction,
   addToShoppingCart as addToShoppingCartAction,
   updateStore as updateStoreAction,
+  updateOrderStatus as updateOrderStatusAction,
   removeFromShoppingCart as removeFromShoppingCartAction,
   removeAllProducts as removeAllProductsActions,
 } from 'actions/data';
@@ -23,11 +23,12 @@ const StoreProvider = ({ children }) => {
   const [data, dispatch] = useReducer(dataReducer, initialState);
   const [choosenID, setChoosenID] = useState('');
   const { pathname } = useLocation();
-
   const { products, shoppingCart, wishlist } = data;
-  const updateStoreActions = {
-    removeFromStore: 'remove',
-    addToStore: 'add',
+
+  const orderStatus = {
+    notRegistered: 'ORDER_NOT_REGISTERED',
+    pending: 'ORDER_PENDING',
+    completed: 'ORDER_COMPLETED',
   };
 
   const numProductsInCart = shoppingCart.reduce((acc, product) => {
@@ -45,17 +46,20 @@ const StoreProvider = ({ children }) => {
 
   const getShoppingCart = () => getShoppingCartAction(dispatch);
 
-  const updateStore = (id, actionType, valuesObj) =>
-    updateStoreAction(dispatch, id, actionType, valuesObj);
+  const updateStore = (productsArr) =>
+    updateStoreAction(dispatch, productsArr, orderStatus);
 
   const addToShoppingCart = (product) =>
-    addToShoppingCartAction(dispatch, shoppingCart, product);
+    addToShoppingCartAction(dispatch, shoppingCart, product, orderStatus);
 
   const removeFromShoppingCart = (id, size) => {
-    removeFromShoppingCartAction(dispatch, id, size);
+    removeFromShoppingCartAction(dispatch, id, size, orderStatus);
   };
 
   const removeAllProducts = () => removeAllProductsActions(dispatch);
+
+  const updateOrderStatus = (status) =>
+    updateOrderStatusAction(dispatch, status);
 
   const handleWishlist = (id, productsArr = products) => {
     const choosenProduct = getFromArrByID(productsArr, id);
@@ -75,19 +79,14 @@ const StoreProvider = ({ children }) => {
 
   useEffect(() => {
     const isHomeRoute = routes.home === pathname;
-
-    if (
-      isHomeRoute &&
-      products.length !== 0 &&
-      products.length !== limitRequest
-    ) {
+    if (isHomeRoute) {
       const loadDefaultProducts = () => {
         removeAllProducts();
         fetchProducts();
       };
       loadDefaultProducts();
     }
-  }, [pathname, products.length]);
+  }, [pathname]);
 
   const values = {
     data,
@@ -95,8 +94,9 @@ const StoreProvider = ({ children }) => {
     addToShoppingCart,
     removeFromShoppingCart,
     updateStore,
-    updateStoreActions,
+    orderStatus,
     fetchProducts,
+    updateOrderStatus,
     removeAllProducts,
     setSelectedID,
     choosenID,

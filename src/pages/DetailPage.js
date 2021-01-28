@@ -1,9 +1,12 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
 import { useParams } from 'react-router-dom';
-import { getFromArrByID, setItemToLocalStorage } from 'helpers';
+import { fetchProduct } from 'actions/data';
+import { getSameCategoryProducts, getFromArrByID } from 'helpers';
 import LoadingProvider from 'providers/LoadingProvider';
+import TransitionProvider from 'providers/TransitionProvider';
+import SkeletonCard from 'components/molecules/SkeletonCard/SkeletonCard';
 import Carousel from 'components/organisms/Carousel/Carousel';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
 import DetailProductTemplate from 'templates/DetailProductTemplate';
@@ -20,7 +23,12 @@ const Wrapper = styled.div`
 `;
 
 const ProductWrapper = styled.div`
-  padding: 0 2px;
+  padding: 0 5px;
+  display: flex;
+  justify-content: center;
+  ${({ theme }) => theme.mq.tablet} {
+    padding: 0 10px;
+  }
 `;
 
 const DetailPage = () => {
@@ -28,56 +36,77 @@ const DetailPage = () => {
     data: { products, wishlist },
     handleWishlist,
   } = useContext(StoreContext);
-  const storedProductRef = useRef(null);
   const { id: ID } = useParams();
-
-  const choosenProduct = getFromArrByID(products, ID);
-
-  if (!choosenProduct) {
-    const [storedProduct] = JSON.parse(localStorage.getItem('choosenProduct'));
-    storedProductRef.current = storedProduct;
-  }
+  const [product, setProduct] = useState({});
+  const [, setError] = useState({});
+  const productFromGlobalState = getFromArrByID(products, ID) || {};
+  const isLocalProductExist = Object.keys(productFromGlobalState).length;
+  const anyProductFound = isLocalProductExist || Object.keys(product).length;
 
   useEffect(() => {
-    if (choosenProduct) setItemToLocalStorage('choosenProduct', choosenProduct);
+    let mounted = true;
 
-    return () => localStorage.removeItem('choosenProduct');
-  }, [choosenProduct]);
+    const setMatchedIdProduct = async () => {
+      try {
+        const matchedProduct = await fetchProduct(ID);
+        setProduct(matchedProduct);
+      } catch (err) {
+        setError(err);
+      }
+    };
 
-  const getSameCategoryProducts = (arrProducts, selectedProduct) => {
-    return arrProducts.filter(
-      ({ id, category }) =>
-        id !== selectedProduct.id && category === selectedProduct.category
-    );
-  };
+    if (mounted && !isLocalProductExist) {
+      setMatchedIdProduct();
+    }
 
-  const productsWithSameCategory = getSameCategoryProducts(
-    products,
-    storedProductRef.current || choosenProduct
-  );
+    return () => {
+      mounted = false;
+    };
+  }, [ID, isLocalProductExist]);
+
+  const productsWithSameCategory = isLocalProductExist
+    ? getSameCategoryProducts(products, productFromGlobalState)
+    : getSameCategoryProducts(products, product);
+
   return (
     <LoadingProvider>
       <Wrapper>
-        <DetailProductTemplate
-          product={choosenProduct || storedProductRef.current}
-        />
+        {anyProductFound && (
+          <TransitionProvider duration={0.3}>
+            <DetailProductTemplate
+              product={isLocalProductExist ? productFromGlobalState : product}
+            />
+          </TransitionProvider>
+        )}
         <SectionTemplate title="Products that you may also like">
           <Carousel>
-            {productsWithSameCategory.map(
-              ({ id, name, price, picture: { url } }) => (
-                <ProductWrapper key={id}>
-                  <ProductCard
-                    id={id}
-                    name={name}
-                    price={price}
-                    pictureURL={url}
-                    cardType="productCard"
-                    handleWishlist={handleWishlist}
-                    onWishlist={wishlist.some((product) => product.id === id)}
-                  />
-                </ProductWrapper>
-              )
-            )}
+            {productsWithSameCategory.length > 0
+              ? productsWithSameCategory.map(
+                  ({ id, name, price, picture: { url } }) => (
+                    <TransitionProvider customKey={id} key={id} duration={0.3}>
+                      <ProductWrapper>
+                        <ProductCard
+                          id={id}
+                          name={name}
+                          price={price}
+                          pictureURL={url}
+                          cardType="productCard"
+                          handleWishlist={handleWishlist}
+                          onWishlist={wishlist.some(
+                            (wishProduct) => wishProduct.id === id
+                          )}
+                        />
+                      </ProductWrapper>
+                    </TransitionProvider>
+                  )
+                )
+              : Array.from({ length: 3 }).map((_, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  // eslint-disable-next-line react/no-array-index-key
+                  <ProductWrapper key={index}>
+                    <SkeletonCard />
+                  </ProductWrapper>
+                ))}
           </Carousel>
         </SectionTemplate>
       </Wrapper>

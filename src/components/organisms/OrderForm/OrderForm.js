@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { StoreContext } from 'store/StoreProvider';
+import { useHistory } from 'react-router-dom';
+import routes from 'routes';
 import styled from 'styled-components';
+import Loader from 'react-loader-spinner';
 import InputElement from 'components/molecules/InputElement/InputElement';
 import CheckBoxElement from 'components/molecules/CheckBoxElement/CheckBoxElement';
 import RadioInput from 'components/molecules/RadioInput/RadioInput';
@@ -8,12 +12,16 @@ import Button from 'components/atoms/Button/Button';
 import ActiveProvider from 'providers/ActiveProvider';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { sleeper } from 'helpers';
 
 const Form = styled.form`
   overflow: hidden;
 `;
 
-const FormWrapper = styled.div``;
+const FormWrapper = styled.div`
+  overflow: hidden;
+  max-width: 478px;
+`;
 
 const Section = styled.div`
   &:last-of-type {
@@ -48,6 +56,9 @@ const StyledRadioInput = styled(RadioInput)`
 `;
 
 const StyledButton = styled(Button)`
+  @media (max-width: 330px) {
+    max-width: 140px;
+  }
   margin: 30px 0 0 0;
 `;
 
@@ -69,22 +80,38 @@ const OrderSchema = Yup.object().shape({
     .min(9, 'Please enter minimum 9 digits'),
 });
 
+const initialValues = {
+  firstName: '',
+  lastName: '',
+  adress: '',
+  postCode: '',
+  city: '',
+  email: '',
+  mobilePhone: '',
+  toggleMobilePhone: false,
+};
+
 const OrderForm = () => {
-  const initialValues = {
-    firstName: '',
-    lastName: '',
-    adress: '',
-    postCode: '',
-    city: '',
-    email: '',
-    mobilePhone: '',
-    toggleMobilePhone: false,
-  };
+  const {
+    updateStore,
+    data: { shoppingCart },
+  } = useContext(StoreContext);
+  const history = useHistory();
 
   return (
-    <Formik initialValues={initialValues} validationSchema={OrderSchema}>
-      {({ values, setFieldValue }) => (
-        <Form>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={OrderSchema}
+      onSubmit={async (_, { resetForm, setSubmitting }) => {
+        await sleeper(200);
+        await updateStore(shoppingCart);
+        setSubmitting(false);
+        resetForm();
+        history.push(routes.orderCompleted);
+      }}
+    >
+      {({ values, setFieldValue, handleSubmit, isSubmitting }) => (
+        <Form onSubmit={handleSubmit}>
           <FormWrapper>
             <Section>
               <StyledSectionHeading title="Billing details" />
@@ -161,7 +188,18 @@ const OrderForm = () => {
                 )}
               </ActiveProvider>
             </Section>
-            <StyledButton type="submit">Complete order</StyledButton>
+            <StyledButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <Loader
+                  type="ThreeDots"
+                  color="#ffffff"
+                  height={50}
+                  width={50}
+                />
+              ) : (
+                'Complete order'
+              )}
+            </StyledButton>
           </FormWrapper>
         </Form>
       )}

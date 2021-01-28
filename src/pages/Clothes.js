@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
@@ -61,20 +61,20 @@ const Clothes = () => {
     isSelectedCategoryCard,
     toggleCategoryCardFilter,
   } = useContext(FilterContext);
-
+  const isMounted = useRef(null);
   const limitCardRender = isAllProductsFetched ? numItemsRequest : limitRequest;
 
   useEffect(() => {
     const isFilteredByCategoryCard = isSelectedCategoryCard;
-    let mounted = true;
-    if (mounted && isFilteredByCategoryCard) {
+    isMounted.current = true;
+    if (isMounted.current && isFilteredByCategoryCard) {
       toggleCategoryCardFilter();
       removeAllProducts();
       fetchProducts({ ...allFilters, categoryFilters });
     }
 
     return () => {
-      mounted = false;
+      isMounted.current = false;
     };
   }, [
     categoryFilters,

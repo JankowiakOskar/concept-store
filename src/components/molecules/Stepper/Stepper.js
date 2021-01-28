@@ -32,8 +32,9 @@ const Step = styled.div`
       opacity: 0.6;
     `}
 
-  ${({ $isDisabled }) =>
+  ${({ $isDisabled, activeIndex }) =>
     $isDisabled &&
+    !activeIndex &&
     css`
       opacity: 0.6;
     `}
@@ -50,16 +51,17 @@ const StepCircle = styled.div`
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
   transition: all 0.15s ease-in;
 
-  ${({ $isCompletedItem }) =>
+  ${({ $isCompletedItem, $isDisabled }) =>
     $isCompletedItem &&
+    !$isDisabled &&
     css`
       cursor: pointer;
     `}
 
-  ${({ $isDisabled }) =>
+  ${({ $isDisabled, activeIndex, theme }) =>
     $isDisabled &&
     css`
-      background-color: ${({ theme }) => theme.grey400};
+      background-color: ${activeIndex ? theme.primaryLight : theme.grey400};
     `}
 `;
 
@@ -98,7 +100,11 @@ const StepperComponent = ({ className }) => {
       href: `${routes.checkout}`,
       icon: CreditCardIcon,
     },
-    { title: 'Completed Order', href: `${routes.home}`, icon: BoxIcon },
+    {
+      title: 'Completed Order',
+      href: `${routes.orderCompleted}`,
+      icon: BoxIcon,
+    },
   ]);
 
   const { pathname } = useLocation();
@@ -109,7 +115,8 @@ const StepperComponent = ({ className }) => {
   const activeIndex = steps.findIndex(({ href }) => isMatchedRoute(href));
 
   const handleRedirect = (href, isStepCompleted) => {
-    return isStepCompleted ? history.push(href) : null;
+    const isLastActive = activeIndex === steps.length - 1;
+    return isStepCompleted && !isLastActive ? history.push(href) : null;
   };
   return (
     <StepperWrapper className={className}>
@@ -118,6 +125,7 @@ const StepperComponent = ({ className }) => {
           const isLastItem = steps.length - 1 === index;
           const isNextItem = index > activeIndex;
           const isCompletedItem = index < activeIndex;
+
           return (
             <React.Fragment key={title}>
               <Step
@@ -128,6 +136,7 @@ const StepperComponent = ({ className }) => {
                 <StepCircle
                   $isCompletedItem={isCompletedItem}
                   $isDisabled={isLastItem || isNextItem}
+                  activeIndex={index === activeIndex}
                   onClick={() => handleRedirect(href, isCompletedItem)}
                   icon={icon}
                 />
