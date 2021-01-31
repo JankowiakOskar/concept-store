@@ -64,8 +64,8 @@ const FilterForm = ({ className, handleClosePanel }) => {
   const {
     state: { categoriesOptions, priceFilters, categoryFilters },
     allFilters,
-    removeAllFilters,
     setPriceFilters,
+    removeAllFilters,
     setCategoryFilters,
   } = useContext(FilterContext);
 
@@ -92,17 +92,17 @@ const FilterForm = ({ className, handleClosePanel }) => {
     });
   };
 
-  const handleSubmit = (e, values) => {
+  const handleSubmit = async (e, values) => {
     e.preventDefault();
-    const currValues = values;
     const selectedFilters = categoriesOptions.filter(
-      ({ categoryName }) => currValues[categoryName]
+      ({ categoryName }) => values[categoryName]
     );
-
-    setCategoryFilters(selectedFilters);
+    await setCategoryFilters(selectedFilters);
     removeAllProducts();
     handleClosePanel();
-    fetchProducts({ ...allFilters, categoryFilters: selectedFilters });
+    if (selectedFilters.length) {
+      fetchProducts({ ...allFilters, categoryFilters: selectedFilters });
+    }
   };
 
   const clearAll = (valuesObj) => {

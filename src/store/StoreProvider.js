@@ -4,7 +4,8 @@ import routes from 'routes';
 import { useLocation } from 'react-router-dom';
 import { initialState, dataReducer } from 'reducers/dataReducer';
 import {
-  getProducts as getProductsAction,
+  fetchProducts as fetchProductsAction,
+  fetchProductsWithParams as fetchProductsWithParamsAction,
   addToWishlist,
   removeFromWishlist,
   getWishlist as getWishlistAction,
@@ -39,8 +40,12 @@ const StoreProvider = ({ children }) => {
     return acc;
   }, 0);
 
+  const fetchProductsWithParams = (queryParam) => {
+    fetchProductsWithParamsAction(dispatch, queryParam);
+  };
+
   const fetchProducts = (filters, currentProducts) =>
-    getProductsAction(dispatch, filters, currentProducts);
+    fetchProductsAction(dispatch, filters, currentProducts);
 
   const getWishlist = () => getWishlistAction(dispatch);
 
@@ -77,18 +82,14 @@ const StoreProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const isHomeRoute = routes.home === pathname;
-    const isClothesPage = pathname.includes(routes.clothes);
-    if (isHomeRoute || isClothesPage) {
-      const loadDefaultProducts = () => {
-        removeAllProducts();
-        fetchProducts();
-      };
-      loadDefaultProducts();
+    const anyClothesRoute = pathname.includes(routes.clothes);
+    if (!anyClothesRoute && products.length) {
+      removeAllProducts();
     }
-  }, [pathname]);
+  }, [pathname, products.length]);
 
   const values = {
+    dispatch,
     data,
     handleWishlist,
     addToShoppingCart,
@@ -96,6 +97,7 @@ const StoreProvider = ({ children }) => {
     updateStore,
     orderStatus,
     fetchProducts,
+    fetchProductsWithParams,
     updateOrderStatus,
     removeAllProducts,
     setSelectedID,

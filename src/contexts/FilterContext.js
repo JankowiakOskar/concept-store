@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect, useState } from 'react';
 import routes from 'routes';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { initialState, filterReducer } from 'reducers/filterReducer';
 import {
@@ -10,7 +11,6 @@ import {
   setSearchValue as setSearchValueAction,
   removeAllFilters as removeAllFiltersAction,
 } from 'actions/filterActions';
-import { useLocation } from 'react-router-dom';
 
 export const FilterContext = React.createContext('');
 
@@ -19,13 +19,25 @@ const FilterProvider = ({ children }) => {
   const { categoryFilters, priceFilters, sortMethod, searchValue } = state;
   const [isSelectedCategoryCard, setSelectedCategoryCard] = useState(false);
   const { pathname } = useLocation();
-
   const allFilters = {
     categoryFilters,
     priceFilters,
     sortMethod,
     searchValue,
   };
+  const isPriceFilterChanged =
+    Object.values(priceFilters).reduce((acc, value) => {
+      // eslint-disable-next-line no-param-reassign
+      acc += value;
+      return acc;
+    }, 0) !== 200;
+
+  const anyFilterProvided =
+    categoryFilters.length ||
+    Object.keys(sortMethod).length ||
+    isSelectedCategoryCard ||
+    searchValue.length >= 1 ||
+    isPriceFilterChanged;
 
   const getCategories = () => getCategoriesAction(dispatch);
 
@@ -41,29 +53,29 @@ const FilterProvider = ({ children }) => {
 
   const removeAllFilters = () => removeAllFiltersAction(dispatch);
 
-  const toggleCategoryCardFilter = () =>
-    setSelectedCategoryCard(!isSelectedCategoryCard);
-
   useEffect(() => {
     getCategories();
   }, []);
 
   useEffect(() => {
-    const isClothesPageChanged = !pathname.includes(routes.clothes);
-    if (isClothesPageChanged) removeAllFilters();
+    const anyClothesRoute = pathname.includes(routes.clothes);
+    if (!anyClothesRoute) {
+      removeAllFilters();
+    }
   }, [pathname]);
 
   const values = {
     state,
     allFilters,
-    getCategories,
+    setSelectedCategoryCard,
     setCategoryFilters,
     setPriceFilters,
     setSortMethod,
     setSearchValue,
     removeAllFilters,
-    toggleCategoryCardFilter,
     isSelectedCategoryCard,
+    anyFilterProvided,
+    isPriceFilterChanged,
   };
 
   return (

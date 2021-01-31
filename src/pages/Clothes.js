@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
 import { FilterContext } from 'contexts/FilterContext';
-import { limitRequest } from 'actions/data';
+import { limitRequest, fetchProducts } from 'actions/data';
 import PageHeader from 'components/atoms/PageHeader/PageHeader';
 import ProductsTemplate from 'templates/ProductsTemplate';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
@@ -43,6 +43,7 @@ export const cardVariants = {
 
 const Clothes = () => {
   const {
+    dispatch,
     data: {
       products,
       wishlist,
@@ -51,54 +52,44 @@ const Clothes = () => {
       isAllProductsFetched,
     },
     handleWishlist,
-    removeAllProducts,
-    fetchProducts,
   } = useContext(StoreContext);
-
   const {
-    state: { categoryFilters, searchValue },
+    state: { categoryFilters },
     allFilters,
+    anyFilterProvided,
     isSelectedCategoryCard,
-    toggleCategoryCardFilter,
-    setSearchValue,
+    setSelectedCategoryCard,
   } = useContext(FilterContext);
   const isMounted = useRef(null);
   const limitCardRender = isAllProductsFetched ? numItemsRequest : limitRequest;
 
   useEffect(() => {
-    const isFilteredByCategoryCard = isSelectedCategoryCard;
     isMounted.current = true;
-    if (isMounted.current && isFilteredByCategoryCard) {
-      toggleCategoryCardFilter();
-      removeAllProducts();
-      fetchProducts({ ...allFilters, categoryFilters });
+    if (isMounted.current && isSelectedCategoryCard && !products.length) {
+      setSelectedCategoryCard(false);
+      fetchProducts(dispatch, { ...allFilters, categoryFilters });
     }
-
     return () => {
       isMounted.current = false;
     };
   }, [
-    categoryFilters,
-    fetchProducts,
     allFilters,
-    removeAllProducts,
+    categoryFilters,
+    dispatch,
+    setSelectedCategoryCard,
     isSelectedCategoryCard,
-    toggleCategoryCardFilter,
+    products.length,
   ]);
 
   useEffect(() => {
-    if (searchValue && isMounted.current) {
-      removeAllProducts();
-      fetchProducts({ ...allFilters, searchValue });
-      setSearchValue('');
+    isMounted.current = true;
+    if (isMounted.current && !anyFilterProvided && !products.length) {
+      fetchProducts(dispatch);
     }
-  }, [
-    searchValue,
-    allFilters,
-    fetchProducts,
-    removeAllProducts,
-    setSearchValue,
-  ]);
+    return () => {
+      isMounted.current = false;
+    };
+  }, [dispatch, anyFilterProvided, products.length]);
 
   return (
     <TransitionProvider>

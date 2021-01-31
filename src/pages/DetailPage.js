@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { fetchProduct } from 'actions/data';
 import { getSameCategoryProducts, getFromArrByID } from 'helpers';
+import { categoryQueryFilter } from 'helpers/queryHelpers';
 import LoadingProvider from 'providers/LoadingProvider';
 import TransitionProvider from 'providers/TransitionProvider';
 import SkeletonCard from 'components/molecules/SkeletonCard/SkeletonCard';
@@ -11,6 +12,7 @@ import Carousel from 'components/organisms/Carousel/Carousel';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
 import DetailProductTemplate from 'templates/DetailProductTemplate';
 import SectionTemplate from 'templates/SectionTemplate';
+import routes from 'routes';
 
 const Wrapper = styled.div`
   padding: 120px 20px 0;
@@ -33,50 +35,66 @@ const ProductWrapper = styled.div`
 
 const DetailPage = () => {
   const {
-    data: { products, wishlist },
+    data: { products, wishlist, highlightedProducts },
     handleWishlist,
+    fetchProductsWithParams,
   } = useContext(StoreContext);
   const { id: ID } = useParams();
-  const [product, setProduct] = useState({});
+  const [fetchedProduct, setFetchedProduct] = useState({});
   const [, setError] = useState({});
   const productFromGlobalState = getFromArrByID(products, ID) || {};
   const isLocalProductExist = Object.keys(productFromGlobalState).length;
-  const anyProductFound = isLocalProductExist || Object.keys(product).length;
+  const anyProductFound =
+    isLocalProductExist || Object.keys(fetchedProduct).length;
+  const productsWithSameCategory = isLocalProductExist
+    ? getSameCategoryProducts(products, productFromGlobalState)
+    : getSameCategoryProducts(highlightedProducts, fetchedProduct);
 
   useEffect(() => {
     let mounted = true;
-
-    const setMatchedIdProduct = async () => {
+    const fetchMatchedIdProduct = async () => {
       try {
         const matchedProduct = await fetchProduct(ID);
-        setProduct(matchedProduct);
+        setFetchedProduct(matchedProduct);
       } catch (err) {
         setError(err);
       }
     };
-
     if (mounted && !isLocalProductExist) {
-      setMatchedIdProduct();
+      fetchMatchedIdProduct();
     }
-
     return () => {
       mounted = false;
     };
   }, [ID, isLocalProductExist]);
 
-  const productsWithSameCategory = isLocalProductExist
-    ? getSameCategoryProducts(products, productFromGlobalState)
-    : getSameCategoryProducts(products, product);
+  useEffect(() => {
+    const isFetchedProduct = Object.keys(fetchedProduct).length;
+    const areProductsWithSameCategory = productsWithSameCategory.length;
+    if (isFetchedProduct && !areProductsWithSameCategory) {
+      const { category } = fetchedProduct;
+      const categoryParam = categoryQueryFilter([category]);
+      fetchProductsWithParams(categoryParam);
+    }
+  }, [
+    fetchedProduct,
+    productsWithSameCategory.length,
+    fetchProductsWithParams,
+  ]);
 
   return (
     <LoadingProvider>
       <Wrapper>
-        {anyProductFound && (
+        {anyProductFound ? (
           <TransitionProvider duration={0.3}>
             <DetailProductTemplate
-              product={isLocalProductExist ? productFromGlobalState : product}
+              product={
+                isLocalProductExist ? productFromGlobalState : fetchedProduct
+              }
             />
           </TransitionProvider>
+        ) : (
+          <Redirect to={routes.home} />
         )}
         <SectionTemplate title="Products that you may also like">
           <Carousel>

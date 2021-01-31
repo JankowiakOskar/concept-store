@@ -2,6 +2,8 @@
 /* eslint-disable import/prefer-default-export */
 export const allDataQueryParam = '_limit=-1';
 
+export const createTopSellingParam = (ratio) => `sellingRatio_gte=${ratio}`;
+
 export const limitQueryParam = (currentProducts, fetchLimit) => {
   const numCurrentProducts = [...currentProducts].length;
   return numCurrentProducts === 0

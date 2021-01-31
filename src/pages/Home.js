@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import routes from 'routes';
 import { useHistory } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import routes from 'routes';
 import { StoreContext } from 'store/StoreProvider';
 import { FilterContext } from 'contexts/FilterContext';
 import styled from 'styled-components';
+import { createTopSellingParam } from 'helpers/queryHelpers';
+import { fetchProductsWithParams } from 'actions/data';
 import Slider from 'components/organisms/Slider/Slider';
 import CategoriesTemplate from 'templates/CategoriesTemplate';
 import SectionTemplate from 'templates/SectionTemplate';
@@ -102,25 +104,33 @@ const ImageBoxSubtitle = styled.p`
 
 const Home = () => {
   const {
-    data: { slides, categoriesCards, products, wishlist, topSellingRatio },
+    data: {
+      slides,
+      categoriesCards,
+      wishlist,
+      highlightedProducts,
+      topSellingRatio,
+    },
     handleWishlist,
+    dispatch,
   } = useContext(StoreContext);
 
   const history = useHistory();
 
-  const { setCategoryFilters, toggleCategoryCardFilter } = useContext(
+  const { setCategoryFilters, setSelectedCategoryCard } = useContext(
     FilterContext
   );
 
-  const handleRedirect = (categoryName) => {
+  const handleRedirect = async (categoryName) => {
+    await setSelectedCategoryCard((prevState) => !prevState);
+    await setCategoryFilters([{ categoryName }]);
     setTimeout(() => history.push(routes.clothes), 50);
-    toggleCategoryCardFilter();
-    setCategoryFilters([{ categoryName }]);
   };
 
-  const topSellingProducts = products.filter(
-    (product) => product.sellingRatio >= topSellingRatio
-  );
+  useEffect(() => {
+    const topSellingParam = createTopSellingParam(topSellingRatio);
+    fetchProductsWithParams(dispatch, topSellingParam);
+  }, [dispatch, topSellingRatio]);
 
   return (
     <LoadingProvider>
@@ -143,8 +153,8 @@ const Home = () => {
               subtitle="on this week"
             >
               <Carousel>
-                {products.length
-                  ? topSellingProducts.map(
+                {highlightedProducts.length
+                  ? highlightedProducts.map(
                       ({ id, name, price, picture: { url } }) => (
                         <ProductCardWrapper key={id}>
                           <StyledProductCard

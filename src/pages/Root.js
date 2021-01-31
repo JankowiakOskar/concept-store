@@ -36,10 +36,10 @@ const Root = () => {
               <Switch>
                 <Route exact path={routes.home} component={Home} />
                 <Route path={routes.wishlist} component={WishListPage} />
+                <Route path={routes.shoppingCart} component={Cart} />
+                <Route exact path={routes.checkout} component={CheckoutPage} />
                 <Route exact path={routes.clothes} component={Clothes} />
                 <Route path={routes.detailClothes} component={DetailPage} />
-                <Route exact path={routes.checkout} component={CheckoutPage} />
-                <Route path={routes.shoppingCart} component={Cart} />
                 <ProtectedRoute
                   path={routes.orderCompleted}
                   component={OrderCompletePage}

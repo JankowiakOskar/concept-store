@@ -23,6 +23,13 @@ export const FETCHING_PRODUCTS_REQUEST = 'FETCHING_PRODUCTS_REQUEST';
 export const FETCHING_PRODUCTS_SUCCESS = 'FETCHING_PRODUCTS_SUCCESS';
 export const FETCHING_PRODUCTS_FAILURE = 'FETCHING_PRODUCTS_FAILURE';
 
+export const FETCHING_HIGHLIGHTED_PRODUCTS_REQUEST =
+  'FETCHING_HIGHLIGHTED_PRODUCTS_REQUEST';
+export const FETCHING_HIGHLIGHTED_PRODUCTS_SUCCESS =
+  'FETCHING_HIGHLIGHTED_PRODUCTS_SUCCESS';
+export const FETCHING_HIGHLIGHTED_PRODUCTS_FAILURE =
+  'FETCHING_HIGHLIGHTED_PRODUCTS_FAILURE';
+
 export const UPDATE_STORE_REQUEST = 'UPDATE_STORE_REQUEST';
 export const UPDATE_STORE_SUCCESS = 'UPDATE_STORE_SUCCESS';
 export const UPDATE_STORE_FAILURE = 'UPDATE_STORE_FAILURE';
@@ -99,21 +106,34 @@ export const fetchProduct = async (id) => {
   }
 };
 
-export const getProducts = async (
+export const fetchProductsWithParams = async (dispatch, queryParam = '') => {
+  dispatch({
+    type: FETCHING_HIGHLIGHTED_PRODUCTS_REQUEST,
+  });
+  try {
+    const { data: highlightedProducts } = await axios.get(
+      `${process.env.REACT_APP_API}/products?${queryParam}`
+    );
+    await sleeper(500);
+    dispatch({
+      type: FETCHING_HIGHLIGHTED_PRODUCTS_SUCCESS,
+      payload: {
+        highlightedProducts,
+      },
+    });
+  } catch (err) {
+    dispatch({ type: FETCHING_HIGHLIGHTED_PRODUCTS_FAILURE, payload: err });
+  }
+};
+
+export const fetchProducts = async (
   dispatch,
   filters = {},
   currentProducts = []
 ) => {
+  const anyFilterProvided = Object.keys(filters).length;
   const anyCategorySelected =
     'categoryFilters' in filters && filters.categoryFilters.length;
-
-  const isPriceFilterSelected = 'priceFilters' in filters;
-
-  const isSortMethodSelected =
-    'sortMethod' in filters && Object.keys(filters.sortMethod).length;
-
-  const isSearchValueProvided =
-    'searchValue' in filters && filters.searchValue.length;
 
   const isNumRequestProvided = filters.categoryFilters?.some(
     (category) => category.productsNum
@@ -137,7 +157,7 @@ export const getProducts = async (
   });
 
   const createEndpoint = () =>
-    Object.keys(filters).length
+    anyFilterProvided
       ? `?${categoryQueryFilter(categoryNames)}${priceQueryFilter(
           filters.priceFilters
         )}${searchQueryParam(filters.searchValue)}${sortQueryFilter(
@@ -160,13 +180,7 @@ export const getProducts = async (
       type: FETCHING_PRODUCTS_SUCCESS,
       payload: {
         products,
-        isAllProductsFetched:
-          anyCategorySelected ||
-          isPriceFilterSelected ||
-          isSortMethodSelected ||
-          isSearchValueProvided
-            ? true
-            : isAllProductsFetched,
+        isAllProductsFetched: anyFilterProvided ? true : isAllProductsFetched,
       },
     });
   } catch (error) {

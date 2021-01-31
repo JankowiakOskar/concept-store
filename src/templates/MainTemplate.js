@@ -37,9 +37,9 @@ const MainTemplate = ({ children }) => {
     <>
       <ThemeProvider theme={theme}>
         <StylesProvider injectFirst>
-          <StoreProvider>
-            <GlobalUIProvider>
-              <FilterProvider>
+          <FilterProvider>
+            <StoreProvider>
+              <GlobalUIProvider>
                 <GlobalStyle />
                 <PageOverlay />
                 <Navbar />
@@ -64,9 +64,9 @@ const MainTemplate = ({ children }) => {
                   pauseOnHover
                 />
                 <Footer />
-              </FilterProvider>
-            </GlobalUIProvider>
-          </StoreProvider>
+              </GlobalUIProvider>
+            </StoreProvider>
+          </FilterProvider>
         </StylesProvider>
       </ThemeProvider>
     </>

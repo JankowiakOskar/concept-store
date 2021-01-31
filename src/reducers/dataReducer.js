@@ -8,6 +8,9 @@ import {
   FETCHING_PRODUCTS_REQUEST,
   FETCHING_PRODUCTS_SUCCESS,
   FETCHING_PRODUCTS_FAILURE,
+  FETCHING_HIGHLIGHTED_PRODUCTS_REQUEST,
+  FETCHING_HIGHLIGHTED_PRODUCTS_SUCCESS,
+  FETCHING_HIGHLIGHTED_PRODUCTS_FAILURE,
   UPDATE_STORE_REQUEST,
   UPDATE_STORE_SUCCESS,
   UPDATE_STORE_FAILURE,
@@ -65,6 +68,7 @@ export const initialState = {
   isAllProductsFetched: false,
   numItemsRequest: 0,
   topSellingRatio: 8.2,
+  highlightedProducts: [],
   products: [],
   wishlist: [],
   shoppingCart: [],
@@ -94,6 +98,26 @@ export const dataReducer = (state, action) => {
         numItemsRequest: 0,
         error: action.payload,
       };
+    case FETCHING_HIGHLIGHTED_PRODUCTS_REQUEST: {
+      return {
+        ...state,
+        isLoadingProducts: !state.isLoadingProducts,
+      };
+    }
+    case FETCHING_HIGHLIGHTED_PRODUCTS_SUCCESS: {
+      return {
+        ...state,
+        highlightedProducts: action.payload.highlightedProducts,
+        isLoadingProducts: !state.isLoadingProducts,
+      };
+    }
+    case FETCHING_HIGHLIGHTED_PRODUCTS_FAILURE: {
+      return {
+        ...state,
+        isLoadingProducts: !state.isLoadingProducts,
+        error: action.payload,
+      };
+    }
     case UPDATE_STORE_REQUEST:
       return {
         ...state,
@@ -169,6 +193,7 @@ export const dataReducer = (state, action) => {
         ...state,
         numItemsRequest: 0,
         products: [],
+        highlightedProducts: [],
       };
     }
     default: {
