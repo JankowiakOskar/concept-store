@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchProduct } from 'actions/data';
 import { getSameCategoryProducts, getFromArrByID } from 'helpers';
 import { categoryQueryFilter } from 'helpers/queryHelpers';
@@ -12,7 +12,6 @@ import Carousel from 'components/organisms/Carousel/Carousel';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
 import DetailProductTemplate from 'templates/DetailProductTemplate';
 import SectionTemplate from 'templates/SectionTemplate';
-import routes from 'routes';
 
 const Wrapper = styled.div`
   padding: 120px 20px 0;
@@ -85,7 +84,7 @@ const DetailPage = () => {
   return (
     <LoadingProvider>
       <Wrapper>
-        {anyProductFound ? (
+        {anyProductFound && (
           <TransitionProvider duration={0.3}>
             <DetailProductTemplate
               product={
@@ -93,8 +92,6 @@ const DetailPage = () => {
               }
             />
           </TransitionProvider>
-        ) : (
-          <Redirect to={routes.home} />
         )}
         <SectionTemplate title="Products that you may also like">
           <Carousel>
