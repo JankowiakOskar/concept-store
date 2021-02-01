@@ -9,7 +9,7 @@ const LoadingProvider = ({ children }) => {
   useEffect(() => {
     const handleLoading = () => setLoading(!isLoading);
 
-    if (isLoading) setTimeout(handleLoading, 1000);
+    if (isLoading) setTimeout(handleLoading, 900);
 
     return () => clearTimeout(handleLoading);
   }, [isLoading]);

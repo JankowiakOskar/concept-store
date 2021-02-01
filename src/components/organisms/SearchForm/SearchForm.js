@@ -13,10 +13,10 @@ const SearchForm = ({ onNavBar }) => {
   const { pathname } = useLocation();
   const [value, setValue] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const isClothesRoute = pathname === routes.clothes;
-    await setSearchValue(value);
+    setSearchValue(value);
     removeAllProducts();
     if (!isClothesRoute) {
       history.push(routes.clothes);

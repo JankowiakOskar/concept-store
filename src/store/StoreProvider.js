@@ -1,7 +1,5 @@
 import React, { useReducer, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import routes from 'routes';
-import { useLocation } from 'react-router-dom';
 import { initialState, dataReducer } from 'reducers/dataReducer';
 import {
   fetchProducts as fetchProductsAction,
@@ -23,9 +21,8 @@ export const StoreContext = React.createContext();
 const StoreProvider = ({ children }) => {
   const [data, dispatch] = useReducer(dataReducer, initialState);
   const [choosenID, setChoosenID] = useState('');
-  const { pathname } = useLocation();
-  const { products, shoppingCart, wishlist } = data;
-
+  const { products, shoppingCart, wishlist, highlightedProducts } = data;
+  const allProducts = [...products, ...highlightedProducts];
   const orderStatus = {
     notRegistered: 'ORDER_NOT_REGISTERED',
     pending: 'ORDER_PENDING',
@@ -66,7 +63,7 @@ const StoreProvider = ({ children }) => {
   const updateOrderStatus = (status) =>
     updateOrderStatusAction(dispatch, status);
 
-  const handleWishlist = (id, productsArr = products) => {
+  const handleWishlist = (id, productsArr = allProducts) => {
     const choosenProduct = getFromArrByID(productsArr, id);
     const isOnWishlist = wishlist.some((product) => product.id === id);
     return isOnWishlist
@@ -81,16 +78,10 @@ const StoreProvider = ({ children }) => {
     getShoppingCart();
   }, []);
 
-  useEffect(() => {
-    const anyClothesRoute = pathname.includes(routes.clothes);
-    if (!anyClothesRoute && products.length) {
-      removeAllProducts();
-    }
-  }, [pathname, products.length]);
-
   const values = {
     dispatch,
     data,
+    allProducts,
     handleWishlist,
     addToShoppingCart,
     removeFromShoppingCart,

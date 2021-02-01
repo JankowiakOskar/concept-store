@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import LazyLoad from 'react-lazyload';
 import styled from 'styled-components';
 import Button from 'components/atoms/Button/Button';
 
@@ -86,7 +87,9 @@ const CategoryCard = ({
       whileHover={{ scale: 1.15, zIndex: 2, opacity: 1 }}
       transition={{ type: 'easeIn', duration: 0.32 }}
     >
-      <CategoryImg src={image} />
+      <LazyLoad offset={100}>
+        <CategoryImg src={image} />
+      </LazyLoad>
       <StyledButton secondary>
         {categoryName}
         <Span />

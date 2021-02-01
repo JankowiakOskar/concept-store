@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
 import { useParams } from 'react-router-dom';
-import { fetchProduct } from 'actions/data';
+import { fetchProduct, fetchProductsWithParams } from 'actions/data';
 import { getSameCategoryProducts, getFromArrByID } from 'helpers';
 import { categoryQueryFilter } from 'helpers/queryHelpers';
 import LoadingProvider from 'providers/LoadingProvider';
@@ -34,68 +34,63 @@ const ProductWrapper = styled.div`
 
 const DetailPage = () => {
   const {
-    data: { products, wishlist, highlightedProducts },
+    dispatch,
+    data: { wishlist },
+    allProducts,
     handleWishlist,
-    fetchProductsWithParams,
   } = useContext(StoreContext);
   const { id: ID } = useParams();
-  const [fetchedProduct, setFetchedProduct] = useState({});
+
+  const foundProduct = getFromArrByID(allProducts, ID);
+  const [matchedProduct, setMatchedProduct] = useState(foundProduct || {});
   const [, setError] = useState({});
-  const productFromGlobalState = getFromArrByID(products, ID) || {};
-  const isLocalProductExist = Object.keys(productFromGlobalState).length;
-  const anyProductFound =
-    isLocalProductExist || Object.keys(fetchedProduct).length;
-  const productsWithSameCategory = isLocalProductExist
-    ? getSameCategoryProducts(products, productFromGlobalState)
-    : getSameCategoryProducts(highlightedProducts, fetchedProduct);
+  const isProductFound = Object.keys(matchedProduct).length;
+  const productsWithSameCategory = isProductFound
+    ? getSameCategoryProducts(allProducts, matchedProduct)
+    : [];
 
   useEffect(() => {
     let mounted = true;
     const fetchMatchedIdProduct = async () => {
       try {
-        const matchedProduct = await fetchProduct(ID);
-        setFetchedProduct(matchedProduct);
+        const fetchedProduct = await fetchProduct(ID);
+        setMatchedProduct(fetchedProduct);
       } catch (err) {
         setError(err);
       }
     };
-    if (mounted && !isLocalProductExist) {
+    if (mounted) {
       fetchMatchedIdProduct();
     }
     return () => {
       mounted = false;
     };
-  }, [ID, isLocalProductExist]);
+  }, [ID]);
 
   useEffect(() => {
-    const isFetchedProduct = Object.keys(fetchedProduct).length;
-    const areProductsWithSameCategory = productsWithSameCategory.length;
-    if (isFetchedProduct && !areProductsWithSameCategory) {
-      const { category } = fetchedProduct;
+    if (isProductFound && !productsWithSameCategory.length) {
+      const { category } = matchedProduct;
       const categoryParam = categoryQueryFilter([category]);
-      fetchProductsWithParams(categoryParam);
+      fetchProductsWithParams(dispatch, categoryParam);
     }
   }, [
-    fetchedProduct,
+    dispatch,
+    isProductFound,
     productsWithSameCategory.length,
-    fetchProductsWithParams,
+    matchedProduct,
   ]);
 
   return (
     <LoadingProvider>
       <Wrapper>
-        {anyProductFound && (
+        {isProductFound && (
           <TransitionProvider duration={0.3}>
-            <DetailProductTemplate
-              product={
-                isLocalProductExist ? productFromGlobalState : fetchedProduct
-              }
-            />
+            <DetailProductTemplate product={matchedProduct} />
           </TransitionProvider>
         )}
         <SectionTemplate title="Products that you may also like">
           <Carousel>
-            {productsWithSameCategory.length > 0
+            {productsWithSameCategory.length
               ? productsWithSameCategory.map(
                   ({ id, name, price, picture: { url } }) => (
                     <TransitionProvider customKey={id} key={id} duration={0.3}>

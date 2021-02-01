@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { StoreContext } from 'store/StoreProvider';
 import { FilterContext } from 'contexts/FilterContext';
-import { limitRequest, fetchProducts } from 'actions/data';
+import { limitRequest, fetchProducts, removeAllProducts } from 'actions/data';
 import PageHeader from 'components/atoms/PageHeader/PageHeader';
 import ProductsTemplate from 'templates/ProductsTemplate';
 import ProductCard from 'components/molecules/ProductCard/ProductCard';
@@ -83,13 +83,18 @@ const Clothes = () => {
 
   useEffect(() => {
     isMounted.current = true;
-    if (isMounted.current && !anyFilterProvided && !products.length) {
-      fetchProducts(dispatch);
+    if (isMounted.current && !anyFilterProvided) {
+      const loadDefaultProducts = () => {
+        removeAllProducts(dispatch);
+        fetchProducts(dispatch);
+      };
+
+      loadDefaultProducts();
     }
     return () => {
       isMounted.current = false;
     };
-  }, [dispatch, anyFilterProvided, products.length]);
+  }, [dispatch, anyFilterProvided]);
 
   return (
     <TransitionProvider>

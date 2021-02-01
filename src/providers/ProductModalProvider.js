@@ -54,7 +54,7 @@ const ProductModalProvider = ({ children }) => {
     },
   } = useContext(UIContext);
   const {
-    data: { products },
+    allProducts,
     choosenID,
     setSelectedID,
     shoppingCartAmount,
@@ -80,7 +80,7 @@ const ProductModalProvider = ({ children }) => {
   });
 
   const RenderModalContent = () => {
-    const choosenProduct = getFromArrByID(products, choosenID);
+    const choosenProduct = getFromArrByID(allProducts, choosenID);
     const {
       id,
       name,

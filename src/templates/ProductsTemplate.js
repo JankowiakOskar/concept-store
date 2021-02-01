@@ -178,9 +178,7 @@ const ProductsTemplate = ({ children, className, isAllProductsFetched }) => {
               </EmptyCartWrapper>
             )}
             {!isAllProductsFetched && (
-              <StyledButton
-                onClick={() => fetchProducts(undefined, currProducts)}
-              >
+              <StyledButton onClick={() => fetchProducts({}, currProducts)}>
                 {isLoadingProducts ? (
                   <Loader
                     type="ThreeDots"

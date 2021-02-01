@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import Logo from 'assets/svgs/Logo.svg';
@@ -12,11 +11,24 @@ const Wrapper = styled(motion.div)`
   justify-content: center;
   align-items: center;
   z-index: ${({ theme }) => theme.zIndex.level10};
-  background-color: ${({ theme, vissible }) =>
-    vissible ? theme.white : 'transparent'};
-  opacity: ${({ vissible }) => (vissible ? '1' : '0')};
-  transition: 0.2s ease-in;
+  background-color: ${({ theme }) => theme.white};
 `;
+
+const wrapperVariants = {
+  initial: {
+    opacity: 1,
+  },
+  animation: {
+    opacity: 1,
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      type: 'easeIn',
+      duration: 0.5,
+    },
+  },
+};
 
 const LogoImg = styled(motion.img)`
   width: 250px;
@@ -30,14 +42,19 @@ const logoVariants = {
 
     transition: {
       type: 'easeIn',
-      duration: 1.2,
+      duration: 1,
     },
   },
 };
 
-const LoadingPage = ({ isLoading }) => {
+const LoadingPage = () => {
   return (
-    <Wrapper vissible={isLoading}>
+    <Wrapper
+      variants={wrapperVariants}
+      initial="initial"
+      animate="animation"
+      exit="exit"
+    >
       <LogoImg
         variants={logoVariants}
         initial={false}
@@ -46,10 +63,6 @@ const LoadingPage = ({ isLoading }) => {
       />
     </Wrapper>
   );
-};
-
-LoadingPage.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
 };
 
 export default LoadingPage;

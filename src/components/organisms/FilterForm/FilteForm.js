@@ -92,12 +92,12 @@ const FilterForm = ({ className, handleClosePanel }) => {
     });
   };
 
-  const handleSubmit = async (e, values) => {
+  const handleSubmit = (e, values) => {
     e.preventDefault();
     const selectedFilters = categoriesOptions.filter(
       ({ categoryName }) => values[categoryName]
     );
-    await setCategoryFilters(selectedFilters);
+    setCategoryFilters(selectedFilters);
     removeAllProducts();
     handleClosePanel();
     if (selectedFilters.length) {

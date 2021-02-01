@@ -7,6 +7,7 @@ import { FilterContext } from 'contexts/FilterContext';
 import styled from 'styled-components';
 import { createTopSellingParam } from 'helpers/queryHelpers';
 import { fetchProductsWithParams } from 'actions/data';
+import LazyLoad from 'react-lazyload';
 import Slider from 'components/organisms/Slider/Slider';
 import CategoriesTemplate from 'templates/CategoriesTemplate';
 import SectionTemplate from 'templates/SectionTemplate';
@@ -180,13 +181,15 @@ const Home = () => {
               </Carousel>
             </SectionTemplate>
           </InnerWrapper>
-          <ImageBox url={manWithCamera}>
-            <ImageBoxDescription>
-              <ImageBoxTitle>New winter trends</ImageBoxTitle>
-              <ImageBoxSubtitle>which you cannot miss</ImageBoxSubtitle>
-              <ArrowLink routeURL={routes.clothes} title="Check out" />
-            </ImageBoxDescription>
-          </ImageBox>
+          <LazyLoad once>
+            <ImageBox url={manWithCamera}>
+              <ImageBoxDescription>
+                <ImageBoxTitle>New winter trends</ImageBoxTitle>
+                <ImageBoxSubtitle>which you cannot miss</ImageBoxSubtitle>
+                <ArrowLink routeURL={routes.clothes} title="Check out" />
+              </ImageBoxDescription>
+            </ImageBox>
+          </LazyLoad>
         </Wrapper>
       </TransitionProvider>
     </LoadingProvider>
