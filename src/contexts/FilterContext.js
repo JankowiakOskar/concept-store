@@ -51,7 +51,10 @@ const FilterProvider = ({ children }) => {
 
   const setSearchValue = (value) => setSearchValueAction(dispatch, value);
 
-  const removeAllFilters = () => removeAllFiltersAction(dispatch);
+  const removeAllFilters = () => {
+    setSelectedCategoryCard(false);
+    removeAllFiltersAction(dispatch);
+  };
 
   useEffect(() => {
     getCategories();

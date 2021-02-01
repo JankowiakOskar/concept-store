@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { StoreContext } from 'store/StoreProvider';
+import { updateOrderStatus } from 'actions/data';
 import styled from 'styled-components';
 import TransitionProvider from 'providers/TransitionProvider';
 import OrderCompleteTemplate from 'templates/OrderCompleteTemplate';
@@ -16,11 +17,11 @@ const Wrapper = styled.div`
 `;
 
 const OrderCompletePage = () => {
-  const { updateOrderStatus, orderStatus } = useContext(StoreContext);
+  const { dispatch, orderStatus } = useContext(StoreContext);
 
   useEffect(() => {
-    return () => updateOrderStatus(orderStatus.notRegistered);
-  }, [orderStatus.notRegistered, updateOrderStatus]);
+    return () => updateOrderStatus(dispatch, orderStatus.notRegistered);
+  }, [dispatch, orderStatus.notRegistered]);
 
   return (
     <TransitionProvider>

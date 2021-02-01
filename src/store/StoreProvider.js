@@ -22,7 +22,7 @@ const StoreProvider = ({ children }) => {
   const [data, dispatch] = useReducer(dataReducer, initialState);
   const [choosenID, setChoosenID] = useState('');
   const { products, shoppingCart, wishlist, highlightedProducts } = data;
-  const allProducts = [...products, ...highlightedProducts];
+  const allProducts = [...products, ...highlightedProducts, ...wishlist];
   const orderStatus = {
     notRegistered: 'ORDER_NOT_REGISTERED',
     pending: 'ORDER_PENDING',

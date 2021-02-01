@@ -2,10 +2,17 @@
 export const getFromArrByID = (arr, id) => arr.find((el) => el.id === id);
 
 export const getSameCategoryProducts = (arrProducts, selectedProduct) => {
-  return arrProducts.filter(
+  const filteredArr = [...arrProducts].filter(
     ({ id, category }) =>
       id !== selectedProduct.id && category === selectedProduct.category
   );
+  const removedDuplicates = filteredArr.reduce((acc, current) => {
+    if (!acc.find(({ id }) => id === current.id)) {
+      acc.push(current);
+    }
+    return acc;
+  }, []);
+  return removedDuplicates;
 };
 
 export const makeFirstLetterUpperCase = (string) => {
@@ -16,7 +23,7 @@ export const makeFirstLetterUpperCase = (string) => {
 
 export const sumItemsPrices = (itemsArr) => {
   let totalPrice = 0;
-  itemsArr.forEach(({ price, sizes_quantity: sizesQuantity }) => {
+  [...itemsArr].forEach(({ price, sizes_quantity: sizesQuantity }) => {
     const [amount] = Object.values(sizesQuantity);
     const currItemPrice = amount * price;
     totalPrice += currItemPrice;
