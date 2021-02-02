@@ -58,6 +58,7 @@ const Clothes = () => {
     allFilters,
     anyFilterProvided,
     isSelectedCategoryCard,
+    setSelectedCategoryCard,
   } = useContext(FilterContext);
   const isMounted = useRef(null);
   const limitCardRender = isAllProductsFetched ? numItemsRequest : limitRequest;
@@ -66,12 +67,19 @@ const Clothes = () => {
     isMounted.current = true;
     if (isMounted.current && isSelectedCategoryCard) {
       removeAllProducts(dispatch);
+      setSelectedCategoryCard(false);
       fetchProducts(dispatch, { ...allFilters, categoryFilters });
     }
     return () => {
       isMounted.current = false;
     };
-  }, [allFilters, categoryFilters, dispatch, isSelectedCategoryCard]);
+  }, [
+    allFilters,
+    categoryFilters,
+    dispatch,
+    isSelectedCategoryCard,
+    setSelectedCategoryCard,
+  ]);
 
   useEffect(() => {
     isMounted.current = true;

@@ -10,7 +10,7 @@ import CloseIconComponent from 'components/atoms/CloseIconComponent/CloseIconCom
 import ShopingCartTemplate from 'templates/ShoppingCartTemplate';
 import MenuList from 'components/molecules/MenuList/MenuList';
 import SearchForm from 'components/organisms/SearchForm/SearchForm';
-import FilterForm from 'components/organisms/FilterForm/FilteForm';
+import FilterForm from 'components/organisms/FilterForm/FilterForm';
 
 const Wrapper = styled(motion.div)`
   position: fixed;

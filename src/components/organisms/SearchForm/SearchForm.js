@@ -3,12 +3,16 @@ import routes from 'routes';
 import { useHistory, useLocation } from 'react-router-dom';
 import { StoreContext } from 'store/StoreProvider';
 import { FilterContext } from 'contexts/FilterContext';
+import { UIContext } from 'contexts/GlobalUIContext';
 import PropTypes from 'prop-types';
 import SearchBar from 'components/molecules/SearchBar/SearchBar';
 
 const SearchForm = ({ onNavBar }) => {
   const { setSearchValue, allFilters } = useContext(FilterContext);
   const { fetchProducts, removeAllProducts } = useContext(StoreContext);
+  const {
+    sidePanel: { hideSidePanel },
+  } = useContext(UIContext);
   const history = useHistory();
   const { pathname } = useLocation();
   const [value, setValue] = useState('');
@@ -18,6 +22,7 @@ const SearchForm = ({ onNavBar }) => {
     const isClothesRoute = pathname === routes.clothes;
     setSearchValue(value);
     removeAllProducts();
+    hideSidePanel();
     if (!isClothesRoute) {
       history.push(routes.clothes);
     }

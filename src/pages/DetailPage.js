@@ -40,7 +40,6 @@ const DetailPage = () => {
     handleWishlist,
   } = useContext(StoreContext);
   const { id: ID } = useParams();
-
   const foundProduct = getFromArrByID(allProducts, ID);
   const [matchedProduct, setMatchedProduct] = useState(foundProduct || {});
   const [, setError] = useState({});

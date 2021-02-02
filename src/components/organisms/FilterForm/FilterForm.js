@@ -68,9 +68,7 @@ const FilterForm = ({ className, handleClosePanel }) => {
     removeAllFilters,
     setCategoryFilters,
   } = useContext(FilterContext);
-
   const { fetchProducts, removeAllProducts } = useContext(StoreContext);
-
   const initialValues = categoriesOptions.reduce(
     (initialState, { categoryName }) => {
       const isFilterSelected = categoryFilters.some(
@@ -82,8 +80,10 @@ const FilterForm = ({ className, handleClosePanel }) => {
     },
     {}
   );
-
   const [filterValues, setFilterValues] = useState(initialValues);
+  const anyFilterSelected = Object.values(filterValues).some(
+    (value) => value === true
+  );
 
   const toggleCheckbox = (categoryName) => {
     setFilterValues({
@@ -92,12 +92,12 @@ const FilterForm = ({ className, handleClosePanel }) => {
     });
   };
 
-  const handleSubmit = (e, values) => {
+  const handleSubmit = async (e, values) => {
     e.preventDefault();
     const selectedFilters = categoriesOptions.filter(
       ({ categoryName }) => values[categoryName]
     );
-    setCategoryFilters(selectedFilters);
+    await setCategoryFilters(selectedFilters);
     removeAllProducts();
     handleClosePanel();
     if (selectedFilters.length) {
@@ -141,7 +141,9 @@ const FilterForm = ({ className, handleClosePanel }) => {
       />
 
       <ButtonsWrapper>
-        <StyledButton type="submit">Filter</StyledButton>
+        <StyledButton type="submit" disabled={!anyFilterSelected}>
+          Filter
+        </StyledButton>
         <StyledButtonClear
           outlined
           type="button"

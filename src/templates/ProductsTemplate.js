@@ -11,7 +11,7 @@ import Loader from 'react-loader-spinner';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { baseIconStyle } from 'components/atoms/ExternalIcon/ExternalIcon';
 import Dropdown from 'components/molecules/Dropdown/Dropdown';
-import FilterForm from 'components/organisms/FilterForm/FilteForm';
+import FilterForm from 'components/organisms/FilterForm/FilterForm';
 import GridTemplate from 'templates/GridTemplate';
 
 const Wrapper = styled.div`
