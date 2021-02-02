@@ -11,7 +11,7 @@ const SearchForm = ({ onNavBar }) => {
   const { setSearchValue, allFilters } = useContext(FilterContext);
   const { fetchProducts, removeAllProducts } = useContext(StoreContext);
   const {
-    sidePanel: { hideSidePanel },
+    sidePanel: { isOpen, hideSidePanel },
   } = useContext(UIContext);
   const history = useHistory();
   const { pathname } = useLocation();
@@ -22,7 +22,9 @@ const SearchForm = ({ onNavBar }) => {
     const isClothesRoute = pathname === routes.clothes;
     setSearchValue(value);
     removeAllProducts();
-    hideSidePanel();
+    if (isOpen) {
+      hideSidePanel();
+    }
     if (!isClothesRoute) {
       history.push(routes.clothes);
     }
