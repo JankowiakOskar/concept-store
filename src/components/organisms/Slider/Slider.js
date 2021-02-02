@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import LazyLoad from 'react-lazyload';
 import Slide from 'components/molecules/Slide/Slide';
 import ControlDot from 'components/atoms/ControlDot/ControlDot';
 
@@ -45,30 +44,28 @@ const Slider = ({ slides }) => {
   }, [activeSlideIndex, slides]);
 
   return (
-    <LazyLoad once>
-      <SliderWrapper>
-        {slides.map(({ image, title, subTitle, btnContent }, index) => (
-          <Slide
-            key={title}
-            image={image}
-            title={title}
-            subTitle={subTitle}
-            btnContent={btnContent}
-            isActiveSlide={activeSlideIndex === index}
+    <SliderWrapper>
+      {slides.map(({ image, title, subTitle, btnContent }, index) => (
+        <Slide
+          key={title}
+          image={image}
+          title={title}
+          subTitle={subTitle}
+          btnContent={btnContent}
+          isActiveSlide={activeSlideIndex === index}
+        />
+      ))}
+      <ControlWrapper>
+        {slides.map(({ id }, index) => (
+          <ControlDot
+            data-testid="controlDot"
+            isActive={activeSlideIndex === index}
+            key={id}
+            onClick={() => handleClick(index)}
           />
         ))}
-        <ControlWrapper>
-          {slides.map(({ id }, index) => (
-            <ControlDot
-              data-testid="controlDot"
-              isActive={activeSlideIndex === index}
-              key={id}
-              onClick={() => handleClick(index)}
-            />
-          ))}
-        </ControlWrapper>
-      </SliderWrapper>
-    </LazyLoad>
+      </ControlWrapper>
+    </SliderWrapper>
   );
 };
 
