@@ -1,70 +1,98 @@
-# Getting Started with Create React App
+# 🛒👟 Concept Store | e-commerce 
+![mock up 2](https://user-images.githubusercontent.com/57623368/107699373-4e64ab00-6cb6-11eb-8659-a821fa7ab8c7.jpg)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Concept Store is a all devices friendly, SPA, e-commerce app made with react.js for exploring and understanding more complex concepts of react. App has every basic feature with you can expect in similar e-commerce websites. ✌
 
-## Available Scripts
+## 🖥Demo
 
-In the project directory, you can run:
+You can checkout live project here: https://concept-store.netlify.app/  
+❗ **Please be patient if you load app first time, beacuse backend is hosted with free plan on heroku, and can be in sleep mode.
+Should start after 10 seconds.** ❗
 
-### `npm start`
+## 🛠 Technologies used in building phase
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Front-end
+- React.JS
+- React Router
+- Jest
+- React Testing Library
+- Styled Components
+- Framer Motion
+- Formik & Yup
+- Axios
+- Husky & Lint Staged
+- Prettier & Eslint
+- React Toastify
+- React Input Range
+- Styled React Modal
+- React Loading Skeleton
+- React Multi Carousel
+- React Scroll
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Backend
+- Strapi (Headless CMS)
 
-### `npm test`
+### Database
+- MongoDB
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 💣Features
 
-### `npm run build`
+- Selecting and filter products fetched from database
+- Adding and removing products from shopping cart and wishlist
+- Side panel with short brief on products from shopping cart
+- Purchase process menaged by multi step form wizard
+- Slider
+- Notifications after adding new product to wishlist or shopping cart
+- Modal with selected product
+- RWD
+- Multiple pages like Detail Page View, Wishlist, Cart, Checkout
+- Matched products by the same category on Detail Page
+- Top selling products selected by selling ratio
+- Simulation of payment process
+- Updating store after ordering
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+and more...
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📸Screenshots
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Home View
 
-### `npm run eject`
+![screen home](https://user-images.githubusercontent.com/57623368/107702851-24fa4e00-6cbb-11eb-95a2-532e06997dd8.png)
+![products](https://user-images.githubusercontent.com/57623368/107702966-49eec100-6cbb-11eb-8815-5cbdeb7406cb.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### Modal
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![modal](https://user-images.githubusercontent.com/57623368/107703019-5d9a2780-6cbb-11eb-9785-0b7855ff45c1.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Detail Page
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+![detail page](https://user-images.githubusercontent.com/57623368/107703143-8de1c600-6cbb-11eb-9cdb-fd773da5ece5.png)
 
-## Learn More
+#### Wishlist
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![wishlist](https://user-images.githubusercontent.com/57623368/107703189-9cc87880-6cbb-11eb-87b2-849b53cd1e78.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+#### Checkout
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+![checkout screen](https://user-images.githubusercontent.com/57623368/107703272-b669c000-6cbb-11eb-85bd-de019176084a.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+#### Cart
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+![cart screen](https://user-images.githubusercontent.com/57623368/107703347-cf727100-6cbb-11eb-828f-f9f7cd7e4965.png)
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+#### Products with filters
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+![products with cart](https://user-images.githubusercontent.com/57623368/107703404-df8a5080-6cbb-11eb-88e8-70f7aaaa023a.png)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 💽 Resources
+All images are downloaded from https://www.bonprix.pl/ and https://www.eobuwie.com.pl/  
+Icons from https://www.flaticon.com/
+
+
+
